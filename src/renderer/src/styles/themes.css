@@ -1,0 +1,21 @@
+/*
+ * Theme surface layers.
+ * The aurora/mist background glow is a static CSS gradient modulated by
+ * --tf-gradient-strength (0..1, set inline on the app shell); obsidian
+ * declares `none`. Nothing here animates, so prefers-reduced-motion users
+ * get the identical rendering.
+ */
+
+.app-shell {
+  background-color: var(--tf-color-app-background);
+  background-image: var(--tf-gradient-shell);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.app-shell[data-wallpaper='on'] {
+  background-image:
+    var(--tf-wallpaper-edge), linear-gradient(var(--tf-wallpaper-veil), var(--tf-wallpaper-veil)),
+    var(--tf-wallpaper-image);
+}

@@ -1,0 +1,11 @@
+@import 'tailwindcss';
+@import './tokens.css';
+@import './dbx-themes.css';
+@import './global.css';
+@import './layout.css';
+@import './views.css';
+@import './docks.css';
+@import './commands.css';
+@import './editor.css';
+@import './wallpaper.css';
+@import './themes.css';

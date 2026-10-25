@@ -1,0 +1,90 @@
+export const IPC_CHANNELS = {
+  appGetInfo: 'app:get-info',
+  connectionsList: 'connections:list',
+  connectionsCreate: 'connections:create',
+  connectionsUpdate: 'connections:update',
+  connectionsRemove: 'connections:remove',
+  connectionsSetFavorite: 'connections:set-favorite',
+  portForwardsList: 'port-forwards:list',
+  portForwardsCreate: 'port-forwards:create',
+  portForwardsUpdate: 'port-forwards:update',
+  portForwardsRemove: 'port-forwards:remove',
+  portForwardsStart: 'port-forwards:start',
+  portForwardsStop: 'port-forwards:stop',
+  portForwardsConnectionImpact: 'port-forwards:connection-impact',
+  securityGetStatus: 'security:get-status',
+  sshConnect: 'ssh:connect',
+  sshCancelConnect: 'ssh:cancel-connect',
+  sshDisconnect: 'ssh:disconnect',
+  sshGetStatus: 'ssh:get-status',
+  sshRespondHostKey: 'ssh:respond-host-key',
+  sshSetCredential: 'ssh:set-credential',
+  terminalOpen: 'terminal:open',
+  terminalWrite: 'terminal:write',
+  terminalResize: 'terminal:resize',
+  terminalClose: 'terminal:close',
+  terminalGetStatus: 'terminal:get-status',
+  terminalReadClipboard: 'terminal:read-clipboard',
+  sftpOpen: 'sftp:open',
+  sftpList: 'sftp:list',
+  sftpStat: 'sftp:stat',
+  sftpMkdir: 'sftp:mkdir',
+  sftpRename: 'sftp:rename',
+  sftpDeleteFile: 'sftp:delete-file',
+  sftpRemoveDirectory: 'sftp:remove-directory',
+  sftpReadTextFile: 'sftp:read-text-file',
+  sftpWriteTextFile: 'sftp:write-text-file',
+  sftpClose: 'sftp:close',
+  localFsList: 'local-fs:list',
+  localFsRoots: 'local-fs:roots',
+  transferEnqueueUpload: 'transfer:enqueue-upload',
+  transferEnqueueDownload: 'transfer:enqueue-download',
+  transferEnqueueUploadPaths: 'transfer:enqueue-upload-paths',
+  transferEnqueueDownloadPaths: 'transfer:enqueue-download-paths',
+  transferCancel: 'transfer:cancel',
+  transferRetry: 'transfer:retry',
+  transferResolveConflict: 'transfer:resolve-conflict',
+  transferList: 'transfer:list',
+  transferClearHistory: 'transfer:clear-history',
+  settingsGet: 'settings:get',
+  settingsUpdate: 'settings:update',
+  hostKeysList: 'host-keys:list',
+  hostKeysRemove: 'host-keys:remove',
+  logsGetInfo: 'logs:get-info',
+  logsExport: 'logs:export',
+  logsOpenFolder: 'logs:open-folder',
+  wallpaperGet: 'wallpaper:get',
+  wallpaperChoose: 'wallpaper:choose',
+  wallpaperRemove: 'wallpaper:remove',
+  quickCommandsList: 'quick-commands:list',
+  quickCommandsCreate: 'quick-commands:create',
+  quickCommandsUpdate: 'quick-commands:update',
+  quickCommandsRemove: 'quick-commands:remove',
+  quickCommandsSetFavorite: 'quick-commands:set-favorite',
+  quickCommandsExecute: 'quick-commands:execute',
+  commandHistoryList: 'command-history:list',
+  commandHistoryRemove: 'command-history:remove',
+  commandHistoryClear: 'command-history:clear',
+} as const
+
+export type IpcChannel = (typeof IPC_CHANNELS)[keyof typeof IPC_CHANNELS]
+
+export const IPC_CHANNEL_NAMES: readonly IpcChannel[] = Object.values(IPC_CHANNELS)
+
+/**
+ * Main → renderer channels are kept out of `IPC_CHANNELS` so invoke handlers
+ * and push events cannot be confused with one another.
+ */
+export const IPC_EVENT_CHANNELS = {
+  sshSessionStatus: 'ssh:session-status',
+  sshHostKeyRequest: 'ssh:host-key-request',
+  terminalOutput: 'terminal:output',
+  terminalStatus: 'terminal:status',
+  terminalExit: 'terminal:exit',
+  transferUpdate: 'transfer:update',
+  portForwardSnapshot: 'port-forwards:snapshot-updated',
+} as const
+
+export type IpcEventChannel = (typeof IPC_EVENT_CHANNELS)[keyof typeof IPC_EVENT_CHANNELS]
+
+export const IPC_EVENT_CHANNEL_NAMES: readonly IpcEventChannel[] = Object.values(IPC_EVENT_CHANNELS)

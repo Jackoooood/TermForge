@@ -1,0 +1,313 @@
+/*
+ * Optional wallpaper skin.
+ * Only `[data-wallpaper='on']` consumes these rules, so the solid console
+ * appearance stays byte-for-byte unchanged. Terminal, inputs and modal forms
+ * keep opaque surfaces; the wallpaper lives behind glass panels and content
+ * veils.
+ */
+
+.app-shell[data-wallpaper='on'] {
+  background-color: var(--tf-color-app-background);
+  background-image:
+    var(--tf-wallpaper-edge), linear-gradient(var(--tf-wallpaper-veil), var(--tf-wallpaper-veil)),
+    var(--tf-wallpaper-image);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.app-shell[data-wallpaper='on'][data-wallpaper-intensity='soft'] {
+  --tf-wallpaper-veil: var(--tf-wallpaper-veil-soft);
+}
+
+.app-shell[data-wallpaper='on'][data-wallpaper-intensity='strong'] {
+  --tf-wallpaper-veil: var(--tf-wallpaper-veil-strong);
+}
+
+/* ---------------------------------------------------------------- */
+/* Glass chrome                                                      */
+/* ---------------------------------------------------------------- */
+
+.app-shell[data-wallpaper='on'] .top-bar,
+.app-shell[data-wallpaper='on'] .primary-sidebar,
+.app-shell[data-wallpaper='on'] .status-bar {
+  border-color: var(--tf-wallpaper-border);
+  background: var(--tf-wallpaper-panel);
+  -webkit-backdrop-filter: blur(18px) saturate(120%);
+  backdrop-filter: blur(18px) saturate(120%);
+}
+
+.app-shell[data-wallpaper='on'] .workspace {
+  background: transparent;
+}
+
+.app-shell[data-wallpaper='on'] .module-header {
+  border-bottom-color: var(--tf-wallpaper-border);
+  background: var(--tf-wallpaper-panel);
+  -webkit-backdrop-filter: blur(18px) saturate(120%);
+  backdrop-filter: blur(18px) saturate(120%);
+}
+
+.app-shell[data-wallpaper='on'] .module-body {
+  background: var(--tf-wallpaper-content);
+}
+
+.app-shell[data-wallpaper='on'] .module-toolbar {
+  border-bottom-color: var(--tf-wallpaper-border);
+  background: var(--tf-wallpaper-content);
+}
+
+.app-shell[data-wallpaper='on'] .tabs-bar,
+.app-shell[data-wallpaper='on'] .terminal-toolbar {
+  border-color: var(--tf-wallpaper-border);
+  background: var(--tf-wallpaper-panel-strong);
+  -webkit-backdrop-filter: blur(18px) saturate(120%);
+  backdrop-filter: blur(18px) saturate(120%);
+}
+
+.app-shell[data-wallpaper='on'] .session-tab--active {
+  background: var(--tf-wallpaper-panel-strong);
+}
+
+.app-shell[data-wallpaper='on'] .session-tab--active::after {
+  background: var(--tf-wallpaper-gold);
+}
+
+/* The terminal itself never becomes translucent. */
+.app-shell[data-wallpaper='on'] .terminal-stage,
+.app-shell[data-wallpaper='on'] .terminal-shell {
+  background: var(--tf-terminal-background, var(--tf-color-terminal));
+}
+
+/* ---------------------------------------------------------------- */
+/* Content surfaces                                                  */
+/* ---------------------------------------------------------------- */
+
+.app-shell[data-wallpaper='on'] .file-panel {
+  border-color: var(--tf-wallpaper-border);
+  border-radius: var(--tf-wallpaper-radius);
+  background: var(--tf-wallpaper-panel);
+  box-shadow: var(--tf-wallpaper-card-shadow);
+  -webkit-backdrop-filter: blur(18px) saturate(120%);
+  backdrop-filter: blur(18px) saturate(120%);
+}
+
+.app-shell[data-wallpaper='on'] .file-panel--local {
+  background: color-mix(in srgb, var(--tf-wallpaper-panel) 82%, var(--tf-wallpaper-inset));
+}
+
+.app-shell[data-wallpaper='on'] .data-table th {
+  background: var(--tf-wallpaper-panel-strong);
+}
+
+.app-shell[data-wallpaper='on'] .empty-state__icon {
+  border-color: var(--tf-wallpaper-border);
+  background: var(--tf-wallpaper-panel);
+}
+
+.app-shell[data-wallpaper='on'] .settings-nav {
+  border-color: var(--tf-wallpaper-border);
+  background: var(--tf-wallpaper-panel);
+  box-shadow: var(--tf-wallpaper-card-shadow);
+  -webkit-backdrop-filter: blur(18px) saturate(120%);
+  backdrop-filter: blur(18px) saturate(120%);
+}
+
+.app-shell[data-wallpaper='on'] .settings-nav__item:hover {
+  background: var(--tf-wallpaper-inset);
+  color: var(--tf-color-text-primary);
+}
+
+.app-shell[data-wallpaper='on'] .settings-nav__item--active {
+  background: var(--tf-wallpaper-gold-soft);
+  box-shadow: inset 2px 0 0 var(--tf-wallpaper-gold);
+  color: var(--tf-wallpaper-gold);
+}
+
+.app-shell[data-wallpaper='on'] .settings-nav__item--active svg {
+  color: var(--tf-wallpaper-gold);
+}
+
+@media (max-width: 1080px) {
+  .app-shell[data-wallpaper='on'] .settings-nav__item--active {
+    box-shadow: inset 0 -2px 0 var(--tf-wallpaper-gold);
+  }
+}
+
+.app-shell[data-wallpaper='on'] .settings-section {
+  border-color: var(--tf-wallpaper-border);
+  border-radius: var(--tf-wallpaper-radius);
+  background: var(--tf-wallpaper-panel);
+  box-shadow: var(--tf-wallpaper-card-shadow);
+  -webkit-backdrop-filter: blur(18px) saturate(120%);
+  backdrop-filter: blur(18px) saturate(120%);
+}
+
+.app-shell[data-wallpaper='on'] .workbench__center {
+  border-color: var(--tf-wallpaper-border);
+  border-radius: var(--tf-wallpaper-radius);
+  box-shadow: var(--tf-wallpaper-card-shadow);
+}
+
+.app-shell[data-wallpaper='on'] .sftp-dock {
+  border-color: var(--tf-wallpaper-border);
+  border-radius: var(--tf-wallpaper-radius);
+  background: var(--tf-wallpaper-panel);
+  box-shadow: var(--tf-wallpaper-card-shadow);
+  -webkit-backdrop-filter: blur(18px) saturate(120%);
+  backdrop-filter: blur(18px) saturate(120%);
+}
+
+.app-shell[data-wallpaper='on'] .theme-card {
+  background: var(--tf-wallpaper-inset);
+}
+
+.app-shell[data-wallpaper='on'] .app-info-grid > div,
+.app-shell[data-wallpaper='on'] .host-key-list li,
+.app-shell[data-wallpaper='on'] .log-file-list li {
+  background: var(--tf-wallpaper-inset);
+}
+
+.app-shell[data-wallpaper='on'] .transfer-drawer {
+  background: var(--tf-wallpaper-panel-strong);
+  -webkit-backdrop-filter: blur(20px) saturate(120%);
+  backdrop-filter: blur(20px) saturate(120%);
+}
+
+.app-shell[data-wallpaper='on'] .transfer-task {
+  background: var(--tf-wallpaper-inset);
+}
+
+.app-shell[data-wallpaper='on'] .floating-menu {
+  border-color: var(--tf-wallpaper-border);
+  background: var(--tf-wallpaper-panel-strong);
+  -webkit-backdrop-filter: blur(20px) saturate(120%);
+  backdrop-filter: blur(20px) saturate(120%);
+}
+
+/* ---------------------------------------------------------------- */
+/* Champagne-gold accents                                            */
+/* ---------------------------------------------------------------- */
+
+.app-shell[data-wallpaper='on'] .icon-btn--active {
+  border-color: var(--tf-wallpaper-gold-border);
+  background: var(--tf-wallpaper-gold-soft);
+  color: var(--tf-wallpaper-gold);
+}
+
+.app-shell[data-wallpaper='on'] .primary-nav__item--active {
+  background: var(--tf-wallpaper-gold-soft);
+  color: var(--tf-wallpaper-gold);
+}
+
+/* ---------------------------------------------------------------- */
+/* Settings wallpaper card                                           */
+/* ---------------------------------------------------------------- */
+
+.wallpaper-card {
+  display: grid;
+  grid-template-columns: 148px minmax(0, 1fr);
+  gap: 12px;
+  padding: 10px;
+  border: 1px solid var(--tf-border-default);
+  border-radius: var(--tf-wallpaper-radius);
+  background: color-mix(in srgb, var(--tf-color-app-background) 62%, transparent);
+}
+
+.wallpaper-card[data-active='true'] {
+  border-color: var(--tf-wallpaper-gold-border);
+}
+
+.wallpaper-card__preview {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 108px;
+  border: 1px solid var(--tf-border-subtle);
+  border-radius: var(--tf-radius-md);
+  background: var(--tf-color-input);
+  color: var(--tf-color-text-muted);
+  overflow: hidden;
+}
+
+.wallpaper-card__preview img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.wallpaper-card__state {
+  position: absolute;
+  bottom: 7px;
+  left: 7px;
+  padding: 1px 7px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  background: rgba(6, 10, 16, 0.62);
+  color: #f2f5fa;
+  font-size: var(--tf-font-size-2xs);
+  backdrop-filter: blur(6px);
+}
+
+.wallpaper-card__content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.wallpaper-card__heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.wallpaper-card__controls {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.wallpaper-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.wallpaper-card__intensity {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.wallpaper-card__intensity .settings-row__label {
+  color: var(--tf-color-text-muted);
+  font-size: var(--tf-font-size-xs);
+  font-weight: 500;
+}
+
+.app-shell[data-wallpaper='on'] .wallpaper-card {
+  border-color: var(--tf-wallpaper-border);
+  background: var(--tf-wallpaper-inset);
+}
+
+.app-shell[data-wallpaper='on'] .wallpaper-card[data-active='true'] {
+  border-color: var(--tf-wallpaper-gold-border);
+}
+
+@media (max-width: 1080px) {
+  .wallpaper-card {
+    grid-template-columns: 1fr;
+  }
+
+  .wallpaper-card__preview {
+    min-height: 128px;
+  }
+}

@@ -1,0 +1,332 @@
+/*
+ * TermForge design tokens.
+ * Three visual styles: aurora (branded dark gradient, default), obsidian
+ * (pure solid dark, no glow) and mist (soft light). `data-theme-style`
+ * selects the palette; `data-theme='dark'|'light'` only tracks the OS
+ * contrast layer used by the title bar and color-scheme. Components
+ * reference tokens only, never raw palette values.
+ */
+
+/* ---------------------------------------------------------------- */
+/* Aurora — default dark palette with brand glow                     */
+/* ---------------------------------------------------------------- */
+
+:root,
+:root[data-theme-style='aurora'] {
+  color-scheme: dark;
+
+  /* Surfaces */
+  --tf-color-app-background: #10141f;
+  --tf-color-panel: #1a2130;
+  --tf-color-elevated: #232d40;
+  --tf-color-input: #0c1019;
+  --tf-color-terminal: #0a0e17;
+
+  /* Text */
+  --tf-color-text-primary: #e9edf6;
+  --tf-color-text-secondary: #a8b2c6;
+  --tf-color-text-muted: #6e7a92;
+  --tf-color-text-inverse: #f4f6ff;
+
+  /* Accents */
+  --tf-color-primary: #6d7cff;
+  --tf-color-primary-strong: #8491ff;
+  --tf-color-primary-soft: rgba(109, 124, 255, 0.16);
+  --tf-color-accent-cyan: #46d9d0;
+  --tf-color-accent-cyan-soft: rgba(70, 217, 208, 0.14);
+  --tf-color-accent-purple: #a855f7;
+  --tf-color-accent-purple-soft: rgba(168, 85, 247, 0.14);
+  --tf-color-success: #4cc9a0;
+  --tf-color-success-soft: rgba(76, 201, 160, 0.14);
+  --tf-color-warning: #f0b85e;
+  --tf-color-warning-soft: rgba(240, 184, 94, 0.14);
+  --tf-color-danger: #f0717d;
+  --tf-color-danger-soft: rgba(240, 113, 125, 0.14);
+  --tf-color-info-soft: rgba(109, 124, 255, 0.12);
+
+  /* Borders & interaction overlays */
+  --tf-border-subtle: rgba(255, 255, 255, 0.06);
+  --tf-border-default: rgba(255, 255, 255, 0.1);
+  --tf-border-strong: rgba(255, 255, 255, 0.18);
+  --tf-hover-overlay: rgba(255, 255, 255, 0.05);
+  --tf-active-overlay: rgba(255, 255, 255, 0.09);
+  --tf-disabled-opacity: 0.42;
+
+  /* Shading */
+  --tf-shadow-elevated: 0 12px 34px rgba(0, 0, 0, 0.45);
+  --tf-shadow-menu: 0 16px 42px rgba(0, 0, 0, 0.55);
+  --tf-shadow-drawer: -14px 0 38px rgba(0, 0, 0, 0.4);
+
+  /* Focus */
+  --tf-focus-ring: 0 0 0 2px var(--tf-color-app-background), 0 0 0 4px rgba(109, 124, 255, 0.75);
+  --tf-focus-ring-inset: inset 0 0 0 1px var(--tf-color-primary);
+
+  /* Background glow — static gradients modulated by --tf-gradient-strength
+     (0..1, set inline on the app shell). */
+  --tf-gradient-shell:
+    radial-gradient(
+      52% 46% at 12% 4%,
+      color-mix(in srgb, #6d7cff calc(var(--tf-gradient-strength, 0.35) * 26%), transparent),
+      transparent 100%
+    ),
+    radial-gradient(
+      46% 42% at 88% 10%,
+      color-mix(in srgb, #a855f7 calc(var(--tf-gradient-strength, 0.35) * 22%), transparent),
+      transparent 100%
+    ),
+    radial-gradient(
+      60% 48% at 74% 96%,
+      color-mix(in srgb, #46d9d0 calc(var(--tf-gradient-strength, 0.35) * 14%), transparent),
+      transparent 100%
+    );
+
+  /* Optional wallpaper skin — dark values */
+  --tf-wallpaper-gold: #cfb27c;
+  --tf-wallpaper-gold-soft: rgba(207, 178, 124, 0.16);
+  --tf-wallpaper-gold-border: rgba(207, 178, 124, 0.42);
+  --tf-wallpaper-veil: rgba(9, 13, 21, 0.7);
+  --tf-wallpaper-veil-soft: rgba(9, 13, 21, 0.82);
+  --tf-wallpaper-veil-strong: rgba(9, 13, 21, 0.56);
+  --tf-wallpaper-edge: linear-gradient(
+    180deg,
+    rgba(6, 10, 16, 0.34) 0%,
+    rgba(6, 10, 16, 0) 24%,
+    rgba(6, 10, 16, 0) 74%,
+    rgba(6, 10, 16, 0.4) 100%
+  );
+  --tf-wallpaper-panel: rgba(20, 26, 37, 0.76);
+  --tf-wallpaper-panel-strong: rgba(14, 19, 28, 0.88);
+  --tf-wallpaper-content: rgba(13, 18, 27, 0.42);
+  --tf-wallpaper-inset: rgba(8, 12, 18, 0.34);
+  --tf-wallpaper-border: rgba(255, 255, 255, 0.16);
+  --tf-wallpaper-card-shadow: 0 16px 40px rgba(0, 0, 0, 0.28);
+
+  /* Terminal ANSI palette */
+  --tf-terminal-background: #0a0e17;
+  --tf-terminal-foreground: #c9d4e8;
+  --tf-terminal-cursor: #8b9cff;
+  --tf-terminal-cursor-accent: #0a0e17;
+  --tf-terminal-selection: rgba(109, 124, 255, 0.34);
+  --tf-terminal-black: #141a26;
+  --tf-terminal-red: #f0717d;
+  --tf-terminal-green: #4cc9a0;
+  --tf-terminal-yellow: #f0b85e;
+  --tf-terminal-blue: #8b9cff;
+  --tf-terminal-magenta: #c89bf5;
+  --tf-terminal-cyan: #5fe0d6;
+  --tf-terminal-white: #c9d4e8;
+  --tf-terminal-bright-black: #5a687a;
+  --tf-terminal-bright-red: #ff8b96;
+  --tf-terminal-bright-green: #6fe3b8;
+  --tf-terminal-bright-yellow: #ffd08a;
+  --tf-terminal-bright-blue: #a5b2ff;
+  --tf-terminal-bright-magenta: #ddb8fa;
+  --tf-terminal-bright-cyan: #85ece3;
+  --tf-terminal-bright-white: #f1f6fc;
+}
+
+/* ---------------------------------------------------------------- */
+/* Obsidian — pure solid dark, no background glow                    */
+/* ---------------------------------------------------------------- */
+
+:root[data-theme-style='obsidian'] {
+  color-scheme: dark;
+
+  /* Surfaces */
+  --tf-color-app-background: #0d1017;
+  --tf-color-panel: #151a24;
+  --tf-color-elevated: #1d2430;
+  --tf-color-input: #0a0d13;
+  --tf-color-terminal: #090c12;
+
+  /* Text */
+  --tf-color-text-primary: #e6eaf3;
+  --tf-color-text-secondary: #a3adc0;
+  --tf-color-text-muted: #6b7689;
+  --tf-color-text-inverse: #f4f6ff;
+
+  /* Accents — muted, low-interference variants */
+  --tf-color-primary: #7e8fe8;
+  --tf-color-primary-strong: #93a3f0;
+  --tf-color-primary-soft: rgba(126, 143, 232, 0.15);
+  --tf-color-accent-cyan: #3bbdb5;
+  --tf-color-accent-cyan-soft: rgba(59, 189, 181, 0.13);
+  --tf-color-accent-purple: #9a6bd8;
+  --tf-color-accent-purple-soft: rgba(154, 107, 216, 0.13);
+  --tf-color-success: #46b985;
+  --tf-color-success-soft: rgba(70, 185, 133, 0.14);
+  --tf-color-warning: #e8b45c;
+  --tf-color-warning-soft: rgba(232, 180, 92, 0.14);
+  --tf-color-danger: #e36c75;
+  --tf-color-danger-soft: rgba(227, 108, 117, 0.14);
+  --tf-color-info-soft: rgba(126, 143, 232, 0.11);
+
+  /* Borders & interaction overlays */
+  --tf-border-subtle: rgba(255, 255, 255, 0.055);
+  --tf-border-default: rgba(255, 255, 255, 0.09);
+  --tf-border-strong: rgba(255, 255, 255, 0.16);
+  --tf-hover-overlay: rgba(255, 255, 255, 0.045);
+  --tf-active-overlay: rgba(255, 255, 255, 0.08);
+
+  --tf-shadow-elevated: 0 12px 34px rgba(0, 0, 0, 0.4);
+  --tf-shadow-menu: 0 16px 42px rgba(0, 0, 0, 0.5);
+  --tf-shadow-drawer: -14px 0 38px rgba(0, 0, 0, 0.36);
+
+  --tf-focus-ring: 0 0 0 2px var(--tf-color-app-background), 0 0 0 4px rgba(126, 143, 232, 0.7);
+
+  /* No background glow */
+  --tf-gradient-shell: none;
+
+  /* Terminal stays readable on the flatter surface */
+  --tf-terminal-background: #090c12;
+  --tf-terminal-foreground: #c3cddf;
+  --tf-terminal-cursor: #9aa9d9;
+  --tf-terminal-cursor-accent: #090c12;
+  --tf-terminal-selection: rgba(126, 143, 232, 0.3);
+}
+
+/* ---------------------------------------------------------------- */
+/* Mist — soft light palette with low-saturation glow                */
+/* ---------------------------------------------------------------- */
+
+:root[data-theme-style='mist'] {
+  color-scheme: light;
+
+  /* Surfaces — the terminal itself stays dark for contrast */
+  --tf-color-app-background: #edeff6;
+  --tf-color-panel: #f7f8fc;
+  --tf-color-elevated: #ffffff;
+  --tf-color-input: #ffffff;
+  --tf-color-terminal: #0c1117;
+
+  /* Text */
+  --tf-color-text-primary: #1b2330;
+  --tf-color-text-secondary: #55637a;
+  --tf-color-text-muted: #7d899b;
+  --tf-color-text-inverse: #ffffff;
+
+  /* Accents */
+  --tf-color-primary: #5a6ce0;
+  --tf-color-primary-strong: #4a5bd1;
+  --tf-color-primary-soft: rgba(90, 108, 224, 0.1);
+  --tf-color-accent-cyan: #2fa8a0;
+  --tf-color-accent-cyan-soft: rgba(47, 168, 160, 0.1);
+  --tf-color-accent-purple: #8b5cf6;
+  --tf-color-accent-purple-soft: rgba(139, 92, 246, 0.1);
+  --tf-color-success: #1f9468;
+  --tf-color-success-soft: rgba(31, 148, 104, 0.1);
+  --tf-color-warning: #9a6a13;
+  --tf-color-warning-soft: rgba(154, 106, 19, 0.12);
+  --tf-color-danger: #c74853;
+  --tf-color-danger-soft: rgba(199, 72, 83, 0.1);
+  --tf-color-info-soft: rgba(90, 108, 224, 0.08);
+
+  /* Borders & interaction overlays */
+  --tf-border-subtle: rgba(24, 38, 58, 0.08);
+  --tf-border-default: rgba(24, 38, 58, 0.14);
+  --tf-border-strong: rgba(24, 38, 58, 0.24);
+  --tf-hover-overlay: rgba(24, 38, 58, 0.05);
+  --tf-active-overlay: rgba(24, 38, 58, 0.09);
+
+  /* Shading */
+  --tf-shadow-elevated: 0 10px 28px rgba(31, 47, 70, 0.16);
+  --tf-shadow-menu: 0 14px 36px rgba(31, 47, 70, 0.2);
+  --tf-shadow-drawer: -12px 0 32px rgba(31, 47, 70, 0.16);
+
+  --tf-focus-ring: 0 0 0 2px var(--tf-color-app-background), 0 0 0 4px rgba(90, 108, 224, 0.65);
+
+  /* Soft lavender/cyan glow */
+  --tf-gradient-shell:
+    radial-gradient(
+      52% 46% at 12% 4%,
+      color-mix(in srgb, #b9c4ff calc(var(--tf-gradient-strength, 0.35) * 30%), transparent),
+      transparent 100%
+    ),
+    radial-gradient(
+      46% 42% at 88% 12%,
+      color-mix(in srgb, #e3d4ff calc(var(--tf-gradient-strength, 0.35) * 26%), transparent),
+      transparent 100%
+    ),
+    radial-gradient(
+      60% 50% at 70% 96%,
+      color-mix(in srgb, #bfe9e4 calc(var(--tf-gradient-strength, 0.35) * 20%), transparent),
+      transparent 100%
+    );
+
+  /* Optional wallpaper skin — light values */
+  --tf-wallpaper-gold: #8a6a2f;
+  --tf-wallpaper-gold-soft: rgba(138, 106, 47, 0.12);
+  --tf-wallpaper-gold-border: rgba(138, 106, 47, 0.42);
+  --tf-wallpaper-veil: rgba(238, 241, 246, 0.72);
+  --tf-wallpaper-veil-soft: rgba(238, 241, 246, 0.84);
+  --tf-wallpaper-veil-strong: rgba(238, 241, 246, 0.58);
+  --tf-wallpaper-edge: linear-gradient(
+    180deg,
+    rgba(31, 47, 70, 0.12) 0%,
+    rgba(31, 47, 70, 0) 26%,
+    rgba(31, 47, 70, 0) 74%,
+    rgba(31, 47, 70, 0.16) 100%
+  );
+  --tf-wallpaper-panel: rgba(247, 249, 252, 0.82);
+  --tf-wallpaper-panel-strong: rgba(255, 255, 255, 0.9);
+  --tf-wallpaper-content: rgba(238, 241, 246, 0.45);
+  --tf-wallpaper-inset: rgba(255, 255, 255, 0.52);
+  --tf-wallpaper-border: rgba(24, 38, 58, 0.18);
+  --tf-wallpaper-card-shadow: 0 14px 34px rgba(31, 47, 70, 0.14);
+}
+
+/* ---------------------------------------------------------------- */
+/* Structural tokens shared by every style                           */
+/* ---------------------------------------------------------------- */
+
+:root {
+  /* Typography — the renderer sets --tf-font-ui and --tf-font-scale inline
+     from the persisted interface font preference. Terminal typography stays
+     independent and is applied by xterm.js. */
+  --tf-font-ui:
+    'Segoe UI Variable Text', 'Segoe UI', 'Microsoft YaHei UI', 'Microsoft YaHei', system-ui,
+    sans-serif;
+  --tf-font-terminal:
+    'Cascadia Mono', 'Cascadia Code', 'JetBrains Mono', Consolas, 'Courier New', monospace;
+  --tf-font-scale: 1;
+  --tf-font-size-3xs: calc(9px * var(--tf-font-scale));
+  --tf-font-size-2xs: calc(10px * var(--tf-font-scale));
+  --tf-font-size-xs: calc(11px * var(--tf-font-scale));
+  --tf-font-size-sm: calc(12px * var(--tf-font-scale));
+  --tf-font-size-md: calc(13px * var(--tf-font-scale));
+  --tf-font-size-lg: calc(14px * var(--tf-font-scale));
+  --tf-font-size-xl: calc(16px * var(--tf-font-scale));
+  --tf-font-size-heading: calc(18px * var(--tf-font-scale));
+
+  /* Spacing */
+  --tf-space-1: 4px;
+  --tf-space-2: 8px;
+  --tf-space-3: 12px;
+  --tf-space-4: 16px;
+  --tf-space-5: 20px;
+  --tf-space-6: 24px;
+  --tf-space-8: 32px;
+
+  /* Radii — console UI stays restrained */
+  --tf-radius-xs: 4px;
+  --tf-radius-sm: 6px;
+  --tf-radius-md: 8px;
+  --tf-radius-lg: 10px;
+  --tf-wallpaper-radius: 14px;
+
+  /* Layout */
+  --tf-layout-appbar: 48px;
+  --tf-layout-sidebar: 260px;
+  --tf-layout-tabs: 40px;
+  --tf-layout-statusbar: 26px;
+  --tf-dock-sftp-width: clamp(320px, 32vw, 460px);
+
+  /* Stacking */
+  --tf-z-base: 0;
+  --tf-z-sidebar: 10;
+  --tf-z-appbar: 30;
+  --tf-z-drawer: 50;
+  --tf-z-menu: 60;
+  --tf-z-modal: 70;
+  --tf-z-toast: 90;
+}
