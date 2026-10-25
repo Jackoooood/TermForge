@@ -59,9 +59,7 @@ export class SystemSshAgentLocator implements SshAgentLocator {
 
   async locate(): Promise<string | null> {
     if (this.platform === 'win32') {
-      return (await this.pathExists(WINDOWS_OPENSSH_AGENT_PIPE))
-        ? WINDOWS_OPENSSH_AGENT_PIPE
-        : null
+      return (await this.pathExists(WINDOWS_OPENSSH_AGENT_PIPE)) ? WINDOWS_OPENSSH_AGENT_PIPE : null
     }
     const socketPath = this.env.SSH_AUTH_SOCK?.trim()
     if (!socketPath) return null
@@ -105,8 +103,7 @@ export class VaultCredentialResolver implements SshCredentialResolver {
       let passphrase: string | undefined
       if (encrypted) {
         passphrase =
-          (await this.readVaultValue(credentialReference(connection.id, 'passphrase'))) ??
-          undefined
+          (await this.readVaultValue(credentialReference(connection.id, 'passphrase'))) ?? undefined
         if (!passphrase) {
           throw new SshFailureError('credential-required', 'passphrase')
         }

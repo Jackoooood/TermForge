@@ -166,7 +166,8 @@ export function CommandPalette() {
         label: `切换到 ${themeLabel(nextThemeStyle(resolvedStyle))} 主题`,
         description: '仅改变界面外观，不影响连接',
         icon: resolvedTheme === 'light' ? Moon : Sun,
-        keywords: 'theme aurora obsidian mist dbx pearl graphite cobalt sage amber blush 主题 深色 浅色',
+        keywords:
+          'theme aurora obsidian mist dbx pearl graphite cobalt sage amber blush 主题 深色 浅色',
         run: () => {
           toggleTheme()
           closePalette()

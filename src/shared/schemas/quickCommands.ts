@@ -13,7 +13,8 @@ import { sshClientIdSchema, sshSessionIdSchema } from './ssh'
 
 const CUSTOM_COMMAND_ID = /^qc-[A-Za-z0-9][A-Za-z0-9_-]{0,95}$/
 const BUILT_IN_COMMAND_ID = /^builtin-[a-z0-9][a-z0-9-]{0,63}$/
-const COMMAND_REFERENCE_ID = /^(?:qc-[A-Za-z0-9][A-Za-z0-9_-]{0,95}|builtin-[a-z0-9][a-z0-9-]{0,63})$/
+const COMMAND_REFERENCE_ID =
+  /^(?:qc-[A-Za-z0-9][A-Za-z0-9_-]{0,95}|builtin-[a-z0-9][a-z0-9-]{0,63})$/
 const HISTORY_ENTRY_ID = /^ch-[A-Za-z0-9][A-Za-z0-9_-]{0,95}$/
 const REQUEST_ID = /^[A-Za-z0-9][A-Za-z0-9_-]{7,95}$/
 const TEMPLATE_IDENTIFIER = /^[A-Za-z_][A-Za-z0-9_]{0,31}$/
@@ -54,7 +55,10 @@ const commandNameSchema = z
   .string()
   .trim()
   .min(1, '请输入命令名称')
-  .max(QUICK_COMMAND_LIMITS.maxNameLength, `命令名称最多 ${QUICK_COMMAND_LIMITS.maxNameLength} 个字符`)
+  .max(
+    QUICK_COMMAND_LIMITS.maxNameLength,
+    `命令名称最多 ${QUICK_COMMAND_LIMITS.maxNameLength} 个字符`,
+  )
   .refine((value) => !hasDisallowedControlCharacters(value), '命令名称不能包含控制字符')
 
 const commandCategorySchema = z
@@ -79,7 +83,10 @@ const commandDescriptionSchema = z
 const commandTextBaseSchema = z
   .string()
   .min(1, '命令内容不能为空')
-  .max(QUICK_COMMAND_LIMITS.maxBodyLength, `命令内容最多 ${QUICK_COMMAND_LIMITS.maxBodyLength} 个字符`)
+  .max(
+    QUICK_COMMAND_LIMITS.maxBodyLength,
+    `命令内容最多 ${QUICK_COMMAND_LIMITS.maxBodyLength} 个字符`,
+  )
   .refine((value) => value.trim().length > 0, '命令内容不能为空')
   .refine(
     (value) => !hasDisallowedControlCharacters(value),
@@ -128,7 +135,10 @@ const quickCommandDraftShape = {
   body: quickCommandBodySchema,
   parameters: z
     .array(quickCommandParameterSchema)
-    .max(QUICK_COMMAND_LIMITS.maxParameters, `一条命令最多包含 ${QUICK_COMMAND_LIMITS.maxParameters} 个参数`),
+    .max(
+      QUICK_COMMAND_LIMITS.maxParameters,
+      `一条命令最多包含 ${QUICK_COMMAND_LIMITS.maxParameters} 个参数`,
+    ),
 }
 
 type TemplateParameterDraft = {
@@ -269,7 +279,10 @@ const targetHostSchema = z
   .string()
   .trim()
   .min(1, '缺少目标主机')
-  .max(QUICK_COMMAND_LIMITS.maxHostLength, `目标主机最多 ${QUICK_COMMAND_LIMITS.maxHostLength} 个字符`)
+  .max(
+    QUICK_COMMAND_LIMITS.maxHostLength,
+    `目标主机最多 ${QUICK_COMMAND_LIMITS.maxHostLength} 个字符`,
+  )
   .refine((value) => !hasDisallowedControlCharacters(value), '目标主机不能包含控制字符')
 
 export const commandHistoryEntrySchema = z.strictObject({

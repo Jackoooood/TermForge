@@ -189,8 +189,7 @@ export const usePortForwardStore = create<PortForwardStoreState>((set, get) => {
         if (!result.ok) throw new Error(result.error.message)
         set((state) => ({
           items: mergeItem(state.items, result.value),
-          startTargetId:
-            state.startTargetId === input.ruleId ? null : state.startTargetId,
+          startTargetId: state.startTargetId === input.ruleId ? null : state.startTargetId,
           actionError: null,
         }))
         return result.value

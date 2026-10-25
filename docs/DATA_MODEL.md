@@ -386,12 +386,7 @@ const MAX_LOCAL_DIRECTORY_ENTRIES = 5000
 ```ts
 type PortForwardType = 'local' | 'remote' | 'dynamic'
 type PortForwardStatus = 'stopped' | 'starting' | 'running' | 'stopping' | 'error'
-type PortForwardStopReason =
-  | 'user'
-  | 'session-ended'
-  | 'connection-removed'
-  | 'app-quit'
-  | null
+type PortForwardStopReason = 'user' | 'session-ended' | 'connection-removed' | 'app-quit' | null
 
 type PortForwardFailureCode =
   | 'session-ended'
@@ -692,16 +687,32 @@ interface TransferUploadEnqueueAck {
 ```ts
 type ClassicThemeStyle = 'aurora' | 'obsidian' | 'mist'
 type DbxThemeStyle =
-  | 'dbx-pearl' | 'dbx-mist' | 'dbx-graphite' | 'dbx-cobalt' | 'dbx-sage' | 'dbx-amber'
-  | 'dbx-blush' | 'dbx-vscode' | 'dbx-idea' | 'dbx-xcode' | 'dbx-jetbrains'
-  | 'dbx-cursor' | 'dbx-claude'
+  | 'dbx-pearl'
+  | 'dbx-mist'
+  | 'dbx-graphite'
+  | 'dbx-cobalt'
+  | 'dbx-sage'
+  | 'dbx-amber'
+  | 'dbx-blush'
+  | 'dbx-vscode'
+  | 'dbx-idea'
+  | 'dbx-xcode'
+  | 'dbx-jetbrains'
+  | 'dbx-cursor'
+  | 'dbx-claude'
 type ThemeStyle = ClassicThemeStyle | DbxThemeStyle
 type ThemePreference = ThemeStyle | 'system'
 type DbxThemeMode = 'system' | 'light' | 'dark'
 type UiFontFamilyId = 'system' | 'segoe' | 'yahei'
 type TerminalFontFamilyId =
-  | 'cascadia' | 'consolas' | 'jetbrains' | 'fira' | 'source-code-pro'
-  | 'sf-mono' | 'ibm-plex' | 'system'
+  | 'cascadia'
+  | 'consolas'
+  | 'jetbrains'
+  | 'fira'
+  | 'source-code-pro'
+  | 'sf-mono'
+  | 'ibm-plex'
+  | 'system'
 type TerminalCursorStyle = 'block' | 'underline' | 'bar'
 type LogLevel = 'error' | 'warn' | 'info' | 'debug'
 type WallpaperIntensity = 'soft' | 'balanced' | 'strong'
@@ -1347,15 +1358,15 @@ SFTP IPC schema（`src/shared/schemas/sftp.ts`）：
 
 设置/主机密钥/日志/快速命令 IPC schema：
 
-| 输入                   | 规则                                                                                                                                                    |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 设置更新               | strict `AppPreferences`；主题为 16 套风格或 `system`、DBX 模式三选一、界面/终端字体 ID 白名单、界面字号 12–15、终端字号 10–20、回滚/并发仅预设整数、布尔严格、日志级别四选一、壁纸开关布尔、壁纸浓度三选一、命令历史开关布尔；未知字段整体拒绝 |
-| 主机密钥删除           | `host` 为合法主机名/IPv4/IPv6（trim、≤253 字符），`port` 为 1–65,535 整数；主进程按端点删除记录                                                         |
-| 日志查询/导出/打开目录 | 无参数；导出目标路径由主进程原生保存对话框产生，渲染进程不能指定路径                                                                                    |
-| 壁纸读取/选择/移除     | 无参数；图片源由主进程原生图片对话框产生，扩展名、文件类型、大小与解码结果由主进程校验                                                                  |
-| 快速命令草稿           | strict `{ name, category, description, body, parameters }`；名称 1–64、分类 1–32、说明 ≤256、正文 1–4,096；正文单行且不含控制字符；参数名必须与正文占位符按顺序一致、唯一、最多 16 个；参数默认值 ≤512 |
+| 输入                   | 规则                                                                                                                                                                                                                                                                   |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 设置更新               | strict `AppPreferences`；主题为 16 套风格或 `system`、DBX 模式三选一、界面/终端字体 ID 白名单、界面字号 12–15、终端字号 10–20、回滚/并发仅预设整数、布尔严格、日志级别四选一、壁纸开关布尔、壁纸浓度三选一、命令历史开关布尔；未知字段整体拒绝                         |
+| 主机密钥删除           | `host` 为合法主机名/IPv4/IPv6（trim、≤253 字符），`port` 为 1–65,535 整数；主进程按端点删除记录                                                                                                                                                                        |
+| 日志查询/导出/打开目录 | 无参数；导出目标路径由主进程原生保存对话框产生，渲染进程不能指定路径                                                                                                                                                                                                   |
+| 壁纸读取/选择/移除     | 无参数；图片源由主进程原生图片对话框产生，扩展名、文件类型、大小与解码结果由主进程校验                                                                                                                                                                                 |
+| 快速命令草稿           | strict `{ name, category, description, body, parameters }`；名称 1–64、分类 1–32、说明 ≤256、正文 1–4,096；正文单行且不含控制字符；参数名必须与正文占位符按顺序一致、唯一、最多 16 个；参数默认值 ≤512                                                                 |
 | 快速命令执行           | strict discriminated union（`kind: 'command' \| 'history'`）；`requestId` 8–96 字符；`commandId` 为 `qc-…`/`builtin-…`；参数值键必须是合法参数名、值非空且 ≤512；`tabId` 为 `sshtab-…`、`sessionId` 为 `ssh-…`；`recordHistory` 布尔；历史正文 1–4,096、允许字面花括号 |
-| 快速命令/历史删除      | strict `{ id }`；命令 ID 为 `qc-…`，历史 ID 为 `ch-…`；未知 ID 返回 `not-found`                                                                          |
+| 快速命令/历史删除      | strict `{ id }`；命令 ID 为 `qc-…`，历史 ID 为 `ch-…`；未知 ID 返回 `not-found`                                                                                                                                                                                        |
 
 错误通过 `toConnectionFieldErrors` 收敛为字段级对象；遇到首个错误时，表单将焦点移动到对应输入。提交期间禁用动作；主进程或磁盘失败时显示内联错误并允许重试。
 
@@ -1559,39 +1570,39 @@ SFTP 变更（mkdir / rename / deleteFile / removeDirectory）
 
 ## 6. 存储与生命周期
 
-| 数据                     | 位置                                | 生命周期                                                           |
-| ------------------------ | ----------------------------------- | ------------------------------------------------------------------ |
-| 连接与分组               | `<userData>/connections.json`       | 跨重启持久化；首启种子；损坏则停止加载                             |
-| 加密凭据条目             | `<userData>/credentials.enc.json`   | 跨重启持久化；无保护时拒绝操作；无明文回退                         |
-| 主机密钥信任记录         | `<userData>/known-hosts.json`       | 显式接受后持久化；`verify` 不写入                                  |
-| SSH 会话（客户端、状态） | 主进程内存                          | 每个标签一个独立会话；断开/取消/关闭标签/窗口关闭/应用退出时释放   |
-| Shell/PTY（通道、状态）  | 主进程内存                          | Shell 打开期间；退出/关闭/SSH 断开/应用退出时释放                  |
-| SFTP 通道与路径锁        | 主进程内存                          | 每 SSH 会话最多一条复用通道；SSH 断开/关闭标签/应用退出时释放      |
-| SFTP 浏览状态            | `sftpStore`（按标签）               | 应用运行期间；切换会话/关闭标签后重置或清理                        |
-| 本地面板浏览状态         | `localPanelStore`（按标签）         | 应用运行期间；按 `requestId` 守卫；会话清理时按标签清理            |
-| 终端重放缓冲             | 渲染进程模块级内存（≤256 KiB/标签） | 标签存续；关闭标签/重连/重置时清理                                 |
-| 渲染会话镜像             | `sessionStore`                      | 应用运行期间；被主进程快照覆盖                                     |
-| 自动重连进度/定时器      | `sessionStore` + 模块级定时器       | 应用运行期间；取消/断开/关闭标签/设置关闭/退出时清除；不持久化      |
-| 分屏布局与窗格绑定       | `workspaceStore`                    | 应用运行期间；不持久化；不拥有 SSH/PTY 生命周期                    |
-| 主机密钥/凭据提示        | `sshPromptStore`                    | 应用运行期间；终态或用户操作后清理                                 |
-| 传输任务/队列/历史       | 主进程 `TransferService` 内存       | 应用运行期间；结束任务可被清空；退出时中止并清理                   |
-| 未完成传输快照           | `<userData>/transfer-journal.json`  | 最多 100 条；防抖/退出冲洗；重启水合为 `interrupted`，不恢复执行   |
-| 传输临时文件             | 本地/远程目标目录                   | `.termforge-part-*`；取消/失败/退出时清理；覆盖提交短暂使用备份    |
-| 传输任务投影             | `transferStore`                     | 应用运行期间；按 `revision` 合并；可随重置清空                     |
-| 端口转发规则             | `<userData>/port-forwards.json`     | 跨重启持久化；损坏则停止加载；启动后规则保持 `stopped`             |
-| 端口转发运行时           | 主进程内存                          | 仅运行期间；停止/会话结束/退出时关闭监听与连接，不持久化           |
-| 端口转发快照             | `portForwardStore`                  | 应用运行期间；按 `revision` 合并；不保存监听器、流量或凭据         |
-| 端口转发删除影响/确认    | `connectionStore`                   | 删除弹窗打开期间；失败可重试；不持久化                             |
-| 自定义快速命令/收藏      | `<userData>/quick-commands.json`    | 跨重启持久化；损坏停止加载；内置命令不落盘                         |
-| 命令历史                 | `<userData>/command-history.json`   | 跨重启持久化；最多 200 条；默认关闭；不额外加密                    |
-| 快速命令投影/抽屉状态    | `quickCommandStore`                 | 应用运行期间；命令与历史投影、搜索、目标候选、弹窗状态             |
+| 数据                     | 位置                                | 生命周期                                                              |
+| ------------------------ | ----------------------------------- | --------------------------------------------------------------------- |
+| 连接与分组               | `<userData>/connections.json`       | 跨重启持久化；首启种子；损坏则停止加载                                |
+| 加密凭据条目             | `<userData>/credentials.enc.json`   | 跨重启持久化；无保护时拒绝操作；无明文回退                            |
+| 主机密钥信任记录         | `<userData>/known-hosts.json`       | 显式接受后持久化；`verify` 不写入                                     |
+| SSH 会话（客户端、状态） | 主进程内存                          | 每个标签一个独立会话；断开/取消/关闭标签/窗口关闭/应用退出时释放      |
+| Shell/PTY（通道、状态）  | 主进程内存                          | Shell 打开期间；退出/关闭/SSH 断开/应用退出时释放                     |
+| SFTP 通道与路径锁        | 主进程内存                          | 每 SSH 会话最多一条复用通道；SSH 断开/关闭标签/应用退出时释放         |
+| SFTP 浏览状态            | `sftpStore`（按标签）               | 应用运行期间；切换会话/关闭标签后重置或清理                           |
+| 本地面板浏览状态         | `localPanelStore`（按标签）         | 应用运行期间；按 `requestId` 守卫；会话清理时按标签清理               |
+| 终端重放缓冲             | 渲染进程模块级内存（≤256 KiB/标签） | 标签存续；关闭标签/重连/重置时清理                                    |
+| 渲染会话镜像             | `sessionStore`                      | 应用运行期间；被主进程快照覆盖                                        |
+| 自动重连进度/定时器      | `sessionStore` + 模块级定时器       | 应用运行期间；取消/断开/关闭标签/设置关闭/退出时清除；不持久化        |
+| 分屏布局与窗格绑定       | `workspaceStore`                    | 应用运行期间；不持久化；不拥有 SSH/PTY 生命周期                       |
+| 主机密钥/凭据提示        | `sshPromptStore`                    | 应用运行期间；终态或用户操作后清理                                    |
+| 传输任务/队列/历史       | 主进程 `TransferService` 内存       | 应用运行期间；结束任务可被清空；退出时中止并清理                      |
+| 未完成传输快照           | `<userData>/transfer-journal.json`  | 最多 100 条；防抖/退出冲洗；重启水合为 `interrupted`，不恢复执行      |
+| 传输临时文件             | 本地/远程目标目录                   | `.termforge-part-*`；取消/失败/退出时清理；覆盖提交短暂使用备份       |
+| 传输任务投影             | `transferStore`                     | 应用运行期间；按 `revision` 合并；可随重置清空                        |
+| 端口转发规则             | `<userData>/port-forwards.json`     | 跨重启持久化；损坏则停止加载；启动后规则保持 `stopped`                |
+| 端口转发运行时           | 主进程内存                          | 仅运行期间；停止/会话结束/退出时关闭监听与连接，不持久化              |
+| 端口转发快照             | `portForwardStore`                  | 应用运行期间；按 `revision` 合并；不保存监听器、流量或凭据            |
+| 端口转发删除影响/确认    | `connectionStore`                   | 删除弹窗打开期间；失败可重试；不持久化                                |
+| 自定义快速命令/收藏      | `<userData>/quick-commands.json`    | 跨重启持久化；损坏停止加载；内置命令不落盘                            |
+| 命令历史                 | `<userData>/command-history.json`   | 跨重启持久化；最多 200 条；默认关闭；不额外加密                       |
+| 快速命令投影/抽屉状态    | `quickCommandStore`                 | 应用运行期间；命令与历史投影、搜索、目标候选、弹窗状态                |
 | 应用设置                 | `<userData>/settings.json`          | 跨重启持久化；损坏时逐字段恢复并保留原文件；v1–v5 读取时内存迁移至 v6 |
-| 设置镜像/解析主题        | `settingsStore`                     | 应用运行期间；启动加载并在写失败时局部回滚                         |
-| 壁纸图片/元数据          | `<userData>/wallpapers/`            | 跨重启持久化；重编码 JPEG + basename；移除时删除                   |
-| 壁纸投影                 | `wallpaperStore`                    | 应用运行期间；只保存 data URL、文件名与更新时间                    |
-| 诊断日志                 | `<userData>/logs/termforge*.log`    | 轮转保留最多 5 个文件；导出另存到用户选择路径                      |
-| 主机密钥管理列表         | 渲染进程 `SettingsView` 局部状态    | 打开页面/手动刷新时读取；删除后重新加载                            |
-| 应用信息                 | 主进程 `getAppInfo()`               | 每次启动通过 bridge 读取                                           |
+| 设置镜像/解析主题        | `settingsStore`                     | 应用运行期间；启动加载并在写失败时局部回滚                            |
+| 壁纸图片/元数据          | `<userData>/wallpapers/`            | 跨重启持久化；重编码 JPEG + basename；移除时删除                      |
+| 壁纸投影                 | `wallpaperStore`                    | 应用运行期间；只保存 data URL、文件名与更新时间                       |
+| 诊断日志                 | `<userData>/logs/termforge*.log`    | 轮转保留最多 5 个文件；导出另存到用户选择路径                         |
+| 主机密钥管理列表         | 渲染进程 `SettingsView` 局部状态    | 打开页面/手动刷新时读取；删除后重新加载                               |
+| 应用信息                 | 主进程 `getAppInfo()`               | 每次启动通过 bridge 读取                                              |
 
 ## 7. 状态与资源不变量
 

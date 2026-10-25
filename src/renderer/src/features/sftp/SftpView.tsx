@@ -108,11 +108,14 @@ export function SftpView() {
   const uploadTasks = transferTasks.filter(
     (task) => task.direction === 'upload' && task.sessionId === sessionId,
   )
-  const activeUploadCount = uploadTasks.filter((task) =>
-    isActiveTransferStatus(task.status),
-  ).length
+  const activeUploadCount = uploadTasks.filter((task) => isActiveTransferStatus(task.status)).length
 
-  const { openMkdir, openRename, openDelete, dialog: mutationDialog } = useSftpMutationDialog({
+  const {
+    openMkdir,
+    openRename,
+    openDelete,
+    dialog: mutationDialog,
+  } = useSftpMutationDialog({
     tabId: activeTabId,
     sessionId,
     path: remotePathOrRoot,
@@ -333,7 +336,8 @@ export function SftpView() {
           </div>
           <h1 className="module-header__title">SFTP 文件</h1>
           <p className="module-header__description">
-            通过已连接的 SSH 会话浏览远程目录，支持上传、下载、新建目录、重命名，以及删除文件或空目录。
+            通过已连接的 SSH
+            会话浏览远程目录，支持上传、下载、新建目录、重命名，以及删除文件或空目录。
             双击普通文件可用内置编辑器直接编辑并保存回服务器（UTF-8、上限 2 MiB）。
             左右双栏之间可直接拖拽：本地文件或目录拖到右侧上传（目录递归展开，符号链接不会被跟随），
             远程文件拖到左侧下载。文件流、临时文件与冲突检查均由主进程执行，渲染进程只接收任务快照。

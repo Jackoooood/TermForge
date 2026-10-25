@@ -3,10 +3,7 @@ import type { Duplex } from 'node:stream'
 import { PORT_FORWARD_LIMITS } from '../../../shared/constants/portForward'
 import { canonicalizeIpLiteral } from '../../../shared/portForward/address'
 import type { RemoteForwardRule } from '../../../shared/types/portForward'
-import type {
-  ForwardedTcpConnection,
-  SshForwardingSession,
-} from '../ssh/SshForwardingSession'
+import type { ForwardedTcpConnection, SshForwardingSession } from '../ssh/SshForwardingSession'
 import { type ForwardConnectionSlot, RuleConnectionTracker } from './connectionTracker'
 import {
   ForwardRuntimeError,
@@ -222,14 +219,10 @@ export async function startRemoteForward(
       }
 
       try {
-        await withTimeout(
-          facade.unforwardIn(rule.bindAddress, boundPort),
-          stopTimeoutMs,
-          {
-            code: 'unbind-failed',
-            message: `解除远程监听 ${rule.bindAddress}:${boundPort} 超时。`,
-          },
-        )
+        await withTimeout(facade.unforwardIn(rule.bindAddress, boundPort), stopTimeoutMs, {
+          code: 'unbind-failed',
+          message: `解除远程监听 ${rule.bindAddress}:${boundPort} 超时。`,
+        })
         unbound = true
       } catch (error) {
         if (facade.closed) {

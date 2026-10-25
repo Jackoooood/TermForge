@@ -78,7 +78,11 @@ function createTerminalHarness(options: BridgeHarnessOptions = {}) {
   const write = vi.fn(async (sessionId: string, _data: string) => ok({ sessionId }))
   const resize = vi.fn(async (sessionId: string, _size: TerminalSize) => ok({ sessionId }))
   const close = vi.fn(async (sessionId: string) => {
-    current = { ...current, status: 'closed', exit: { code: null, signal: null, reason: 'local-close' } }
+    current = {
+      ...current,
+      status: 'closed',
+      exit: { code: null, signal: null, reason: 'local-close' },
+    }
     for (const listener of [...statusListeners]) listener(current)
     return ok({ sessionId })
   })
@@ -311,7 +315,9 @@ describe('renderer terminal runtime', () => {
     runtime.writeTerminalInput(TAB_ID, 'pwd\r')
     expect(harness.write).not.toHaveBeenCalled()
 
-    useTerminalStore.getState().applySnapshot(TAB_ID, openSnapshot(SESSION_ID, { cols: 80, rows: 24 }))
+    useTerminalStore
+      .getState()
+      .applySnapshot(TAB_ID, openSnapshot(SESSION_ID, { cols: 80, rows: 24 }))
     runtime.writeTerminalInput(TAB_ID, 'pwd\r')
     await vi.waitFor(() => expect(harness.write).toHaveBeenCalledWith(SESSION_ID, 'pwd\r'))
 
@@ -341,7 +347,9 @@ describe('renderer terminal runtime', () => {
     const harness = createTerminalHarness()
     const { runtime, useTerminalStore } = await loadTerminalModules()
     runtime.bindTerminalTab(TAB_ID, SESSION_ID)
-    useTerminalStore.getState().applySnapshot(TAB_ID, openSnapshot(SESSION_ID, { cols: 80, rows: 24 }))
+    useTerminalStore
+      .getState()
+      .applySnapshot(TAB_ID, openSnapshot(SESSION_ID, { cols: 80, rows: 24 }))
 
     runtime.writeTerminalInput(TAB_ID, 'echo typed')
     const inserted = await runtime.insertTerminalInput(TAB_ID, SESSION_ID, 'df -h')
@@ -361,7 +369,9 @@ describe('renderer terminal runtime', () => {
     const harness = createTerminalHarness()
     const { runtime, useTerminalStore } = await loadTerminalModules()
     runtime.bindTerminalTab(TAB_ID, SESSION_ID)
-    useTerminalStore.getState().applySnapshot(TAB_ID, openSnapshot(SESSION_ID, { cols: 80, rows: 24 }))
+    useTerminalStore
+      .getState()
+      .applySnapshot(TAB_ID, openSnapshot(SESSION_ID, { cols: 80, rows: 24 }))
 
     const release: { current: (() => void) | null } = { current: null }
     harness.write.mockImplementationOnce(
@@ -389,7 +399,9 @@ describe('renderer terminal runtime', () => {
     const harness = createTerminalHarness()
     const { runtime, useTerminalStore } = await loadTerminalModules()
     runtime.bindTerminalTab(TAB_ID, SESSION_ID)
-    useTerminalStore.getState().applySnapshot(TAB_ID, openSnapshot(SESSION_ID, { cols: 80, rows: 24 }))
+    useTerminalStore
+      .getState()
+      .applySnapshot(TAB_ID, openSnapshot(SESSION_ID, { cols: 80, rows: 24 }))
 
     runtime.resizeTerminalShell(TAB_ID, { cols: 120, rows: 40 })
     runtime.resizeTerminalShell(TAB_ID, { cols: 120, rows: 40 })
@@ -426,7 +438,9 @@ describe('renderer terminal runtime', () => {
     const { runtime, useTerminalStore } = await loadTerminalModules()
     runtime.bindTerminalTab(TAB_ID, SESSION_ID)
     const release = runtime.attachTerminalRuntime()
-    useTerminalStore.getState().applySnapshot(TAB_ID, openSnapshot(SESSION_ID, { cols: 80, rows: 24 }))
+    useTerminalStore
+      .getState()
+      .applySnapshot(TAB_ID, openSnapshot(SESSION_ID, { cols: 80, rows: 24 }))
     harness.emitOutput({ sessionId: SESSION_ID, data: 'logout\r\n' })
 
     await runtime.closeTerminalShell(TAB_ID)

@@ -96,7 +96,8 @@ export const useWorkspaceStore = create<WorkspaceStoreState>((set, get) => ({
 
   setSftpDockWidth: (width) =>
     set({
-      sftpDockWidth: width === null ? null : clampWidth(width, SFTP_DOCK_MIN_WIDTH, SFTP_DOCK_MAX_WIDTH),
+      sftpDockWidth:
+        width === null ? null : clampWidth(width, SFTP_DOCK_MIN_WIDTH, SFTP_DOCK_MAX_WIDTH),
     }),
 
   setSftpTreeWidth: (width) =>
@@ -110,9 +111,7 @@ export const useWorkspaceStore = create<WorkspaceStoreState>((set, get) => ({
 
   addTab: (tabId) =>
     set((state) => {
-      const tabOrder = state.tabOrder.includes(tabId)
-        ? state.tabOrder
-        : [...state.tabOrder, tabId]
+      const tabOrder = state.tabOrder.includes(tabId) ? state.tabOrder : [...state.tabOrder, tabId]
       if (!state.split.enabled) return { tabOrder, activeTabId: tabId }
 
       const existing = paneIdForTab(state.split, tabId)
@@ -123,9 +122,7 @@ export const useWorkspaceStore = create<WorkspaceStoreState>((set, get) => ({
           split: { ...state.split, focusedPaneId: existing },
         }
       }
-      const emptyPane = SPLIT_PANE_IDS.find(
-        (paneId) => state.split.panes[paneId].tabId === null,
-      )
+      const emptyPane = SPLIT_PANE_IDS.find((paneId) => state.split.panes[paneId].tabId === null)
       const target = emptyPane ?? state.split.focusedPaneId
       return {
         tabOrder,
@@ -177,7 +174,9 @@ export const useWorkspaceStore = create<WorkspaceStoreState>((set, get) => ({
           split: closedSplit(state.split),
         }
       }
-      const focusedPaneId = focusedTab ? state.split.focusedPaneId : otherPaneId(state.split.focusedPaneId)
+      const focusedPaneId = focusedTab
+        ? state.split.focusedPaneId
+        : otherPaneId(state.split.focusedPaneId)
       return {
         tabOrder,
         activeTabId: activeTabForPane({ ...state.split, panes }, focusedPaneId),
@@ -197,9 +196,7 @@ export const useWorkspaceStore = create<WorkspaceStoreState>((set, get) => ({
           split: { ...state.split, focusedPaneId: existing },
         }
       }
-      const emptyPane = SPLIT_PANE_IDS.find(
-        (paneId) => state.split.panes[paneId].tabId === null,
-      )
+      const emptyPane = SPLIT_PANE_IDS.find((paneId) => state.split.panes[paneId].tabId === null)
       const target = emptyPane ?? state.split.focusedPaneId
       return {
         activeTabId: tabId,
@@ -226,7 +223,7 @@ export const useWorkspaceStore = create<WorkspaceStoreState>((set, get) => ({
       const current =
         state.activeTabId && state.tabOrder.includes(state.activeTabId)
           ? state.activeTabId
-          : state.tabOrder[0] ?? null
+          : (state.tabOrder[0] ?? null)
       if (!current) return state
       const secondary = state.tabOrder.find((tabId) => tabId !== current) ?? null
       return {
@@ -250,9 +247,11 @@ export const useWorkspaceStore = create<WorkspaceStoreState>((set, get) => ({
       const focusedTab = state.split.panes[state.split.focusedPaneId].tabId
       const otherTab = state.split.panes[otherPaneId(state.split.focusedPaneId)].tabId
       const activeTabId =
-        focusedTab ?? otherTab ?? (state.activeTabId && state.tabOrder.includes(state.activeTabId)
+        focusedTab ??
+        otherTab ??
+        (state.activeTabId && state.tabOrder.includes(state.activeTabId)
           ? state.activeTabId
-          : state.tabOrder[0] ?? null)
+          : (state.tabOrder[0] ?? null))
       return {
         activeTabId,
         split: closedSplit(state.split),
@@ -265,8 +264,7 @@ export const useWorkspaceStore = create<WorkspaceStoreState>((set, get) => ({
     else state.enableSplit(direction)
   },
 
-  setSplitDirection: (direction) =>
-    set((state) => ({ split: { ...state.split, direction } })),
+  setSplitDirection: (direction) => set((state) => ({ split: { ...state.split, direction } })),
 
   setSplitRatio: (ratio) =>
     set((state) => ({ split: { ...state.split, ratio: clampSplitRatio(ratio) } })),
@@ -302,8 +300,7 @@ export const useWorkspaceStore = create<WorkspaceStoreState>((set, get) => ({
             split: closedSplit(state.split),
           }
         }
-        const focusedId =
-          state.split.focusedPaneId === paneId ? otherId : state.split.focusedPaneId
+        const focusedId = state.split.focusedPaneId === paneId ? otherId : state.split.focusedPaneId
         return {
           activeTabId: panes[focusedId].tabId,
           split: { ...state.split, focusedPaneId: focusedId, panes },

@@ -1,4 +1,10 @@
-import { createServer, createConnection, type AddressInfo, type Server, type Socket } from 'node:net'
+import {
+  createServer,
+  createConnection,
+  type AddressInfo,
+  type Server,
+  type Socket,
+} from 'node:net'
 import { once } from 'node:events'
 import { duplexPair, type Duplex } from 'node:stream'
 import type {

@@ -69,10 +69,7 @@ function remoteRule(id: string, overrides: Partial<RemoteForwardRule> = {}): Rem
   }
 }
 
-function dynamicRule(
-  id: string,
-  overrides: Partial<DynamicForwardRule> = {},
-): DynamicForwardRule {
+function dynamicRule(id: string, overrides: Partial<DynamicForwardRule> = {}): DynamicForwardRule {
   return {
     id,
     type: 'dynamic',
@@ -212,10 +209,7 @@ class Harness {
   }
   readonly service: PortForwardService
 
-  constructor(
-    rules: PortForwardRule[] = [],
-    sessionConnections: Record<string, string> = {},
-  ) {
+  constructor(rules: PortForwardRule[] = [], sessionConnections: Record<string, string> = {}) {
     this.store = new MemoryPortForwardStore(rules)
     this.ssh = {
       getStatus: vi.fn(async (sessionId: string) =>
@@ -455,9 +449,7 @@ describe('port forward service', () => {
 
   it('reports a local bind failure as an error state instead of a false running state', async () => {
     const blocker = createServer()
-    await new Promise<void>((resolve) =>
-      blocker.listen({ host: '127.0.0.1', port: 0 }, resolve),
-    )
+    await new Promise<void>((resolve) => blocker.listen({ host: '127.0.0.1', port: 0 }, resolve))
     const address = blocker.address()
     if (typeof address !== 'object' || address === null) throw new Error('missing address')
     const harness = createHarness([localRule('pf-local-busy', { bindPort: address.port })])
@@ -588,17 +580,15 @@ describe('port forward service', () => {
     await harness.service.start({ ruleId: 'pf-a-2', sessionId: 'ssh-A' })
     await harness.service.start({ ruleId: 'pf-b-1', sessionId: 'ssh-B' })
 
-    await expect(
-      harness.service.getConnectionRemovalImpact(CONNECTION_A),
-    ).resolves.toEqual({
+    await expect(harness.service.getConnectionRemovalImpact(CONNECTION_A)).resolves.toEqual({
       connectionId: CONNECTION_A,
       portForwardRuleCount: 2,
       runningPortForwardCount: 2,
     })
 
-    await expect(
-      harness.service.removeForConnection(CONNECTION_A),
-    ).rejects.toMatchObject({ code: 'unavailable' })
+    await expect(harness.service.removeForConnection(CONNECTION_A)).rejects.toMatchObject({
+      code: 'unavailable',
+    })
 
     expect(harness.store.removeForConnectionCalls).toEqual([])
     expect((await harness.service.list()).items).toHaveLength(3)
@@ -614,14 +604,10 @@ describe('port forward service', () => {
     const removed = await harness.service.removeForConnection(CONNECTION_A)
     expect(removed.sort()).toEqual(['pf-a-1', 'pf-a-2'])
     expect(harness.store.removeForConnectionCalls).toEqual([CONNECTION_A])
-    expect((await harness.service.list()).items.map((item) => item.rule.id)).toEqual([
-      'pf-b-1',
-    ])
+    expect((await harness.service.list()).items.map((item) => item.rule.id)).toEqual(['pf-b-1'])
     expect(harness.latestItem('pf-b-1')?.runtime.status).toBe('running')
     expect(facadeB.unforwardInCalls).toEqual([])
-    await expect(
-      harness.service.getConnectionRemovalImpact(CONNECTION_A),
-    ).resolves.toEqual({
+    await expect(harness.service.getConnectionRemovalImpact(CONNECTION_A)).resolves.toEqual({
       connectionId: CONNECTION_A,
       portForwardRuleCount: 0,
       runningPortForwardCount: 0,

@@ -23,8 +23,7 @@ const AUTH_METHOD_LABELS: Record<AuthMethod, string> = {
 }
 
 const AUTH_NOTES: Record<AuthMethod, string> = {
-  password:
-    '密码不会写入连接配置。首次连接时由主进程提示输入，并保存到操作系统凭据存储。',
+  password: '密码不会写入连接配置。首次连接时由主进程提示输入，并保存到操作系统凭据存储。',
   privateKey:
     '可填写私钥文件路径（由主进程读取），或留空以在连接时粘贴私钥并存入操作系统凭据存储。私钥内容不会写入配置文件。',
   sshAgent:
@@ -96,8 +95,7 @@ export function ConnectionForm({
   const showCredentialRef = authMethod === 'privateKey' || authMethod === 'sshAgent'
   const connectionById = new Map(connections.map((item) => [item.id, item]))
   const jumpCandidates = connections.filter(
-    (item) =>
-      item.id !== connection?.id && !values.jumpConnectionIds.includes(item.id),
+    (item) => item.id !== connection?.id && !values.jumpConnectionIds.includes(item.id),
   )
   const jumpAtLimit = values.jumpConnectionIds.length >= MAX_JUMP_HOPS
   const jumpPath = [
@@ -576,7 +574,8 @@ export function ConnectionForm({
                 </p>
               ) : (
                 <p className="field__hint">
-                  按顺序从第 1 跳开始依次连接（最多 {MAX_JUMP_HOPS} 个）。每跳使用所选连接自身的认证方式与主机密钥信任记录，跳板被信任不会让目标服务器被自动信任。
+                  按顺序从第 1 跳开始依次连接（最多 {MAX_JUMP_HOPS}{' '}
+                  个）。每跳使用所选连接自身的认证方式与主机密钥信任记录，跳板被信任不会让目标服务器被自动信任。
                 </p>
               )}
             </div>

@@ -82,13 +82,8 @@ export function StatusBar() {
 
       <span className="status-bar__spacer" aria-hidden="true" />
 
-      <span
-        className="status-bar__badge"
-        title="SSH 会话与 SFTP 文件传输均由 Electron 主进程执行"
-      >
-        {bridgeStatus === 'unavailable'
-          ? '浏览器预览 · 无 SSH 能力'
-          : '主进程管理 SSH 与文件传输'}
+      <span className="status-bar__badge" title="SSH 会话与 SFTP 文件传输均由 Electron 主进程执行">
+        {bridgeStatus === 'unavailable' ? '浏览器预览 · 无 SSH 能力' : '主进程管理 SSH 与文件传输'}
       </span>
       <span
         className={

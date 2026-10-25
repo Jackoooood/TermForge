@@ -13,9 +13,8 @@ export function isEncryptedPrivateKey(content: string): boolean {
   if (/Proc-Type:\s*4\s*,\s*ENCRYPTED/i.test(content)) return true
   if (/DEK-Info:/i.test(content)) return true
 
-  const match = /-----BEGIN OPENSSH PRIVATE KEY-----([\s\S]*?)-----END OPENSSH PRIVATE KEY-----/.exec(
-    content,
-  )
+  const match =
+    /-----BEGIN OPENSSH PRIVATE KEY-----([\s\S]*?)-----END OPENSSH PRIVATE KEY-----/.exec(content)
   if (!match?.[1]) return false
 
   let decoded: Buffer
@@ -92,19 +91,11 @@ export const readPrivateKeyFile: PrivateKeyFileReader = async (rawPath) => {
       throw new SshFailureError('private-key-unreadable', undefined, '私钥路径不是普通文件。')
     }
     if (info.size <= 0 || info.size > MAX_PRIVATE_KEY_BYTES) {
-      throw new SshFailureError(
-        'private-key-unreadable',
-        undefined,
-        '私钥文件为空或超出允许大小。',
-      )
+      throw new SshFailureError('private-key-unreadable', undefined, '私钥文件为空或超出允许大小。')
     }
     const buffer = await readFile(filePath)
     if (buffer.length === 0 || buffer.length > MAX_PRIVATE_KEY_BYTES) {
-      throw new SshFailureError(
-        'private-key-unreadable',
-        undefined,
-        '私钥文件为空或超出允许大小。',
-      )
+      throw new SshFailureError('private-key-unreadable', undefined, '私钥文件为空或超出允许大小。')
     }
     return buffer.toString('utf8').replace(/^\uFEFF/, '')
   } catch (error) {

@@ -88,9 +88,7 @@ export const useConnectionStore = create<ConnectionStoreState>((set, get) => ({
         tags: catalog.tags,
         loadStatus: 'ready',
       })
-      useSessionStore
-        .getState()
-        .syncConnectionProfiles(catalog.connections)
+      useSessionStore.getState().syncConnectionProfiles(catalog.connections)
       useSessionStore
         .getState()
         .retainConnections(catalog.connections.map((connection) => connection.id))
@@ -280,8 +278,7 @@ export const useConnectionStore = create<ConnectionStoreState>((set, get) => ({
     const impact = get().deleteImpact
     if (get().deleteImpactStatus !== 'ready' || !impact) {
       set({
-        deleteError:
-          get().deleteImpactError ?? '仍在检查关联的端口转发规则，请稍后再试。',
+        deleteError: get().deleteImpactError ?? '仍在检查关联的端口转发规则，请稍后再试。',
       })
       return false
     }

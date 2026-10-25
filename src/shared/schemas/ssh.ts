@@ -32,10 +32,7 @@ export const sshCredentialKindSchema = z.enum(SSH_CREDENTIAL_KINDS, {
 export const sshCredentialInputSchema = z.strictObject({
   connectionId: connectionIdSchema,
   kind: sshCredentialKindSchema,
-  secret: z
-    .string()
-    .min(1, '凭据内容不能为空')
-    .max(MAX_SECRET_LENGTH, '凭据内容超出允许长度'),
+  secret: z.string().min(1, '凭据内容不能为空').max(MAX_SECRET_LENGTH, '凭据内容超出允许长度'),
 })
 
 export const respondHostKeyInputSchema = z.strictObject({

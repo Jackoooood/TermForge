@@ -96,10 +96,7 @@ describe('quick command store', () => {
 
   it('refuses to execute when the session or shell no longer matches the requested target', async () => {
     const execute = vi.fn(async () => ({ ok: true as const, value: ack() }))
-    window.termforge = createFakeBridge(
-      {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
-      { execute },
-    )
+    window.termforge = createFakeBridge({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, { execute })
     readyTargets()
 
     const result = await useQuickCommandStore.getState().executeQuickCommand({
@@ -128,7 +125,17 @@ describe('quick command store', () => {
       value: ack(),
     }))
     window.termforge = createFakeBridge(
-      {}, {}, { write }, {}, {}, {}, {}, {}, {}, {}, {},
+      {},
+      {},
+      { write },
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
       { execute },
     )
     readyTargets()

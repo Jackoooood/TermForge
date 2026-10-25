@@ -80,9 +80,9 @@ describe('credential resolver', () => {
     })
     const resolver = new VaultCredentialResolver({ credentials: store })
 
-    await expect(
-      resolver.resolve(profile({ credentialRef: 'vault://team/ops' })),
-    ).resolves.toEqual({ method: 'password', password: 'team-password' })
+    await expect(resolver.resolve(profile({ credentialRef: 'vault://team/ops' }))).resolves.toEqual(
+      { method: 'password', password: 'team-password' },
+    )
     expect(read).toHaveBeenNthCalledWith(1, 'vault://team/ops')
   })
 
@@ -121,7 +121,11 @@ describe('credential resolver', () => {
   })
 
   it('requires a stored passphrase for an encrypted private key', async () => {
-    const encrypted = ['-----BEGIN ENCRYPTED PRIVATE KEY-----', 'ciphertext', '-----END ENCRYPTED PRIVATE KEY-----'].join('\n')
+    const encrypted = [
+      '-----BEGIN ENCRYPTED PRIVATE KEY-----',
+      'ciphertext',
+      '-----END ENCRYPTED PRIVATE KEY-----',
+    ].join('\n')
     const passphraseRef = credentialReference('conn-1', 'passphrase')
     const readPrivateKeyFile = vi.fn(async () => encrypted)
     const { store, read } = createStore({ [passphraseRef]: 'key-passphrase' })
@@ -189,27 +193,21 @@ describe('credential resolver', () => {
     const resolver = new VaultCredentialResolver({ credentials: store })
 
     await resolver.saveCredential(profile(), 'password', 'vault-password')
-    expect(save).toHaveBeenCalledWith(
-      credentialReference('conn-1', 'password'),
-      'vault-password',
-    )
+    expect(save).toHaveBeenCalledWith(credentialReference('conn-1', 'password'), 'vault-password')
 
     await resolver.saveCredential(
       profile({ authMethod: 'privateKey' }),
       'privateKey',
       `${OPENSSH_KEY}\r\n`,
     )
-    expect(save).toHaveBeenLastCalledWith(
-      credentialReference('conn-1', 'privateKey'),
-      OPENSSH_KEY,
-    )
+    expect(save).toHaveBeenLastCalledWith(credentialReference('conn-1', 'privateKey'), OPENSSH_KEY)
 
     await expect(
       resolver.saveCredential(profile({ authMethod: 'privateKey' }), 'privateKey', 'not a key'),
     ).rejects.toMatchObject({ code: 'invalid-input' })
-    await expect(
-      resolver.saveCredential(profile(), 'password', ''),
-    ).rejects.toMatchObject({ code: 'invalid-input' })
+    await expect(resolver.saveCredential(profile(), 'password', '')).rejects.toMatchObject({
+      code: 'invalid-input',
+    })
     await expect(
       resolver.saveCredential(profile({ authMethod: 'sshAgent' }), 'password', 'secret'),
     ).rejects.toMatchObject({ code: 'invalid-input' })
@@ -239,16 +237,26 @@ describe('system SSH agent locator', () => {
     )
     await expect(present.locate()).resolves.toBe('/tmp/ssh-agent.sock')
 
-    const stale = new SystemSshAgentLocator('linux', { SSH_AUTH_SOCK: '/tmp/stale.sock' }, async () => false)
+    const stale = new SystemSshAgentLocator(
+      'linux',
+      { SSH_AUTH_SOCK: '/tmp/stale.sock' },
+      async () => false,
+    )
     await expect(stale.locate()).resolves.toBeNull()
-    await expect(new SystemSshAgentLocator('linux', {}, async () => true).locate()).resolves.toBeNull()
+    await expect(
+      new SystemSshAgentLocator('linux', {}, async () => true).locate(),
+    ).resolves.toBeNull()
   })
 })
 
 describe('private key helpers', () => {
   it('detects encrypted OpenSSH and PEM key material', () => {
     expect(isEncryptedPrivateKey('-----BEGIN ENCRYPTED PRIVATE KEY-----\nx\n')).toBe(true)
-    expect(isEncryptedPrivateKey(`-----BEGIN OPENSSH PRIVATE KEY-----\n${'A'.repeat(40)}\n-----END OPENSSH PRIVATE KEY-----`)).toBe(false)
+    expect(
+      isEncryptedPrivateKey(
+        `-----BEGIN OPENSSH PRIVATE KEY-----\n${'A'.repeat(40)}\n-----END OPENSSH PRIVATE KEY-----`,
+      ),
+    ).toBe(false)
     expect(isEncryptedPrivateKey(OPENSSH_KEY)).toBe(false)
   })
 

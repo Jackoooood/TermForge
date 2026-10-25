@@ -138,10 +138,7 @@ export class WallpaperService implements WallpaperServicePort {
 
     const jpeg = output.toJPEG(JPEG_QUALITY)
     if (jpeg.byteLength === 0) {
-      throw new AppOperationError(
-        'storage-write-failed',
-        '无法处理所选图片。请换一张图片后重试。',
-      )
+      throw new AppOperationError('storage-write-failed', '无法处理所选图片。请换一张图片后重试。')
     }
 
     await this.writeFiles(jpeg, {
@@ -195,10 +192,7 @@ export class WallpaperService implements WallpaperServicePort {
   }
 
   private async writeFiles(jpeg: Buffer, metadata: WallpaperMetadata): Promise<void> {
-    const temporaryImage = join(
-      this.directory,
-      `.${IMAGE_FILE}.${process.pid}.${randomUUID()}.tmp`,
-    )
+    const temporaryImage = join(this.directory, `.${IMAGE_FILE}.${process.pid}.${randomUUID()}.tmp`)
     const temporaryMetadata = join(
       this.directory,
       `.${METADATA_FILE}.${process.pid}.${randomUUID()}.tmp`,

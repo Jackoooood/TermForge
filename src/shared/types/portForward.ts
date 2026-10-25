@@ -31,11 +31,7 @@ export const PORT_FORWARD_FAILURE_CODES = [
 export type PortForwardFailureCode = (typeof PORT_FORWARD_FAILURE_CODES)[number]
 
 export type PortForwardStopReason =
-  | 'user'
-  | 'session-ended'
-  | 'connection-removed'
-  | 'app-quit'
-  | null
+  'user' | 'session-ended' | 'connection-removed' | 'app-quit' | null
 
 interface PortForwardRuleBase {
   id: string
@@ -97,9 +93,7 @@ export interface DynamicForwardCreateInput {
 }
 
 export type PortForwardCreateInput =
-  | LocalForwardCreateInput
-  | RemoteForwardCreateInput
-  | DynamicForwardCreateInput
+  LocalForwardCreateInput | RemoteForwardCreateInput | DynamicForwardCreateInput
 
 export interface LocalForwardUpdateInput {
   type: 'local'
@@ -126,9 +120,7 @@ export interface DynamicForwardUpdateInput {
 }
 
 export type PortForwardUpdateInput =
-  | LocalForwardUpdateInput
-  | RemoteForwardUpdateInput
-  | DynamicForwardUpdateInput
+  LocalForwardUpdateInput | RemoteForwardUpdateInput | DynamicForwardUpdateInput
 
 export interface PortForwardFailure {
   code: PortForwardFailureCode

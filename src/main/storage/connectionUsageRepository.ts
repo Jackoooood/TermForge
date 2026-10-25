@@ -108,9 +108,7 @@ export class ConnectionUsageRepository implements ConnectionUsageStore {
       if (event === 'attempt') {
         nextRecord = {
           connectionId: id,
-          lastAttemptAt: existing
-            ? latestIso(existing.lastAttemptAt, timestamp)
-            : timestamp,
+          lastAttemptAt: existing ? latestIso(existing.lastAttemptAt, timestamp) : timestamp,
           lastConnectedAt: existing?.lastConnectedAt ?? null,
           attemptCount: (existing?.attemptCount ?? 0) + 1,
           successCount: existing?.successCount ?? 0,
@@ -133,10 +131,7 @@ export class ConnectionUsageRepository implements ConnectionUsageStore {
         }
       }
 
-      if (
-        nextRecord.attemptCount > MAX_USAGE_COUNT ||
-        nextRecord.successCount > MAX_USAGE_COUNT
-      ) {
+      if (nextRecord.attemptCount > MAX_USAGE_COUNT || nextRecord.successCount > MAX_USAGE_COUNT) {
         throw new AppOperationError('invalid-input', '最近连接记录计数已达上限。')
       }
 

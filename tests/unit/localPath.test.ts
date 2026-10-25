@@ -102,7 +102,12 @@ describe('localPath', () => {
   })
 
   it('sorts directories first and honours field, direction and stable ties', () => {
-    const directory = { name: 'z-folder', kind: 'directory' as const, sizeBytes: null, modifiedAt: null }
+    const directory = {
+      name: 'z-folder',
+      kind: 'directory' as const,
+      sizeBytes: null,
+      modifiedAt: null,
+    }
     const small = {
       name: 'small.txt',
       kind: 'file' as const,

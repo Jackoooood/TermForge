@@ -1,13 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import type { KeyboardEvent, MouseEvent } from 'react'
-import {
-  ArrowDown,
-  ArrowUp,
-  ChevronsUpDown,
-  FileText,
-  Folder,
-  Link2,
-} from 'lucide-react'
+import { ArrowDown, ArrowUp, ChevronsUpDown, FileText, Folder, Link2 } from 'lucide-react'
 import type { RemoteFileEntry } from '@shared/types'
 import type { RemoteSortField, RemoteSortState } from '@shared/sftp/remotePath'
 import { cn, formatBytes, formatDateTime } from '@renderer/lib/utils'

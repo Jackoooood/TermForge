@@ -1,14 +1,6 @@
 import { useEffect, useId, useState } from 'react'
 import type { FormEvent, ReactNode } from 'react'
-import {
-  AlertTriangle,
-  FileText,
-  Folder,
-  FolderPlus,
-  Info,
-  Link2,
-  PencilLine,
-} from 'lucide-react'
+import { AlertTriangle, FileText, Folder, FolderPlus, Info, Link2, PencilLine } from 'lucide-react'
 import type { OperationResult, RemoteFileEntry, SftpMutationAck } from '@shared/types'
 import { getRemoteEntryNameError, joinRemotePath, remoteParentPath } from '@shared/sftp/remotePath'
 import { Button } from '@renderer/components/common/Button'
@@ -247,12 +239,7 @@ export function useSftpMutationDialog({
     let result: OperationResult<SftpMutationAck>
 
     if (current.kind === 'mkdir') {
-      result = await store.mkdir(
-        current.tabId,
-        current.sessionId,
-        current.parentPath,
-        current.name,
-      )
+      result = await store.mkdir(current.tabId, current.sessionId, current.parentPath, current.name)
       await finishMutation(current.tabId, current.sessionId, result, {
         title: '已创建远程目录',
         description: targetPath ?? current.name,
@@ -301,165 +288,162 @@ export function useSftpMutationDialog({
         : null
   const dialogTitle = dialog ? MUTATION_TITLES[dialog.kind] : ''
 
-  const dialogNode =
-    dialog ? (
-      <Modal
-        title={dialogTitle}
-        description={
-          dialog.kind === 'mkdir'
-            ? '在当前远程目录中创建单个目录，不会递归创建多级路径。'
-            : dialog.kind === 'rename'
-              ? '条目保留在同一目录；目标已存在时服务器会拒绝，不会静默覆盖。'
-              : '此操作只会影响远程服务器上的目标条目。'
-        }
-        width={480}
-        onClose={closeDialog}
-        footer={
-          <>
-            <Button
-              variant={dialog.kind === 'delete' ? 'danger' : 'primary'}
-              disabled={dialog.submitting || dialog.outcomeUnknown}
-              onClick={() => void submitDialog()}
-            >
-              {dialog.kind === 'delete' ? (
-                <AlertTriangle size={13} aria-hidden="true" />
-              ) : dialog.kind === 'mkdir' ? (
-                <FolderPlus size={13} aria-hidden="true" />
-              ) : (
-                <PencilLine size={13} aria-hidden="true" />
-              )}
-              {dialog.outcomeUnknown
-                ? '结果未确认'
-                : dialog.submitting
-                  ? '处理中…'
-                  : dialog.kind === 'delete'
-                    ? '确认删除'
-                    : dialog.kind === 'mkdir'
-                      ? '创建目录'
-                      : '重命名'}
-            </Button>
-            <Button variant="ghost" disabled={dialog.submitting} onClick={closeDialog}>
-              {dialog.outcomeUnknown ? '关闭' : '取消'}
-            </Button>
-          </>
-        }
+  const dialogNode = dialog ? (
+    <Modal
+      title={dialogTitle}
+      description={
+        dialog.kind === 'mkdir'
+          ? '在当前远程目录中创建单个目录，不会递归创建多级路径。'
+          : dialog.kind === 'rename'
+            ? '条目保留在同一目录；目标已存在时服务器会拒绝，不会静默覆盖。'
+            : '此操作只会影响远程服务器上的目标条目。'
+      }
+      width={480}
+      onClose={closeDialog}
+      footer={
+        <>
+          <Button
+            variant={dialog.kind === 'delete' ? 'danger' : 'primary'}
+            disabled={dialog.submitting || dialog.outcomeUnknown}
+            onClick={() => void submitDialog()}
+          >
+            {dialog.kind === 'delete' ? (
+              <AlertTriangle size={13} aria-hidden="true" />
+            ) : dialog.kind === 'mkdir' ? (
+              <FolderPlus size={13} aria-hidden="true" />
+            ) : (
+              <PencilLine size={13} aria-hidden="true" />
+            )}
+            {dialog.outcomeUnknown
+              ? '结果未确认'
+              : dialog.submitting
+                ? '处理中…'
+                : dialog.kind === 'delete'
+                  ? '确认删除'
+                  : dialog.kind === 'mkdir'
+                    ? '创建目录'
+                    : '重命名'}
+          </Button>
+          <Button variant="ghost" disabled={dialog.submitting} onClick={closeDialog}>
+            {dialog.outcomeUnknown ? '关闭' : '取消'}
+          </Button>
+        </>
+      }
+    >
+      <form
+        className="sftp-dialog"
+        noValidate
+        onSubmit={(event: FormEvent<HTMLFormElement>) => {
+          event.preventDefault()
+          void submitDialog()
+        }}
       >
-        <form
-          className="sftp-dialog"
-          noValidate
-          onSubmit={(event: FormEvent<HTMLFormElement>) => {
-            event.preventDefault()
-            void submitDialog()
-          }}
-        >
-          {dialog.kind === 'delete' && dialogEntry ? (
-            <div className="delete-confirm">
-              <div className="delete-confirm__target">
-                <span className="delete-confirm__icon" aria-hidden="true">
-                  <EntryIcon entry={dialogEntry} />
-                </span>
-                <div>
-                  <p className="delete-confirm__name">{dialogEntry.name}</p>
-                  <p className="delete-confirm__address">
-                    {entryKindLabel(dialogEntry.kind)} · {dialogEntry.path}
-                  </p>
-                </div>
-              </div>
-              <p className="delete-confirm__message">
-                {dialogEntry.kind === 'directory'
-                  ? '仅当该目录为空时才会删除。目录中存在任何条目时，服务器会拒绝本次操作，目录保持不变。'
-                  : dialogEntry.kind === 'symlink'
-                    ? '将删除符号链接本身，不会修改或删除它指向的目标。'
-                    : '将删除该远程文件。删除后无法通过本应用恢复。'}
-              </p>
-              <div className="delete-confirm__note">
-                <AlertTriangle size={13} aria-hidden="true" />
-                <span>
-                  不会递归删除。根目录、常见系统目录以及权限不足的目标会由主进程或服务器拒绝。
-                </span>
-              </div>
-            </div>
-          ) : (
-            <div className="sftp-dialog__target">
-              <span className="sftp-dialog__target-icon" aria-hidden="true">
-                {dialog.kind === 'mkdir' ? <FolderPlus size={16} /> : <PencilLine size={16} />}
+        {dialog.kind === 'delete' && dialogEntry ? (
+          <div className="delete-confirm">
+            <div className="delete-confirm__target">
+              <span className="delete-confirm__icon" aria-hidden="true">
+                <EntryIcon entry={dialogEntry} />
               </span>
               <div>
-                <p className="sftp-dialog__target-path">
-                  {dialogTarget ?? '输入名称后显示目标路径'}
-                </p>
-                <p className="sftp-dialog__target-hint">
-                  {dialog.kind === 'mkdir'
-                    ? `父目录：${dialog.parentPath}`
-                    : `目标目录：${dialog.parentPath}`}
+                <p className="delete-confirm__name">{dialogEntry.name}</p>
+                <p className="delete-confirm__address">
+                  {entryKindLabel(dialogEntry.kind)} · {dialogEntry.path}
                 </p>
               </div>
             </div>
-          )}
-
-          {dialog.kind !== 'delete' ? (
-            <div className="field">
-              <label className="field__label" htmlFor={dialogInputId}>
-                {dialog.kind === 'mkdir' ? '目录名称' : '新名称'}{' '}
-                <span className="field__required" aria-hidden="true">
-                  *
-                </span>
-              </label>
-              <input
-                id={dialogInputId}
-                className="text-input"
-                type="text"
-                autoFocus
-                disabled={dialogLocked}
-                value={dialog.name}
-                aria-invalid={Boolean(dialog.fieldError || dialog.requestError)}
-                aria-describedby={`${dialogInputId}-hint`}
-                placeholder={dialog.kind === 'mkdir' ? '例如 release-2026.11' : '输入新的名称'}
-                onChange={(event) => {
-                  const name = event.target.value
-                  setDialog((state) =>
-                    state
-                      ? {
-                          ...state,
-                          name,
-                          fieldError: null,
-                          requestError: null,
-                          outcomeUnknown: false,
-                        }
-                      : state,
-                  )
-                }}
-              />
-              {dialog.fieldError ? (
-                <p className="field__error" role="alert">
-                  {dialog.fieldError}
-                </p>
-              ) : (
-                <p className="field__hint" id={`${dialogInputId}-hint`}>
-                  支持空格与 Unicode；不能包含 /、NUL 或控制字符，不能是 . 或 ..。
-                </p>
-              )}
-            </div>
-          ) : null}
-
-          {dialog.requestError ? (
-            <div className="form-error-summary" role="alert">
-              <Info size={13} aria-hidden="true" />
-              <span>{dialog.requestError}</span>
-            </div>
-          ) : null}
-
-          {dialog.outcomeUnknown ? (
+            <p className="delete-confirm__message">
+              {dialogEntry.kind === 'directory'
+                ? '仅当该目录为空时才会删除。目录中存在任何条目时，服务器会拒绝本次操作，目录保持不变。'
+                : dialogEntry.kind === 'symlink'
+                  ? '将删除符号链接本身，不会修改或删除它指向的目标。'
+                  : '将删除该远程文件。删除后无法通过本应用恢复。'}
+            </p>
             <div className="delete-confirm__note">
               <AlertTriangle size={13} aria-hidden="true" />
               <span>
-                无法确认操作是否已在服务器上生效。已请求刷新目录；请根据最新列表核实后再操作，应用不会自动重试。
+                不会递归删除。根目录、常见系统目录以及权限不足的目标会由主进程或服务器拒绝。
               </span>
             </div>
-          ) : null}
-        </form>
-      </Modal>
-    ) : null
+          </div>
+        ) : (
+          <div className="sftp-dialog__target">
+            <span className="sftp-dialog__target-icon" aria-hidden="true">
+              {dialog.kind === 'mkdir' ? <FolderPlus size={16} /> : <PencilLine size={16} />}
+            </span>
+            <div>
+              <p className="sftp-dialog__target-path">{dialogTarget ?? '输入名称后显示目标路径'}</p>
+              <p className="sftp-dialog__target-hint">
+                {dialog.kind === 'mkdir'
+                  ? `父目录：${dialog.parentPath}`
+                  : `目标目录：${dialog.parentPath}`}
+              </p>
+            </div>
+          </div>
+        )}
+
+        {dialog.kind !== 'delete' ? (
+          <div className="field">
+            <label className="field__label" htmlFor={dialogInputId}>
+              {dialog.kind === 'mkdir' ? '目录名称' : '新名称'}{' '}
+              <span className="field__required" aria-hidden="true">
+                *
+              </span>
+            </label>
+            <input
+              id={dialogInputId}
+              className="text-input"
+              type="text"
+              autoFocus
+              disabled={dialogLocked}
+              value={dialog.name}
+              aria-invalid={Boolean(dialog.fieldError || dialog.requestError)}
+              aria-describedby={`${dialogInputId}-hint`}
+              placeholder={dialog.kind === 'mkdir' ? '例如 release-2026.11' : '输入新的名称'}
+              onChange={(event) => {
+                const name = event.target.value
+                setDialog((state) =>
+                  state
+                    ? {
+                        ...state,
+                        name,
+                        fieldError: null,
+                        requestError: null,
+                        outcomeUnknown: false,
+                      }
+                    : state,
+                )
+              }}
+            />
+            {dialog.fieldError ? (
+              <p className="field__error" role="alert">
+                {dialog.fieldError}
+              </p>
+            ) : (
+              <p className="field__hint" id={`${dialogInputId}-hint`}>
+                支持空格与 Unicode；不能包含 /、NUL 或控制字符，不能是 . 或 ..。
+              </p>
+            )}
+          </div>
+        ) : null}
+
+        {dialog.requestError ? (
+          <div className="form-error-summary" role="alert">
+            <Info size={13} aria-hidden="true" />
+            <span>{dialog.requestError}</span>
+          </div>
+        ) : null}
+
+        {dialog.outcomeUnknown ? (
+          <div className="delete-confirm__note">
+            <AlertTriangle size={13} aria-hidden="true" />
+            <span>
+              无法确认操作是否已在服务器上生效。已请求刷新目录；请根据最新列表核实后再操作，应用不会自动重试。
+            </span>
+          </div>
+        ) : null}
+      </form>
+    </Modal>
+  ) : null
 
   return {
     openMkdir,

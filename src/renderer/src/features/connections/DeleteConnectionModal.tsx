@@ -14,9 +14,7 @@ export function DeleteConnectionModal() {
   const cascadePortForwards = useConnectionStore((state) => state.cascadePortForwards)
   const cancelDelete = useConnectionStore((state) => state.cancelDelete)
   const loadDeleteImpact = useConnectionStore((state) => state.loadDeleteImpact)
-  const setCascadePortForwards = useConnectionStore(
-    (state) => state.setCascadePortForwards,
-  )
+  const setCascadePortForwards = useConnectionStore((state) => state.setCascadePortForwards)
   const confirmDelete = useConnectionStore((state) => state.confirmDelete)
 
   const target = connections.find((connection) => connection.id === targetId)
@@ -29,10 +27,7 @@ export function DeleteConnectionModal() {
   const runningCount = deleteImpact?.runningPortForwardCount ?? 0
   const cascadeRequired = ruleCount > 0
   const confirmBlocked =
-    deleting ||
-    impactLoading ||
-    impactFailed ||
-    (cascadeRequired && !cascadePortForwards)
+    deleting || impactLoading || impactFailed || (cascadeRequired && !cascadePortForwards)
 
   return (
     <Modal
@@ -57,11 +52,7 @@ export function DeleteConnectionModal() {
             onClick={() => void confirmDelete()}
           >
             <Trash2 size={13} aria-hidden="true" />
-            {deleting
-              ? '删除中…'
-              : cascadeRequired
-                ? '删除连接并清理规则'
-                : '删除连接'}
+            {deleting ? '删除中…' : cascadeRequired ? '删除连接并清理规则' : '删除连接'}
           </Button>
           <Button variant="ghost" disabled={deleting} onClick={cancelDelete}>
             取消
@@ -133,9 +124,7 @@ export function DeleteConnectionModal() {
                 disabled={deleting}
                 onChange={(event) => setCascadePortForwards(event.target.checked)}
               />
-              <span>
-                我已确认停止并删除这 {ruleCount} 条端口转发规则，随后再删除该连接。
-              </span>
+              <span>我已确认停止并删除这 {ruleCount} 条端口转发规则，随后再删除该连接。</span>
             </label>
           </div>
         ) : null}

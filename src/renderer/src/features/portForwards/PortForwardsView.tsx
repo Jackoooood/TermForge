@@ -182,8 +182,9 @@ export function PortForwardsView() {
           </div>
           <h1 className="module-header__title">端口转发</h1>
           <p className="module-header__description">
-            在本机或 SSH 服务端建立监听器，并通过已连接的会话转发 TCP 流量。列表状态来自主进程的实际监听结果；
-            应用重启后规则保持停止，SSH 重连也不会静默恢复旧规则。转发数据不会被读取、记录或发送给界面。
+            在本机或 SSH 服务端建立监听器，并通过已连接的会话转发 TCP
+            流量。列表状态来自主进程的实际监听结果； 应用重启后规则保持停止，SSH
+            重连也不会静默恢复旧规则。转发数据不会被读取、记录或发送给界面。
           </p>
         </div>
         <div className="module-header__actions">
@@ -209,9 +210,7 @@ export function PortForwardsView() {
           显示 {filtered.length} / {items.length}
         </span>
         <span className="module-toolbar__spacer" />
-        <span className="module-toolbar__meta">
-          运行中 {runningCount} 条 · 仅使用现有 SSH 会话
-        </span>
+        <span className="module-toolbar__meta">运行中 {runningCount} 条 · 仅使用现有 SSH 会话</span>
       </div>
 
       {actionError ? (
@@ -296,11 +295,7 @@ export function PortForwardsView() {
                   <tr key={item.rule.id}>
                     <td>
                       <div className="table-name">
-                        <ArrowLeftRight
-                          className="table-name__icon"
-                          size={14}
-                          aria-hidden="true"
-                        />
+                        <ArrowLeftRight className="table-name__icon" size={14} aria-hidden="true" />
                         <span className="table-name__text" title={item.rule.name}>
                           {item.rule.name}
                         </span>
@@ -310,9 +305,7 @@ export function PortForwardsView() {
                       </div>
                     </td>
                     <td>
-                      <Badge
-                        tone={item.rule.type === 'dynamic' ? 'primary' : 'neutral'}
-                      >
+                      <Badge tone={item.rule.type === 'dynamic' ? 'primary' : 'neutral'}>
                         {TYPE_LABELS[item.rule.type]}
                       </Badge>
                     </td>
@@ -322,9 +315,7 @@ export function PortForwardsView() {
                       </span>
                     </td>
                     <td>
-                      <span className="table-address">
-                        {endpoint(item.rule, running, item)}
-                      </span>
+                      <span className="table-address">{endpoint(item.rule, running, item)}</span>
                       {running && item.runtime.boundPort !== item.rule.bindPort ? (
                         <span className="field__hint">实际端口</span>
                       ) : null}

@@ -159,11 +159,7 @@ describe('SftpDock interactions', () => {
     installBridge({
       '/': [],
       '/home': [],
-      [HOME]: [
-        entry(HOME, 'alpha.txt'),
-        entry(HOME, 'beta.txt'),
-        entry(HOME, 'release notes.md'),
-      ],
+      [HOME]: [entry(HOME, 'alpha.txt'), entry(HOME, 'beta.txt'), entry(HOME, 'release notes.md')],
     })
     const user = userEvent.setup()
     render(<SftpDock />)
@@ -399,8 +395,6 @@ describe('SftpDock interactions', () => {
     await user.type(within(dialog).getByLabelText(/目录名称/), 'release 2026')
     await user.click(within(dialog).getByRole('button', { name: '创建目录' }))
 
-    await waitFor(() =>
-      expect(mkdir).toHaveBeenCalledWith(SESSION_ID, HOME, 'release 2026'),
-    )
+    await waitFor(() => expect(mkdir).toHaveBeenCalledWith(SESSION_ID, HOME, 'release 2026'))
   })
 })

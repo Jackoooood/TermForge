@@ -17,10 +17,7 @@ import type { QuickCommandComposeRequest } from '@renderer/stores/quickCommandSt
 import { useSessionStore } from '@renderer/stores/sessionStore'
 import { useSettingsStore } from '@renderer/stores/settingsStore'
 import { useTerminalStore } from '@renderer/stores/terminalStore'
-import {
-  listQuickCommandTargets,
-  targetKey,
-} from '@renderer/lib/quickCommandTargets'
+import { listQuickCommandTargets, targetKey } from '@renderer/lib/quickCommandTargets'
 
 export function QuickCommandComposeModal() {
   const compose = useQuickCommandStore((state) => state.compose)
@@ -41,9 +38,7 @@ function ComposeDialog({ request }: { request: QuickCommandComposeRequest }) {
       ? (commands.find((item) => item.id === source.commandId) ?? null)
       : null
   const historyEntry =
-    source.kind === 'history'
-      ? (history.find((item) => item.id === source.entryId) ?? null)
-      : null
+    source.kind === 'history' ? (history.find((item) => item.id === source.entryId) ?? null) : null
   const capturedTarget = useQuickCommandStore((state) => state.capturedTarget)
   const closeCompose = useQuickCommandStore((state) => state.closeCompose)
   const insertQuickCommand = useQuickCommandStore((state) => state.insertQuickCommand)
@@ -69,18 +64,14 @@ function ComposeDialog({ request }: { request: QuickCommandComposeRequest }) {
     )
     return available ? capturedPair : ''
   })
-  const [recordHistory, setRecordHistory] = useState(() =>
-    useSettingsStore.getState().commandHistoryEnabled,
+  const [recordHistory, setRecordHistory] = useState(
+    () => useSettingsStore.getState().commandHistoryEnabled,
   )
   const [submitting, setSubmitting] = useState(false)
   const [requestError, setRequestError] = useState<string | null>(null)
 
-  const targets = useMemo(
-    () => listQuickCommandTargets(sessions, shells),
-    [sessions, shells],
-  )
-  const selectedTarget =
-    targets.find((target) => targetKey(target) === targetSelection) ?? null
+  const targets = useMemo(() => listQuickCommandTargets(sessions, shells), [sessions, shells])
+  const selectedTarget = targets.find((target) => targetKey(target) === targetSelection) ?? null
   const capturedPair = capturedTarget ? targetKey(capturedTarget) : null
   const capturedInvalid =
     capturedPair !== null && !targets.some((target) => targetKey(target) === capturedPair)
@@ -331,9 +322,7 @@ function ComposeDialog({ request }: { request: QuickCommandComposeRequest }) {
                   disabled={submitting}
                   onChange={(event) => setRecordHistory(event.target.checked)}
                 />
-                <span>
-                  记录本次发送到命令历史（仅保存命令正文与目标信息，不保存输出或退出码）
-                </span>
+                <span>记录本次发送到命令历史（仅保存命令正文与目标信息，不保存输出或退出码）</span>
               </label>
             ) : (
               <p className="qc-compose__history-off">

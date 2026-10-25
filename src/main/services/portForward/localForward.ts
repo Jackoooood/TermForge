@@ -3,10 +3,7 @@ import type { Duplex } from 'node:stream'
 import { PORT_FORWARD_LIMITS } from '../../../shared/constants/portForward'
 import type { LocalForwardRule } from '../../../shared/types/portForward'
 import type { SshForwardingSession } from '../ssh/SshForwardingSession'
-import {
-  type ForwardConnectionSlot,
-  RuleConnectionTracker,
-} from './connectionTracker'
+import { type ForwardConnectionSlot, RuleConnectionTracker } from './connectionTracker'
 import {
   ForwardRuntimeError,
   mapLocalBindFailure,
@@ -96,12 +93,7 @@ export async function startLocalForward(
     }
 
     socket.once('close', finalize)
-    void openForwardChannel(
-      facade,
-      rule.targetHost,
-      rule.targetPort,
-      connectTimeoutMs,
-    ).then(
+    void openForwardChannel(facade, rule.targetHost, rule.targetPort, connectTimeoutMs).then(
       (channel) => {
         if (entry.closed || stopRequested) {
           try {

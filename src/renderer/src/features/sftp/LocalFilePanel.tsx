@@ -51,10 +51,7 @@ interface LocalFilePanelProps {
   activeUploadCount: number
   onPickFiles: () => void
   onUploadPaths: (paths: string[]) => void
-  onDownloadFiles: (
-    payload: { sessionId: string; paths: string[] },
-    localDirectory: string,
-  ) => void
+  onDownloadFiles: (payload: { sessionId: string; paths: string[] }, localDirectory: string) => void
   onOpenTransfers: () => void
 }
 
@@ -145,11 +142,11 @@ export function LocalFilePanel({
     canAccept: (event) =>
       Boolean(
         tabId &&
-          tab &&
-          tab.status !== 'loading' &&
-          tab.path !== '' &&
-          !isLocalPathAtRoot(tab.path) &&
-          hasRemoteFiles(event.dataTransfer),
+        tab &&
+        tab.status !== 'loading' &&
+        tab.path !== '' &&
+        !isLocalPathAtRoot(tab.path) &&
+        hasRemoteFiles(event.dataTransfer),
       ),
     onDrop: (dataTransfer) => {
       const payload = readRemoteFiles(dataTransfer)
@@ -194,7 +191,9 @@ export function LocalFilePanel({
     if (range) {
       const anchor = tab?.selectedPath
       const anchorPath =
-        anchor && visibleEntries.some((candidate) => candidate.path === anchor) ? anchor : entry.path
+        anchor && visibleEntries.some((candidate) => candidate.path === anchor)
+          ? anchor
+          : entry.path
       const anchorIndex = visibleEntries.findIndex((candidate) => candidate.path === anchorPath)
       const targetIndex = visibleEntries.findIndex((candidate) => candidate.path === entry.path)
       if (anchorIndex >= 0 && targetIndex >= 0) {
@@ -272,7 +271,11 @@ export function LocalFilePanel({
             onClick={() => navigate(root.path)}
           >
             <span className="file-row__name">
-              <Icon className="file-row__icon file-row__icon--directory" size={14} aria-hidden="true" />
+              <Icon
+                className="file-row__icon file-row__icon--directory"
+                size={14}
+                aria-hidden="true"
+              />
               <span>{root.name}</span>
             </span>
             <span className="file-row__size">{rootKindLabel(root.kind)}</span>
@@ -624,13 +627,13 @@ export function LocalFilePanel({
           {rooting
             ? `根位置 ${tab?.roots.length ?? 0} 个`
             : `已显示 ${visibleEntries.length} / 共 ${tab?.entries.length ?? 0} 项 · 已选 ${selectedEntries.length}`}
-          {uploadTaskCount > 0 ? ` · 上传任务 ${uploadTaskCount} 个（进行中 ${activeUploadCount}）` : ''}
+          {uploadTaskCount > 0
+            ? ` · 上传任务 ${uploadTaskCount} 个（进行中 ${activeUploadCount}）`
+            : ''}
         </span>
         <span className="file-selection-bar">
           <Info size={11} aria-hidden="true" />
-          {remoteDirectory
-            ? `拖拽上传目标：${remoteDirectory}`
-            : '远程目录未就绪，暂不能上传'}
+          {remoteDirectory ? `拖拽上传目标：${remoteDirectory}` : '远程目录未就绪，暂不能上传'}
         </span>
       </footer>
     </section>

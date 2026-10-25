@@ -948,15 +948,23 @@ describe('main-process IPC', () => {
       error: { code: 'invalid-input', message: '上传路径参数未通过校验。' },
     })
     await expect(
-      handlerFor(IPC_CHANNELS.transferEnqueueUploadPaths)(event, SNAPSHOT.sessionId, '/home/deploy', [
-        'relative/path',
-      ]),
+      handlerFor(IPC_CHANNELS.transferEnqueueUploadPaths)(
+        event,
+        SNAPSHOT.sessionId,
+        '/home/deploy',
+        ['relative/path'],
+      ),
     ).resolves.toEqual({
       ok: false,
       error: { code: 'invalid-input', message: '上传路径参数未通过校验。' },
     })
     await expect(
-      handlerFor(IPC_CHANNELS.transferEnqueueUploadPaths)(event, SNAPSHOT.sessionId, '/home/deploy', []),
+      handlerFor(IPC_CHANNELS.transferEnqueueUploadPaths)(
+        event,
+        SNAPSHOT.sessionId,
+        '/home/deploy',
+        [],
+      ),
     ).resolves.toEqual({
       ok: false,
       error: { code: 'invalid-input', message: '上传路径参数未通过校验。' },
@@ -976,10 +984,12 @@ describe('main-process IPC', () => {
     expect(dependencies.transfer.enqueueDownloadPaths).not.toHaveBeenCalled()
 
     await expect(
-      handlerFor(IPC_CHANNELS.transferEnqueueUploadPaths)(event, SNAPSHOT.sessionId, '/home/deploy', [
-        'C:\\src\\app.js',
-        'C:\\src\\assets',
-      ]),
+      handlerFor(IPC_CHANNELS.transferEnqueueUploadPaths)(
+        event,
+        SNAPSHOT.sessionId,
+        '/home/deploy',
+        ['C:\\src\\app.js', 'C:\\src\\assets'],
+      ),
     ).resolves.toEqual({
       ok: true,
       value: {
@@ -1235,7 +1245,9 @@ describe('main-process IPC', () => {
     expect(dependencies.wallpaper.remove).toHaveBeenCalledTimes(1)
 
     const get = dependencies.wallpaper.get as ReturnType<typeof vi.fn>
-    get.mockRejectedValueOnce(new AppOperationError('storage-read-failed', '无法读取已保存的壁纸。'))
+    get.mockRejectedValueOnce(
+      new AppOperationError('storage-read-failed', '无法读取已保存的壁纸。'),
+    )
     expect(await handlerFor(IPC_CHANNELS.wallpaperGet)(event)).toEqual({
       ok: false,
       error: { code: 'storage-read-failed', message: '无法读取已保存的壁纸。' },
@@ -1505,9 +1517,10 @@ describe('main-process IPC', () => {
       ok: false,
       error: { code: 'invalid-input', message: '快速命令发送参数未通过校验，未发送任何内容。' },
     })
-    expect(
-      await handlerFor(IPC_CHANNELS.commandHistoryRemove)(event, '../bad'),
-    ).toMatchObject({ ok: false, error: { code: 'invalid-input' } })
+    expect(await handlerFor(IPC_CHANNELS.commandHistoryRemove)(event, '../bad')).toMatchObject({
+      ok: false,
+      error: { code: 'invalid-input' },
+    })
 
     await expect(handlerFor(IPC_CHANNELS.commandHistoryClear)(event)).resolves.toEqual({
       ok: true,

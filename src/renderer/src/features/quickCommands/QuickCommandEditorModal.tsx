@@ -125,7 +125,10 @@ function EditorDialog({ commandId }: { commandId: string | null }) {
         <div className="qc-editor__grid">
           <div className="field">
             <label className="field__label" htmlFor={nameId}>
-              命令名称<span className="field__required" aria-hidden="true">*</span>
+              命令名称
+              <span className="field__required" aria-hidden="true">
+                *
+              </span>
             </label>
             <input
               id={nameId}
@@ -142,7 +145,10 @@ function EditorDialog({ commandId }: { commandId: string | null }) {
           </div>
           <div className="field">
             <label className="field__label" htmlFor={categoryId}>
-              分类<span className="field__required" aria-hidden="true">*</span>
+              分类
+              <span className="field__required" aria-hidden="true">
+                *
+              </span>
             </label>
             <input
               id={categoryId}
@@ -183,7 +189,10 @@ function EditorDialog({ commandId }: { commandId: string | null }) {
 
         <div className="field">
           <label className="field__label" htmlFor={bodyId}>
-            命令正文<span className="field__required" aria-hidden="true">*</span>
+            命令正文
+            <span className="field__required" aria-hidden="true">
+              *
+            </span>
           </label>
           <input
             id={bodyId}
@@ -202,8 +211,8 @@ function EditorDialog({ commandId }: { commandId: string | null }) {
           />
           <p className="field__hint">
             单行命令；使用 <code>{'{{参数名}}'}</code> 声明参数，最多{' '}
-            {QUICK_COMMAND_LIMITS.maxParameters} 个。参数按字面单次替换，不做额外 shell
-            转义，也没有 eval 或本地 shell。
+            {QUICK_COMMAND_LIMITS.maxParameters} 个。参数按字面单次替换，不做额外 shell 转义，也没有
+            eval 或本地 shell。
           </p>
           {!parsed.ok ? (
             <p className="field__error" role="alert">
@@ -215,9 +224,7 @@ function EditorDialog({ commandId }: { commandId: string | null }) {
         <div className="qc-editor__params">
           <p className="qc-compose__section-title">
             参数默认值
-            {parsed.ok && parsed.parameters.length > 0
-              ? `（${parsed.parameters.length} 个）`
-              : ''}
+            {parsed.ok && parsed.parameters.length > 0 ? `（${parsed.parameters.length} 个）` : ''}
           </p>
           {parsed.ok && parsed.parameters.length > 0 ? (
             parsed.parameters.map((parameterName) => (

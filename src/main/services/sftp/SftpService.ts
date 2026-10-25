@@ -151,7 +151,8 @@ function readNativeErrorCode(error: unknown): string | null {
 }
 
 function textRevision(stats: Pick<Stats, 'size' | 'mtime'>): string {
-  const size = typeof stats.size === 'number' && Number.isFinite(stats.size) ? Math.trunc(stats.size) : -1
+  const size =
+    typeof stats.size === 'number' && Number.isFinite(stats.size) ? Math.trunc(stats.size) : -1
   const mtime =
     typeof stats.mtime === 'number' && Number.isFinite(stats.mtime) ? Math.trunc(stats.mtime) : -1
   return `${mtime}:${size}`
@@ -368,10 +369,7 @@ export class SftpService implements SftpServicePort, SftpTransferPort {
     }
     const parent = remoteParentPath(tempPath)
     if (parent !== remoteParentPath(targetPath)) {
-      throw new AppOperationError(
-        'invalid-input',
-        '临时文件必须与目标位于同一目录，才能安全提交。',
-      )
+      throw new AppOperationError('invalid-input', '临时文件必须与目标位于同一目录，才能安全提交。')
     }
 
     const state = this.ensureState(parsed.data.sessionId)
@@ -773,17 +771,13 @@ export class SftpService implements SftpServicePort, SftpTransferPort {
       const parent = remoteParentPath(path)
       const tempPath = joinRemotePath(parent, `${TRANSFER_TEMP_PREFIX}${randomUUID()}`)
       const backupPath = joinRemotePath(parent, `${TRANSFER_BACKUP_PREFIX}${randomUUID()}`)
-      const mode =
-        typeof stats.mode === 'number' && stats.mode > 0 ? stats.mode & 0o7777 : 0o600
+      const mode = typeof stats.mode === 'number' && stats.mode > 0 ? stats.mode & 0o7777 : 0o600
       let tempPending = false
 
       try {
         await this.execute<undefined>(state, '写入编辑临时文件', true, (wrapper, done) => {
-          wrapper.writeFile(
-            tempPath,
-            Buffer.from(bytes),
-            { flag: 'wx', mode },
-            (error) => done(error),
+          wrapper.writeFile(tempPath, Buffer.from(bytes), { flag: 'wx', mode }, (error) =>
+            done(error),
           )
         })
         tempPending = true

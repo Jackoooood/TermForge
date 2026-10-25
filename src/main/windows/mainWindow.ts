@@ -28,7 +28,10 @@ function resolveAppearance(
   }
 }
 
-function titleBarOverlay(theme: ThemePreference, dbxThemeMode: DbxThemeMode): TitleBarOverlayOptions {
+function titleBarOverlay(
+  theme: ThemePreference,
+  dbxThemeMode: DbxThemeMode,
+): TitleBarOverlayOptions {
   const { mode } = resolveAppearance(theme, dbxThemeMode)
   return {
     // The web app bar draws its own background and bottom divider beneath this area.

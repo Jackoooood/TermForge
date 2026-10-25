@@ -69,12 +69,22 @@ describe('wallpaper store', () => {
     expect(useWallpaperStore.getState().error).toContain('bridge')
 
     resetWallpaperStore()
-    window.termforge = createFakeBridge({}, {}, {}, {}, {}, {}, {}, {}, {
-      get: async () => ({
-        ok: false,
-        error: { code: 'storage-read-failed', message: '无法读取已保存的壁纸。' },
-      }),
-    })
+    window.termforge = createFakeBridge(
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {
+        get: async () => ({
+          ok: false,
+          error: { code: 'storage-read-failed', message: '无法读取已保存的壁纸。' },
+        }),
+      },
+    )
     await useWallpaperStore.getState().loadWallpaper()
     expect(useWallpaperStore.getState()).toMatchObject({
       dataUrl: null,
@@ -103,9 +113,7 @@ describe('wallpaper store', () => {
       description: 'desk.jpg',
     })
     await vi.waitFor(() => {
-      expect(update).toHaveBeenCalledWith(
-        expect.objectContaining({ wallpaperEnabled: true }),
-      )
+      expect(update).toHaveBeenCalledWith(expect.objectContaining({ wallpaperEnabled: true }))
     })
     expect(update).toHaveBeenCalledTimes(1)
   })
@@ -170,9 +178,7 @@ describe('wallpaper store', () => {
       title: '壁纸已移除',
     })
     await vi.waitFor(() => {
-      expect(update).toHaveBeenCalledWith(
-        expect.objectContaining({ wallpaperEnabled: false }),
-      )
+      expect(update).toHaveBeenCalledWith(expect.objectContaining({ wallpaperEnabled: false }))
     })
     expect(update).toHaveBeenCalledTimes(1)
   })

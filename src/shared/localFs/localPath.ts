@@ -180,10 +180,7 @@ const KIND_ORDER: Record<LocalFileKind, number> = {
   file: 2,
 }
 
-type ComparableLocalEntry = Pick<
-  LocalFileEntry,
-  'name' | 'kind' | 'sizeBytes' | 'modifiedAt'
->
+type ComparableLocalEntry = Pick<LocalFileEntry, 'name' | 'kind' | 'sizeBytes' | 'modifiedAt'>
 
 /**
  * Directories stay first regardless of the sort field; the chosen field (and

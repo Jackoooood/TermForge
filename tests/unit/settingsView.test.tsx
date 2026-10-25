@@ -94,9 +94,10 @@ describe('settings view', () => {
 
     const classicGroup = screen.getByRole('group', { name: '经典主题' })
     expect(within(classicGroup).getAllByRole('button')).toHaveLength(3)
-    expect(
-      within(classicGroup).getByRole('button', { name: /Aurora 极光/ }),
-    ).toHaveAttribute('aria-pressed', 'true')
+    expect(within(classicGroup).getByRole('button', { name: /Aurora 极光/ })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
     expect(
       within(screen.getByRole('group', { name: 'DBX 色板' })).getAllByRole('button'),
     ).toHaveLength(13)
@@ -183,9 +184,7 @@ describe('settings view', () => {
     expect(screen.getByText(/最多 5 次/)).toBeInTheDocument()
 
     await user.click(toggle)
-    expect(update).toHaveBeenLastCalledWith(
-      expect.objectContaining({ autoReconnectEnabled: true }),
-    )
+    expect(update).toHaveBeenLastCalledWith(expect.objectContaining({ autoReconnectEnabled: true }))
     expect(await screen.findByText('已启用')).toBeInTheDocument()
   })
 

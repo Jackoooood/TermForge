@@ -22,7 +22,12 @@ vi.mock('../../src/renderer/src/features/editor/CodeMirrorSurface', async () => 
       'aria-label': '编辑器内容',
       value: content,
       onChange: (event: { target: { value: string } }) => onChange(event.target.value),
-      onKeyDown: (event: { key: string; ctrlKey: boolean; metaKey: boolean; preventDefault: () => void }) => {
+      onKeyDown: (event: {
+        key: string
+        ctrlKey: boolean
+        metaKey: boolean
+        preventDefault: () => void
+      }) => {
         if (event.key === 's' && (event.ctrlKey || event.metaKey)) {
           event.preventDefault()
           onSave()

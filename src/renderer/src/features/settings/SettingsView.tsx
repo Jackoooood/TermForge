@@ -315,7 +315,8 @@ export function SettingsView() {
       pushToast({
         tone: 'success',
         title: '已恢复默认外观',
-        description: 'Aurora 深色 · 界面 13px · 终端 Cascadia Mono 13px · 默认光标与渐变 · 壁纸关闭。',
+        description:
+          'Aurora 深色 · 界面 13px · 终端 Cascadia Mono 13px · 默认光标与渐变 · 壁纸关闭。',
       })
     }
   }
@@ -920,7 +921,11 @@ export function SettingsView() {
                       </p>
                     </div>
                     <div className="settings-row__control">
-                      <Button size="sm" variant="ghost" onClick={() => setActiveSection('appearance')}>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => setActiveSection('appearance')}
+                      >
                         前往外观设置
                       </Button>
                     </div>
@@ -1511,11 +1516,13 @@ export function SettingsView() {
                       <p className="settings-row__description">
                         默认关闭。启用后，仅在网络错误、连接超时、DNS
                         解析失败、连接被拒绝或服务器关闭连接时自动重试，最多 5 次，间隔依次为
-                        1、2、4、8、15 秒。认证失败、主机密钥变化、手动取消、主动断开、关闭标签或应用退出都不会触发自动重试。
+                        1、2、4、8、15
+                        秒。认证失败、主机密钥变化、手动取消、主动断开、关闭标签或应用退出都不会触发自动重试。
                       </p>
                       <p className="settings-row__description">
                         每次重试都会重新执行完整的 SSH
-                        认证与主机密钥校验，不会自动信任新密钥，不会重放断线前的终端输入、未确认的快速命令或其他待发送数据，也不会恢复旧的远程 Shell、前台进程或工作目录。重试计划仅存在于运行中的应用内，不会写入磁盘。
+                        认证与主机密钥校验，不会自动信任新密钥，不会重放断线前的终端输入、未确认的快速命令或其他待发送数据，也不会恢复旧的远程
+                        Shell、前台进程或工作目录。重试计划仅存在于运行中的应用内，不会写入磁盘。
                       </p>
                     </div>
                     <div className="settings-row__control settings-actions">

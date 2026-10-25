@@ -98,7 +98,9 @@ export function CredentialPromptModal() {
   return (
     <Modal
       title={
-        prompt.hopIndex ? `跳板 ${prompt.hopIndex} · ${KIND_TITLES[prompt.kind]}` : KIND_TITLES[prompt.kind]
+        prompt.hopIndex
+          ? `跳板 ${prompt.hopIndex} · ${KIND_TITLES[prompt.kind]}`
+          : KIND_TITLES[prompt.kind]
       }
       description={`${prompt.username}@${prompt.host}:${prompt.port} · ${prompt.connectionName}`}
       width={560}
@@ -115,7 +117,12 @@ export function CredentialPromptModal() {
         </>
       }
     >
-      <form className="connection-form" id={formId} noValidate onSubmit={(event) => void submit(event)}>
+      <form
+        className="connection-form"
+        id={formId}
+        noValidate
+        onSubmit={(event) => void submit(event)}
+      >
         <div className="form-error-summary" role="alert">
           <Lock size={13} aria-hidden="true" />
           <span>{prompt.message}</span>

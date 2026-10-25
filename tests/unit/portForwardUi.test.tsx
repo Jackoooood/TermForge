@@ -59,10 +59,7 @@ const REMOTE_RULE: PortForwardRule = {
   updatedAt: '2026-10-20T08:00:00.000Z',
 }
 
-function runtime(
-  ruleId: string,
-  overrides: Partial<PortForwardRuntime> = {},
-): PortForwardRuntime {
+function runtime(ruleId: string, overrides: Partial<PortForwardRuntime> = {}): PortForwardRuntime {
   return {
     ruleId,
     status: 'stopped',
@@ -218,9 +215,7 @@ describe('port forwarding UI', () => {
     expect(submit).toBeDisabled()
     expect(dialog).toHaveTextContent('非回环地址会向其他主机暴露端口')
 
-    await user.click(
-      within(dialog).getByRole('checkbox', { name: /我已确认该监听地址的暴露范围/ }),
-    )
+    await user.click(within(dialog).getByRole('checkbox', { name: /我已确认该监听地址的暴露范围/ }))
     expect(submit).toBeEnabled()
     await user.click(submit)
 

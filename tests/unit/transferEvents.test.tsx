@@ -60,15 +60,21 @@ describe('useTransferBridgeEvents', () => {
       value: listing(sessionId, path),
     }))
     const queued = fakeTransferTask({ sessionId: SESSION, status: 'queued' })
-    window.termforge = createFakeBridge({}, {}, {}, { list }, {
-      list: async () => ({ ok: true, value: [queued] }),
-      onUpdate: (listener) => {
-        emit = listener
-        return () => {
-          emit = null
-        }
+    window.termforge = createFakeBridge(
+      {},
+      {},
+      {},
+      { list },
+      {
+        list: async () => ({ ok: true, value: [queued] }),
+        onUpdate: (listener) => {
+          emit = listener
+          return () => {
+            emit = null
+          }
+        },
       },
-    })
+    )
 
     const { unmount } = renderHook(() => useTransferBridgeEvents())
     await waitFor(() => expect(useTransferStore.getState().tasks).toHaveLength(1))
@@ -99,15 +105,21 @@ describe('useTransferBridgeEvents', () => {
       ok: true as const,
       value: listing(sessionId, path),
     }))
-    window.termforge = createFakeBridge({}, {}, {}, { list }, {
-      list: async () => ({ ok: true, value: [] }),
-      onUpdate: (listener) => {
-        emit = listener
-        return () => {
-          emit = null
-        }
+    window.termforge = createFakeBridge(
+      {},
+      {},
+      {},
+      { list },
+      {
+        list: async () => ({ ok: true, value: [] }),
+        onUpdate: (listener) => {
+          emit = listener
+          return () => {
+            emit = null
+          }
+        },
       },
-    })
+    )
 
     const { unmount } = renderHook(() => useTransferBridgeEvents())
     await waitFor(() => expect(useTransferStore.getState().syncing).toBe(false))
@@ -139,8 +151,22 @@ describe('useTransferBridgeEvents', () => {
     await new Promise((resolve) => setTimeout(resolve, 300))
     expect(list).not.toHaveBeenCalled()
 
-    emitTask(fakeTransferTask({ id: 'transfer-upload-1', sessionId: SESSION, status: 'completed', revision: 2 }))
-    emitTask(fakeTransferTask({ id: 'transfer-upload-2', sessionId: SESSION, status: 'completed', revision: 2 }))
+    emitTask(
+      fakeTransferTask({
+        id: 'transfer-upload-1',
+        sessionId: SESSION,
+        status: 'completed',
+        revision: 2,
+      }),
+    )
+    emitTask(
+      fakeTransferTask({
+        id: 'transfer-upload-2',
+        sessionId: SESSION,
+        status: 'completed',
+        revision: 2,
+      }),
+    )
     unmount()
 
     await new Promise((resolve) => setTimeout(resolve, 300))

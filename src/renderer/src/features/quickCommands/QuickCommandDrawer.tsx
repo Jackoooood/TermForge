@@ -291,15 +291,15 @@ export function QuickCommandDrawer() {
             value={search}
             onChange={setSearch}
             label={activePane === 'library' ? '搜索快速命令' : '搜索命令历史'}
-            placeholder={activePane === 'library' ? '搜索名称、分类或命令…' : '搜索命令正文或目标主机…'}
+            placeholder={
+              activePane === 'library' ? '搜索名称、分类或命令…' : '搜索命令正文或目标主机…'
+            }
           />
           <IconButton
             label={activePane === 'library' ? '从主进程刷新快速命令' : '从主进程刷新命令历史'}
             size="sm"
             disabled={
-              activePane === 'library'
-                ? commandsStatus === 'loading'
-                : historyStatus === 'loading'
+              activePane === 'library' ? commandsStatus === 'loading' : historyStatus === 'loading'
             }
             onClick={retryActivePane}
           >
@@ -375,7 +375,12 @@ export function QuickCommandDrawer() {
           <div className="qc-inline-confirm" role="alertdialog" aria-label="确认清空命令历史">
             <AlertTriangle size={12} aria-hidden="true" />
             <span>确认清空全部 {history.length} 条命令历史？该操作不可撤销。</span>
-            <Button size="sm" variant="danger" disabled={clearing} onClick={() => void clearAllHistory()}>
+            <Button
+              size="sm"
+              variant="danger"
+              disabled={clearing}
+              onClick={() => void clearAllHistory()}
+            >
               {clearing ? '清空中…' : '确认清空'}
             </Button>
             <Button

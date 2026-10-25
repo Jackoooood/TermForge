@@ -22,14 +22,8 @@ import { StatusDot, statusLabel } from '@renderer/components/common/StatusDot'
 import { closeTerminalShell } from '@renderer/services/terminalRuntime'
 import { useAppStore } from '@renderer/stores/appStore'
 import { useQuickCommandStore } from '@renderer/stores/quickCommandStore'
-import {
-  promptForCredentialIfNeeded,
-  useSessionStore,
-} from '@renderer/stores/sessionStore'
-import {
-  getTerminalToolController,
-  useTerminalToolStore,
-} from '@renderer/stores/terminalToolStore'
+import { promptForCredentialIfNeeded, useSessionStore } from '@renderer/stores/sessionStore'
+import { getTerminalToolController, useTerminalToolStore } from '@renderer/stores/terminalToolStore'
 import { useTerminalStore } from '@renderer/stores/terminalStore'
 import { useWorkspaceStore } from '@renderer/stores/workspaceStore'
 
@@ -80,11 +74,9 @@ export function TerminalToolbar({ session }: TerminalToolbarProps) {
   const hasSelection = useTerminalToolStore((state) => state.selection[session.id] ?? false)
   const pushToast = useAppStore((state) => state.pushToast)
   const showShell = session.status === 'connected'
-  const canCloseShell =
-    showShell && (shellStatus === 'open' || shellStatus === 'opening')
+  const canCloseShell = showShell && (shellStatus === 'open' || shellStatus === 'opening')
   const busy = BUSY_STATUSES.has(session.status)
-  const autoReconnectActive =
-    session.autoReconnect !== null && !session.autoReconnect.exhausted
+  const autoReconnectActive = session.autoReconnect !== null && !session.autoReconnect.exhausted
   const canRetry = session.status === 'error' || session.status === 'disconnected'
   const canProvideCredential =
     session.status === 'error' && session.failure?.credentialKind !== undefined
@@ -342,9 +334,7 @@ export function TerminalToolbar({ session }: TerminalToolbarProps) {
             variant="ghost"
             size="sm"
             aria-label={session.status === 'closing' ? '正在断开…' : '取消连接'}
-            title={
-              session.status === 'closing' ? '正在断开连接' : '取消进行中的连接尝试'
-            }
+            title={session.status === 'closing' ? '正在断开连接' : '取消进行中的连接尝试'}
             disabled={session.status === 'closing'}
             onClick={() => void cancelConnect(session.id)}
           >

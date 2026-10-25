@@ -46,10 +46,7 @@ export function clampSplitRatio(value: number): number {
   return Math.min(SPLIT_RATIO_MAX, Math.max(SPLIT_RATIO_MIN, value))
 }
 
-export function paneIdForTab(
-  layout: TerminalSplitLayout,
-  tabId: string,
-): SplitPaneId | null {
+export function paneIdForTab(layout: TerminalSplitLayout, tabId: string): SplitPaneId | null {
   for (const paneId of SPLIT_PANE_IDS) {
     if (layout.panes[paneId].tabId === tabId) return paneId
   }

@@ -1,10 +1,6 @@
 import { useEffect } from 'react'
 import type { CSSProperties } from 'react'
-import {
-  DEFAULT_UI_FONT_SIZE,
-  TERMINAL_FONT_FAMILIES,
-  UI_FONT_FAMILIES,
-} from '@shared/constants'
+import { DEFAULT_UI_FONT_SIZE, TERMINAL_FONT_FAMILIES, UI_FONT_FAMILIES } from '@shared/constants'
 import { TopBar } from '@renderer/components/layout/TopBar'
 import { PrimarySidebar } from '@renderer/components/layout/PrimarySidebar'
 import { StatusBar } from '@renderer/components/layout/StatusBar'

@@ -896,7 +896,10 @@ describe('TransferService', () => {
     }
     expect(await fsp.readFile(join(harness.remoteRoot, 'inbox', 'top.txt'), 'utf8')).toBe('top')
     expect(
-      await fsp.readFile(join(harness.remoteRoot, 'inbox', 'bundle', 'sub', 'deep', 'c.txt'), 'utf8'),
+      await fsp.readFile(
+        join(harness.remoteRoot, 'inbox', 'bundle', 'sub', 'deep', 'c.txt'),
+        'utf8',
+      ),
     ).toBe('C')
     expect(harness.port.mkdirs).toEqual(
       expect.arrayContaining(['/inbox/bundle', '/inbox/bundle/sub', '/inbox/bundle/sub/deep']),
@@ -928,7 +931,9 @@ describe('TransferService', () => {
     }
 
     await expect(
-      harness.service.enqueueUploadPaths(SESSION, '/inbox', [join(harness.localRoot, 'missing.txt')]),
+      harness.service.enqueueUploadPaths(SESSION, '/inbox', [
+        join(harness.localRoot, 'missing.txt'),
+      ]),
     ).rejects.toMatchObject({ code: 'not-found' })
     await expect(
       harness.service.enqueueUploadPaths(SESSION, '/inbox', ['relative\\path']),
@@ -942,7 +947,9 @@ describe('TransferService', () => {
       harness.service.enqueueUploadPaths(SESSION, '/inbox', ['/src/..\\escape.txt']),
     ).rejects.toMatchObject({ code: 'not-found' })
     await expect(
-      harness.service.enqueueUploadPaths(SESSION, '/inbox/missing-dir', [join(realDir, 'kept.txt')]),
+      harness.service.enqueueUploadPaths(SESSION, '/inbox/missing-dir', [
+        join(realDir, 'kept.txt'),
+      ]),
     ).rejects.toMatchObject({ code: 'unavailable' })
   }, 10_000)
 
@@ -1002,9 +1009,16 @@ describe('TransferService', () => {
     const diskRoot = process.platform === 'win32' ? 'C:\\' : '/'
     await expect(
       harness.service.enqueueDownloadPaths(SESSION, ['/src/report.txt'], diskRoot),
-    ).rejects.toMatchObject({ code: 'invalid-input', message: expect.stringContaining('磁盘根目录') })
+    ).rejects.toMatchObject({
+      code: 'invalid-input',
+      message: expect.stringContaining('磁盘根目录'),
+    })
     await expect(
-      harness.service.enqueueDownloadPaths(SESSION, ['/src/report.txt'], join(harness.localRoot, 'missing')),
+      harness.service.enqueueDownloadPaths(
+        SESSION,
+        ['/src/report.txt'],
+        join(harness.localRoot, 'missing'),
+      ),
     ).rejects.toMatchObject({ code: 'unavailable' })
   }, 10_000)
 })

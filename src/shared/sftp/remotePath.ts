@@ -124,10 +124,7 @@ export interface RemoteSortState {
   direction: RemoteSortDirection
 }
 
-type SortableRemoteEntry = Pick<
-  RemoteFileEntry,
-  'name' | 'kind' | 'sizeBytes' | 'modifiedAt'
->
+type SortableRemoteEntry = Pick<RemoteFileEntry, 'name' | 'kind' | 'sizeBytes' | 'modifiedAt'>
 
 function modifiedTimestamp(value: string | null): number | null {
   if (!value) return null
@@ -148,8 +145,7 @@ export function compareRemoteEntriesBy(
     primary = collator.compare(left.name, right.name)
   } else {
     const leftValue = sort.field === 'size' ? left.sizeBytes : modifiedTimestamp(left.modifiedAt)
-    const rightValue =
-      sort.field === 'size' ? right.sizeBytes : modifiedTimestamp(right.modifiedAt)
+    const rightValue = sort.field === 'size' ? right.sizeBytes : modifiedTimestamp(right.modifiedAt)
     if (leftValue === null || rightValue === null) {
       if (leftValue === null && rightValue === null) primary = 0
       else return leftValue === null ? 1 : -1

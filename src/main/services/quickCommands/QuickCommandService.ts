@@ -172,10 +172,7 @@ export class QuickCommandService implements QuickCommandServicePort {
       )
     }
     if (snapshot.sessionId !== sessionId || snapshot.clientId !== tabId) {
-      throw new AppOperationError(
-        'conflict',
-        '目标终端已变化，快速命令未发送。请重新选择终端。',
-      )
+      throw new AppOperationError('conflict', '目标终端已变化，快速命令未发送。请重新选择终端。')
     }
     if (snapshot.status !== 'connected') {
       throw new AppOperationError(

@@ -209,8 +209,7 @@ if (!hasSingleInstanceLock) {
         store: new PortForwardRepository(join(userDataPath, 'port-forwards.json')),
         connections,
         ssh,
-        emitUpdate: (event) =>
-          sendToMainWindow(IPC_EVENT_CHANNELS.portForwardSnapshot, event),
+        emitUpdate: (event) => sendToMainWindow(IPC_EVENT_CHANNELS.portForwardSnapshot, event),
       })
 
       sftpService = new SftpService({

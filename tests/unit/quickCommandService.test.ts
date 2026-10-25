@@ -48,7 +48,9 @@ const SHELL: TerminalShellSnapshot = {
   exit: null,
 }
 
-function storedCustom(overrides: Partial<PersistedCustomQuickCommand> = {}): PersistedCustomQuickCommand {
+function storedCustom(
+  overrides: Partial<PersistedCustomQuickCommand> = {},
+): PersistedCustomQuickCommand {
   return {
     id: 'qc-1',
     name: '查看服务状态',
@@ -63,7 +65,9 @@ function storedCustom(overrides: Partial<PersistedCustomQuickCommand> = {}): Per
   }
 }
 
-function createCommandStore(initial: QuickCommandStoreState = { customCommands: [], builtInFavoriteIds: [] }): {
+function createCommandStore(
+  initial: QuickCommandStoreState = { customCommands: [], builtInFavoriteIds: [] },
+): {
   store: QuickCommandStore
   state: QuickCommandStoreState
 } {
@@ -130,11 +134,13 @@ function createSsh(overrides: Partial<Record<keyof SshServicePort, unknown>> = {
   return ssh
 }
 
-function createService(options: {
-  commands?: QuickCommandStoreState
-  historyEnabled?: boolean
-  ssh?: SshServicePort
-} = {}): {
+function createService(
+  options: {
+    commands?: QuickCommandStoreState
+    historyEnabled?: boolean
+    ssh?: SshServicePort
+  } = {},
+): {
   service: QuickCommandService
   commands: ReturnType<typeof createCommandStore>
   history: ReturnType<typeof createHistoryStore>
@@ -197,10 +203,7 @@ describe('quick command service', () => {
       }),
     )
 
-    expect(ssh.writeShell).toHaveBeenCalledWith(
-      'ssh-1',
-      'systemctl status nginx --no-pager\r',
-    )
+    expect(ssh.writeShell).toHaveBeenCalledWith('ssh-1', 'systemctl status nginx --no-pager\r')
     expect(ack).toMatchObject({
       requestId: 'req-12345678',
       body: 'systemctl status nginx --no-pager',
@@ -293,9 +296,9 @@ describe('quick command service', () => {
     const { service } = createService({ ssh })
 
     const first = service.execute(executeInput())
-    await expect(service.execute(executeInput({ requestId: 'req-abcdefgh' }))).rejects.toMatchObject(
-      { code: 'conflict' },
-    )
+    await expect(
+      service.execute(executeInput({ requestId: 'req-abcdefgh' })),
+    ).rejects.toMatchObject({ code: 'conflict' })
     resolveStatus?.(structuredClone(SNAPSHOT))
     await first
 

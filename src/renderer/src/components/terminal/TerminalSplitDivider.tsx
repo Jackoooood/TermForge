@@ -9,11 +9,7 @@ interface TerminalSplitDividerProps {
   onChange: (ratio: number) => void
 }
 
-export function TerminalSplitDivider({
-  direction,
-  ratio,
-  onChange,
-}: TerminalSplitDividerProps) {
+export function TerminalSplitDivider({ direction, ratio, onChange }: TerminalSplitDividerProps) {
   const draggingRef = useRef(false)
 
   const updateFromPointer = (event: PointerEvent<HTMLDivElement>): void => {

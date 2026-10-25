@@ -289,11 +289,7 @@ export function registerIpcHandlers(
 
   ipcMain.handle(
     IPC_CHANNELS.portForwardsUpdate,
-    (
-      event,
-      rawId: unknown,
-      rawInput: unknown,
-    ): Promise<OperationResult<PortForwardItem>> => {
+    (event, rawId: unknown, rawInput: unknown): Promise<OperationResult<PortForwardItem>> => {
       assertTrustedSender(event, getWindow)
       const id = portForwardIdSchema.safeParse(rawId)
       const input = portForwardUpdateInputSchema.safeParse(rawInput)
@@ -576,21 +572,15 @@ export function registerIpcHandlers(
     },
   )
 
-  ipcMain.handle(
-    IPC_CHANNELS.terminalReadClipboard,
-    (event): Promise<OperationResult<string>> => {
-      assertTrustedSender(event, getWindow)
-      return toResult(async () => clipboard.readText())
-    },
-  )
+  ipcMain.handle(IPC_CHANNELS.terminalReadClipboard, (event): Promise<OperationResult<string>> => {
+    assertTrustedSender(event, getWindow)
+    return toResult(async () => clipboard.readText())
+  })
 
-  ipcMain.handle(
-    IPC_CHANNELS.localFsRoots,
-    (event): Promise<OperationResult<LocalRootsResult>> => {
-      assertTrustedSender(event, getWindow)
-      return toResult(() => dependencies.localFs.roots())
-    },
-  )
+  ipcMain.handle(IPC_CHANNELS.localFsRoots, (event): Promise<OperationResult<LocalRootsResult>> => {
+    assertTrustedSender(event, getWindow)
+    return toResult(() => dependencies.localFs.roots())
+  })
 
   ipcMain.handle(
     IPC_CHANNELS.localFsList,
@@ -770,9 +760,7 @@ export function registerIpcHandlers(
           error: { code: 'invalid-input', message: '读取文本文件参数未通过校验。' },
         })
       }
-      return toResult(() =>
-        dependencies.sftp.readTextFile(parsed.data.sessionId, parsed.data.path),
-      )
+      return toResult(() => dependencies.sftp.readTextFile(parsed.data.sessionId, parsed.data.path))
     },
   )
 
@@ -1048,13 +1036,10 @@ export function registerIpcHandlers(
     return toResult(() => dependencies.logs.openFolder())
   })
 
-  ipcMain.handle(
-    IPC_CHANNELS.wallpaperGet,
-    (event): Promise<OperationResult<WallpaperState>> => {
-      assertTrustedSender(event, getWindow)
-      return toResult(() => dependencies.wallpaper.get())
-    },
-  )
+  ipcMain.handle(IPC_CHANNELS.wallpaperGet, (event): Promise<OperationResult<WallpaperState>> => {
+    assertTrustedSender(event, getWindow)
+    return toResult(() => dependencies.wallpaper.get())
+  })
 
   ipcMain.handle(
     IPC_CHANNELS.wallpaperChoose,

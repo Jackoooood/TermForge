@@ -56,8 +56,11 @@ describe('port forward schemas', () => {
       localForwardCreateInputSchema.parse({ ...LOCAL_CREATE, targetHost: '[::1]' }).targetHost,
     ).toBe('::1')
     expect(
-      portForwardCreateInputSchema.parse({ ...LOCAL_CREATE, type: 'remote', bindAddress: undefined })
-        .type,
+      portForwardCreateInputSchema.parse({
+        ...LOCAL_CREATE,
+        type: 'remote',
+        bindAddress: undefined,
+      }).type,
     ).toBe('remote')
   })
 
@@ -93,7 +96,8 @@ describe('port forward schemas', () => {
       }).success,
     ).toBe(false)
     expect(
-      localForwardCreateInputSchema.safeParse({ ...LOCAL_CREATE, bindAddress: 'localhost' }).success,
+      localForwardCreateInputSchema.safeParse({ ...LOCAL_CREATE, bindAddress: 'localhost' })
+        .success,
     ).toBe(false)
 
     for (const field of ['password', 'passphrase', 'privateKey', 'secret']) {

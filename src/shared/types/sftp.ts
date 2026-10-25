@@ -1,7 +1,4 @@
-import type {
-  RemoteTextEncoding,
-  RemoteTextEol,
-} from '../sftp/remoteText'
+import type { RemoteTextEncoding, RemoteTextEol } from '../sftp/remoteText'
 
 export type { RemoteTextEncoding, RemoteTextEol } from '../sftp/remoteText'
 

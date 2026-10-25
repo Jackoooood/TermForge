@@ -20,7 +20,11 @@ export const UI_FONT_FAMILIES = {
     "'Microsoft YaHei UI', 'Microsoft YaHei', 'PingFang SC', 'Segoe UI', system-ui, sans-serif",
 } as const
 
-export const UI_FONT_FAMILY_IDS = ['system', 'segoe', 'yahei'] as const satisfies readonly (keyof typeof UI_FONT_FAMILIES)[]
+export const UI_FONT_FAMILY_IDS = [
+  'system',
+  'segoe',
+  'yahei',
+] as const satisfies readonly (keyof typeof UI_FONT_FAMILIES)[]
 
 export type UiFontFamilyId = (typeof UI_FONT_FAMILY_IDS)[number]
 
@@ -34,9 +38,7 @@ export const TERMINAL_FONT_SIZE_MIN = 10
 
 export const TERMINAL_FONT_SIZE_MAX = 20
 
-export const TERMINAL_FONT_SIZES = [
-  10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
-] as const
+export const TERMINAL_FONT_SIZES = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20] as const
 
 export const DEFAULT_TERMINAL_FONT_SIZE = 13
 
@@ -48,20 +50,17 @@ export const DEFAULT_TERMINAL_FONT_SIZE = 13
 export const TERMINAL_FONT_FAMILIES = {
   cascadia:
     "'Cascadia Mono', 'Cascadia Code', Consolas, 'Microsoft YaHei UI', 'PingFang SC', monospace",
-  consolas:
-    "Consolas, 'Courier New', 'Microsoft YaHei UI', 'PingFang SC', monospace",
+  consolas: "Consolas, 'Courier New', 'Microsoft YaHei UI', 'PingFang SC', monospace",
   jetbrains:
     "'JetBrains Mono', 'Cascadia Code', Consolas, 'Microsoft YaHei UI', 'PingFang SC', monospace",
-  fira:
-    "'Fira Code', 'Cascadia Code', Consolas, 'Microsoft YaHei UI', 'PingFang SC', monospace",
+  fira: "'Fira Code', 'Cascadia Code', Consolas, 'Microsoft YaHei UI', 'PingFang SC', monospace",
   'source-code-pro':
     "'Source Code Pro', 'Cascadia Code', Consolas, 'Microsoft YaHei UI', 'PingFang SC', monospace",
   'sf-mono':
     "'SF Mono', ui-monospace, 'Cascadia Code', 'Microsoft YaHei UI', 'PingFang SC', monospace",
   'ibm-plex':
     "'IBM Plex Mono', 'Cascadia Code', Consolas, 'Microsoft YaHei UI', 'PingFang SC', monospace",
-  system:
-    "ui-monospace, 'Cascadia Mono', Consolas, 'Microsoft YaHei UI', 'PingFang SC', monospace",
+  system: "ui-monospace, 'Cascadia Mono', Consolas, 'Microsoft YaHei UI', 'PingFang SC', monospace",
 } as const
 
 export const TERMINAL_FONT_FAMILY_IDS = [

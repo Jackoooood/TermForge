@@ -12,10 +12,7 @@ import { DEFAULT_TERMINAL_SIZE } from '@shared/types'
 import { QuickCommandComposeModal } from '@renderer/features/quickCommands/QuickCommandComposeModal'
 import { QuickCommandDrawer } from '@renderer/features/quickCommands/QuickCommandDrawer'
 import { QuickCommandEditorModal } from '@renderer/features/quickCommands/QuickCommandEditorModal'
-import {
-  bindTerminalTab,
-  resetTerminalSessions,
-} from '@renderer/services/terminalRuntime'
+import { bindTerminalTab, resetTerminalSessions } from '@renderer/services/terminalRuntime'
 import { useAppStore } from '@renderer/stores/appStore'
 import { useQuickCommandStore } from '@renderer/stores/quickCommandStore'
 import { useSessionStore } from '@renderer/stores/sessionStore'
@@ -94,10 +91,7 @@ describe('quick command drawer', () => {
       value:
         id === CUSTOM_COMMAND.id ? { ...CUSTOM_COMMAND, favorite } : fakeQuickCommand({ favorite }),
     }))
-    window.termforge = createFakeBridge(
-      {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
-      { setFavorite },
-    )
+    window.termforge = createFakeBridge({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, { setFavorite })
     useQuickCommandStore.setState({
       drawerOpen: true,
       commands: [fakeQuickCommand(), CUSTOM_COMMAND],
@@ -131,10 +125,7 @@ describe('quick command drawer', () => {
       ok: true as const,
       value: { cleared: 1 } satisfies CommandHistoryClearAck,
     }))
-    window.termforge = createFakeBridge(
-      {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
-      { clear },
-    )
+    window.termforge = createFakeBridge({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, { clear })
     useQuickCommandStore.setState({
       drawerOpen: true,
       activePane: 'history',
@@ -174,10 +165,7 @@ describe('quick command send confirmation', () => {
         historyWarning: null,
       },
     }))
-    window.termforge = createFakeBridge(
-      {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
-      { execute },
-    )
+    window.termforge = createFakeBridge({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, { execute })
     setupTarget()
     useSettingsStore.setState({ commandHistoryEnabled: true })
     useQuickCommandStore.setState({
@@ -218,9 +206,7 @@ describe('quick command send confirmation', () => {
       recordHistory: true,
     })
     await waitFor(() =>
-      expect(
-        screen.queryByRole('dialog', { name: '确认发送快速命令' }),
-      ).not.toBeInTheDocument(),
+      expect(screen.queryByRole('dialog', { name: '确认发送快速命令' })).not.toBeInTheDocument(),
     )
     expect(useAppStore.getState().toasts.at(-1)).toMatchObject({
       tone: 'success',
@@ -240,10 +226,7 @@ describe('quick command send confirmation', () => {
         historyWarning: null,
       },
     }))
-    window.termforge = createFakeBridge(
-      {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
-      { execute },
-    )
+    window.termforge = createFakeBridge({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, { execute })
     setupTarget()
     useSettingsStore.setState({ commandHistoryEnabled: true })
     useQuickCommandStore.setState({
@@ -288,10 +271,7 @@ describe('quick command send confirmation', () => {
         historyWarning: null,
       },
     }))
-    window.termforge = createFakeBridge(
-      {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
-      { execute },
-    )
+    window.termforge = createFakeBridge({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, { execute })
     setupTarget()
     useQuickCommandStore.setState({
       commands: [fakeQuickCommand()],
@@ -321,7 +301,17 @@ describe('quick command send confirmation', () => {
     }))
     const execute = vi.fn()
     window.termforge = createFakeBridge(
-      {}, {}, { write }, {}, {}, {}, {}, {}, {}, {}, {},
+      {},
+      {},
+      { write },
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
       { execute },
     )
     setupTarget()
@@ -365,10 +355,7 @@ describe('quick command editor', () => {
         id: 'qc-created',
       } satisfies QuickCommand,
     }))
-    window.termforge = createFakeBridge(
-      {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
-      { create },
-    )
+    window.termforge = createFakeBridge({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, { create })
     useQuickCommandStore.setState({
       editor: { commandId: null },
       commands: [CUSTOM_COMMAND],

@@ -165,11 +165,7 @@ describe('POSIX remote path helpers', () => {
       sortRemoteEntriesBy(entries, { field: 'size', direction: 'desc' }).map((item) => item.name),
     ).toEqual(['a.txt', 'b.txt'])
     expect(
-      compareRemoteEntriesBy(
-        entries[0]!,
-        entries[1]!,
-        { field: 'modified', direction: 'desc' },
-      ),
+      compareRemoteEntriesBy(entries[0]!, entries[1]!, { field: 'modified', direction: 'desc' }),
     ).toBeGreaterThan(0)
   })
 })

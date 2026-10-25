@@ -55,11 +55,23 @@ export function TopBar() {
         }
       >
         <StatusDot
-          status={bridgeStatus === 'ready' ? 'online' : bridgeStatus === 'unavailable' ? 'error' : 'idle'}
-          label={bridgeStatus === 'ready' ? '桥接就绪' : bridgeStatus === 'unavailable' ? '桥接不可用' : '桥接连接中'}
+          status={
+            bridgeStatus === 'ready' ? 'online' : bridgeStatus === 'unavailable' ? 'error' : 'idle'
+          }
+          label={
+            bridgeStatus === 'ready'
+              ? '桥接就绪'
+              : bridgeStatus === 'unavailable'
+                ? '桥接不可用'
+                : '桥接连接中'
+          }
         />
         <span>
-          {bridgeStatus === 'ready' ? '桥接就绪' : bridgeStatus === 'unavailable' ? '浏览器预览' : '连接主进程…'}
+          {bridgeStatus === 'ready'
+            ? '桥接就绪'
+            : bridgeStatus === 'unavailable'
+              ? '浏览器预览'
+              : '连接主进程…'}
         </span>
       </span>
 

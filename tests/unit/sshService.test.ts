@@ -335,7 +335,8 @@ function createHarness(options: HarnessOptions = {}) {
   } satisfies ConnectionStore
 
   const verify = vi.fn(
-    options.verifyImpl ?? (async (_presented: PresentedHostKey): Promise<HostKeyVerdict> => verdict),
+    options.verifyImpl ??
+      (async (_presented: PresentedHostKey): Promise<HostKeyVerdict> => verdict),
   )
   const trust = vi.fn(async (presented: PresentedHostKey): Promise<HostKeyRecord> => ({
     ...presented,

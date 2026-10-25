@@ -80,9 +80,8 @@ describe('command history repository', () => {
   })
 
   it('keeps only the newest entries at the storage limit', async () => {
-    const entries = Array.from(
-      { length: QUICK_COMMAND_LIMITS.maxHistoryEntries },
-      (_, index) => storedEntry(index),
+    const entries = Array.from({ length: QUICK_COMMAND_LIMITS.maxHistoryEntries }, (_, index) =>
+      storedEntry(index),
     )
     await writeFile(
       filePath,

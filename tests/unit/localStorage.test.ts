@@ -118,7 +118,10 @@ describe('local connection storage', () => {
     await expect(corrupt.list()).rejects.toMatchObject({ code: 'storage-corrupt' })
     expect(await readFile(filePath, 'utf8')).toBe('{ not json')
 
-    await writeFile(filePath, JSON.stringify({ version: 99, data: { connections: [], groups: [] } }))
+    await writeFile(
+      filePath,
+      JSON.stringify({ version: 99, data: { connections: [], groups: [] } }),
+    )
     await expect(new ConnectionRepository(filePath).list()).rejects.toMatchObject({
       code: 'storage-corrupt',
     })
@@ -236,9 +239,7 @@ describe('local connection storage', () => {
     )
     const migratedFromV2 = await new ConnectionRepository(filePath).list()
     expect(migratedFromV2.connections[0]?.tagIds).toEqual(['tag-database'])
-    expect(
-      (JSON.parse(await readFile(filePath, 'utf8')) as { version: number }).version,
-    ).toBe(3)
+    expect((JSON.parse(await readFile(filePath, 'utf8')) as { version: number }).version).toBe(3)
 
     const broken = JSON.stringify({
       version: 1,

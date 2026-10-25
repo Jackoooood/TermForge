@@ -45,8 +45,7 @@ export async function startDynamicForward(
 ): Promise<ForwardRuntimeHandle> {
   const { rule, facade, gate, events } = options
   const connectTimeoutMs = options.connectTimeoutMs ?? PORT_FORWARD_LIMITS.connectTimeoutMs
-  const handshakeTimeoutMs =
-    options.handshakeTimeoutMs ?? PORT_FORWARD_LIMITS.handshakeTimeoutMs
+  const handshakeTimeoutMs = options.handshakeTimeoutMs ?? PORT_FORWARD_LIMITS.handshakeTimeoutMs
   const stopTimeoutMs = options.stopTimeoutMs ?? PORT_FORWARD_LIMITS.stopTimeoutMs
 
   const connections = new Set<DynamicConnection>()

@@ -878,7 +878,9 @@ async function main() {
       10000,
       'stalled connection is in progress',
     )
-    await cdp.evaluate(`__p105Help.clickAria('取消连接', __p105Help.panel(${JSON.stringify(stallTab)}))`)
+    await cdp.evaluate(
+      `__p105Help.clickAria('取消连接', __p105Help.panel(${JSON.stringify(stallTab)}))`,
+    )
     const cancelled = await waitFor(
       cdp,
       `(() => {
@@ -921,12 +923,7 @@ async function main() {
       return { cancelled, afterCancel }
     })
     await cdp.evaluate(`__p105Help.closeTab(${JSON.stringify(stallTab)})`)
-    await waitFor(
-      cdp,
-      `__p105Help.tabs().length === 2`,
-      5000,
-      'stalled tab closed by user',
-    )
+    await waitFor(cdp, `__p105Help.tabs().length === 2`, 5000, 'stalled tab closed by user')
     await stopStallServer()
 
     await cdp.evaluate(`__p105Help.clickTab(${JSON.stringify(tabA)})`)
@@ -996,7 +993,9 @@ async function main() {
         throw new Error(`unexpected disconnect classification: ${JSON.stringify(disconnectedA)}`)
       }
       if (disconnectedA.notice !== null) {
-        throw new Error(`auto reconnect notice appeared while disabled: ${JSON.stringify(disconnectedA)}`)
+        throw new Error(
+          `auto reconnect notice appeared while disabled: ${JSON.stringify(disconnectedA)}`,
+        )
       }
       if (fixture.connectionCount() !== connectionCountAfterDrop) {
         throw new Error('automatic retry happened while the setting was off')
@@ -1038,9 +1037,7 @@ async function main() {
       10000,
       'new session prompt',
     )
-    await cdp.evaluate(
-      `window.termforge.terminal.write(${JSON.stringify(sessionA2)}, '\\r')`,
-    )
+    await cdp.evaluate(`window.termforge.terminal.write(${JSON.stringify(sessionA2)}, '\\r')`)
     await sleep(800)
     const replay = await cdp.evaluate(`(() => ({
       all: __p105Help.allOutput(),
@@ -1150,9 +1147,7 @@ async function main() {
       10000,
       'automatic reconnect prompt',
     )
-    await cdp.evaluate(
-      `window.termforge.terminal.write(${JSON.stringify(sessionA3)}, '\\r')`,
-    )
+    await cdp.evaluate(`window.termforge.terminal.write(${JSON.stringify(sessionA3)}, '\\r')`)
     await sleep(800)
     const autoState = await cdp.evaluate(`(() => ({
       notice: __p105Help.notice(${JSON.stringify(tabA)}),

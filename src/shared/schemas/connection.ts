@@ -295,10 +295,7 @@ function hasJumpCycle(catalog: CatalogReferenceData): boolean {
   return false
 }
 
-function addCatalogReferenceIssues(
-  catalog: CatalogReferenceData,
-  context: z.RefinementCtx,
-): void {
+function addCatalogReferenceIssues(catalog: CatalogReferenceData, context: z.RefinementCtx): void {
   const connectionIds = new Set<string>()
   for (const [index, connection] of catalog.connections.entries()) {
     if (connectionIds.has(connection.id)) {
@@ -559,9 +556,7 @@ function migrateLegacyCatalog(
         ...rest,
         jumpConnectionIds: connection.jumpConnectionIds ?? [],
         tagIds: Array.from(
-          new Set(
-            legacyTags.map((name) => idByName.get(normalizeTagName(name)) as string),
-          ),
+          new Set(legacyTags.map((name) => idByName.get(normalizeTagName(name)) as string)),
         ),
       }
     }),

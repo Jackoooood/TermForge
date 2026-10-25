@@ -43,7 +43,7 @@ let attachedCount = 0
 let detachBridge: (() => void) | null = null
 
 function terminalBridge(): TermForgeBridge['terminal'] | null {
-  return typeof window === 'undefined' ? null : window.termforge?.terminal ?? null
+  return typeof window === 'undefined' ? null : (window.termforge?.terminal ?? null)
 }
 
 function bumpRevision(tabId: string): void {
@@ -300,11 +300,15 @@ async function openShellInternal(
   }
   const binding = bindings.get(tabId)
   if (!bridge || !binding) {
-    useTerminalStore.getState().applyFailure(
-      tabId,
-      bridge ? { code: 'session-unavailable', message: 'SSH 会话尚未绑定到该标签。' } : BRIDGE_MISSING,
-      size,
-    )
+    useTerminalStore
+      .getState()
+      .applyFailure(
+        tabId,
+        bridge
+          ? { code: 'session-unavailable', message: 'SSH 会话尚未绑定到该标签。' }
+          : BRIDGE_MISSING,
+        size,
+      )
     return null
   }
 
@@ -337,9 +341,7 @@ async function openShellInternal(
     if (bindings.get(tabId)?.sessionId !== binding.sessionId) return null
     if (!result.ok) {
       if ((revisions.get(tabId) ?? 0) === revision) {
-        useTerminalStore
-          .getState()
-          .applyFailure(tabId, failureFromOperation(result.error), size)
+        useTerminalStore.getState().applyFailure(tabId, failureFromOperation(result.error), size)
       }
       return useTerminalStore.getState().shells[tabId] ?? null
     }
@@ -350,11 +352,13 @@ async function openShellInternal(
     return useTerminalStore.getState().shells[tabId] ?? null
   } catch {
     if ((revisions.get(tabId) ?? 0) === revision) {
-      useTerminalStore.getState().applyFailure(
-        tabId,
-        { code: 'shell-open-failed', message: '打开远程 Shell 的请求失败，请稍后重试。' },
-        size,
-      )
+      useTerminalStore
+        .getState()
+        .applyFailure(
+          tabId,
+          { code: 'shell-open-failed', message: '打开远程 Shell 的请求失败，请稍后重试。' },
+          size,
+        )
     }
     return useTerminalStore.getState().shells[tabId] ?? null
   }

@@ -185,7 +185,9 @@ describe('wallpaper service', () => {
     await mkdir(join(sourceDirectory, 'write-blocked', 'wallpaper.jpg'), { recursive: true })
     await expect(writeBlocked.choose()).rejects.toMatchObject({ code: 'storage-write-failed' })
     expect(
-      (await readdir(join(sourceDirectory, 'write-blocked'))).filter((name) => name.endsWith('.tmp')),
+      (await readdir(join(sourceDirectory, 'write-blocked'))).filter((name) =>
+        name.endsWith('.tmp'),
+      ),
     ).toEqual([])
   })
 

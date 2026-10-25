@@ -159,8 +159,8 @@ export function RemoteFilePanel({
     canAccept: (event) =>
       Boolean(
         dropEnabled &&
-          sessionId !== null &&
-          (hasOsFiles(event.dataTransfer) || hasLocalPaths(event.dataTransfer)),
+        sessionId !== null &&
+        (hasOsFiles(event.dataTransfer) || hasLocalPaths(event.dataTransfer)),
       ),
     onDrop: (dataTransfer) => {
       const custom = readLocalPaths(dataTransfer)
@@ -544,17 +544,17 @@ export function RemoteFilePanel({
             </>
           ) : selectedEntries.length > 1 ? (
             <>
-              <span className="file-selection-detail__name">已选择 {selectedEntries.length} 项</span>
+              <span className="file-selection-detail__name">
+                已选择 {selectedEntries.length} 项
+              </span>
               <span className="file-selection-detail__meta">
-                {selectedFiles.length} 个文件 ·{' '}
-                {selectedEntries.length - selectedFiles.length} 个目录 / 链接 · 下载只会包含文件
+                {selectedFiles.length} 个文件 · {selectedEntries.length - selectedFiles.length}{' '}
+                个目录 / 链接 · 下载只会包含文件
               </span>
             </>
           ) : (
             <span className="file-selection-detail__meta">
-              {status === 'loading'
-                ? '正在刷新目录…'
-                : '点击选择；Ctrl/⌘ 多选，Shift 连选'}
+              {status === 'loading' ? '正在刷新目录…' : '点击选择；Ctrl/⌘ 多选，Shift 连选'}
             </span>
           )}
         </div>

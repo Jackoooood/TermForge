@@ -16,9 +16,11 @@ interface WallpaperStoreState {
   removeWallpaper: () => Promise<boolean>
 }
 
-function applyState(
-  state: { dataUrl: string | null; fileName: string | null; updatedAt: string | null },
-): {
+function applyState(state: {
+  dataUrl: string | null
+  fileName: string | null
+  updatedAt: string | null
+}): {
   dataUrl: string | null
   fileName: string | null
   updatedAt: string | null

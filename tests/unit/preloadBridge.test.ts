@@ -298,10 +298,7 @@ describe('preload bridge boundary', () => {
     )
 
     await bridge.ssh.cancelConnect('sshtab-1')
-    expect(electronMock.invoke).toHaveBeenLastCalledWith(
-      IPC_CHANNELS.sshCancelConnect,
-      'sshtab-1',
-    )
+    expect(electronMock.invoke).toHaveBeenLastCalledWith(IPC_CHANNELS.sshCancelConnect, 'sshtab-1')
 
     await bridge.ssh.disconnect('ssh-1')
     expect(electronMock.invoke).toHaveBeenLastCalledWith(IPC_CHANNELS.sshDisconnect, 'ssh-1')
@@ -410,10 +407,7 @@ describe('preload bridge boundary', () => {
       force: false,
     }
     await bridge.sftp.writeTextFile(writeInput)
-    expect(electronMock.invoke).toHaveBeenLastCalledWith(
-      IPC_CHANNELS.sftpWriteTextFile,
-      writeInput,
-    )
+    expect(electronMock.invoke).toHaveBeenLastCalledWith(IPC_CHANNELS.sftpWriteTextFile, writeInput)
 
     await bridge.sftp.close('ssh-1')
     expect(electronMock.invoke).toHaveBeenLastCalledWith(IPC_CHANNELS.sftpClose, 'ssh-1')
@@ -452,7 +446,11 @@ describe('preload bridge boundary', () => {
       ['/var/www/a', '/var/www/b'],
     )
 
-    await bridge.transfer.enqueueDownloadPaths('ssh-1', ['/var/www/a'], 'C:\\Users\\deploy\\Downloads')
+    await bridge.transfer.enqueueDownloadPaths(
+      'ssh-1',
+      ['/var/www/a'],
+      'C:\\Users\\deploy\\Downloads',
+    )
     expect(electronMock.invoke).toHaveBeenLastCalledWith(
       IPC_CHANNELS.transferEnqueueDownloadPaths,
       'ssh-1',

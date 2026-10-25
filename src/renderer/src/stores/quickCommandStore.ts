@@ -25,8 +25,7 @@ export interface CapturedQuickCommandTarget {
 }
 
 export type QuickCommandSourceReference =
-  | { kind: 'command'; commandId: string }
-  | { kind: 'history'; entryId: string }
+  { kind: 'command'; commandId: string } | { kind: 'history'; entryId: string }
 
 export interface QuickCommandComposeRequest {
   intent: QuickCommandIntent
@@ -99,10 +98,7 @@ function targetUnavailable(message: string): QuickCommandActionResult<never> {
   return { ok: false, error: { code: 'unavailable', message } }
 }
 
-function withCaughtError<T>(
-  error: unknown,
-  fallback: string,
-): OperationResult<T> {
+function withCaughtError<T>(error: unknown, fallback: string): OperationResult<T> {
   if (error && typeof error === 'object' && 'message' in error) {
     const message = (error as { message?: unknown }).message
     if (typeof message === 'string' && message.trim().length > 0) {
@@ -115,12 +111,12 @@ function withCaughtError<T>(
 function isTargetStillValid(tabId: string, sessionId: string): boolean {
   const session = useSessionStore.getState().sessions[tabId]
   const shell = useTerminalStore.getState().shells[tabId]
-  return (
-    isQuickCommandTargetSendable(session, shell) && session?.sessionId === sessionId
-  )
+  return isQuickCommandTargetSendable(session, shell) && session?.sessionId === sessionId
 }
 
-function captureSendableTarget(tabId: string | null | undefined): CapturedQuickCommandTarget | null {
+function captureSendableTarget(
+  tabId: string | null | undefined,
+): CapturedQuickCommandTarget | null {
   const session = tabId ? useSessionStore.getState().sessions[tabId] : undefined
   const shell = tabId ? useTerminalStore.getState().shells[tabId] : undefined
   if (!session?.sessionId || !isQuickCommandTargetSendable(session, shell)) return null
@@ -185,7 +181,10 @@ export const useQuickCommandStore = create<QuickCommandStoreState>((set, get) =>
   refreshCommands: async () => {
     const bridge = window.termforge?.quickCommands
     if (!bridge) {
-      set({ commandsStatus: 'error', commandsError: '未加载 Electron preload bridge，无法读取快速命令。' })
+      set({
+        commandsStatus: 'error',
+        commandsError: '未加载 Electron preload bridge，无法读取快速命令。',
+      })
       return
     }
     if (get().commandsStatus === 'loading') return
@@ -205,7 +204,10 @@ export const useQuickCommandStore = create<QuickCommandStoreState>((set, get) =>
   refreshHistory: async () => {
     const bridge = window.termforge?.commandHistory
     if (!bridge) {
-      set({ historyStatus: 'error', historyError: '未加载 Electron preload bridge，无法读取命令历史。' })
+      set({
+        historyStatus: 'error',
+        historyError: '未加载 Electron preload bridge，无法读取命令历史。',
+      })
       return
     }
     if (get().historyStatus === 'loading') return
@@ -230,9 +232,7 @@ export const useQuickCommandStore = create<QuickCommandStoreState>((set, get) =>
     const bridge = window.termforge?.quickCommands
     if (!bridge) return bridgeUnavailable()
     try {
-      const result = commandId
-        ? await bridge.update(commandId, input)
-        : await bridge.create(input)
+      const result = commandId ? await bridge.update(commandId, input) : await bridge.create(input)
       if (!result.ok) return result
       set((state) => ({ commands: upsertCommand(state.commands, result.value) }))
       void get().refreshCommands()
@@ -321,7 +321,10 @@ export const useQuickCommandStore = create<QuickCommandStoreState>((set, get) =>
       }
       return result
     } catch (error) {
-      return withCaughtError(error, '快速命令发送请求失败，发送结果未知，请检查终端后再决定是否重试。')
+      return withCaughtError(
+        error,
+        '快速命令发送请求失败，发送结果未知，请检查终端后再决定是否重试。',
+      )
     }
   },
 

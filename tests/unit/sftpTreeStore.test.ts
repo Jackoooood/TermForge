@@ -93,8 +93,12 @@ describe('sftpStore tree and sorting', () => {
     })
     await openTab(list)
 
-    const staleLoad = useSftpStore.getState().loadTreeDirectory(TAB, SESSION, '/srv', { force: true })
-    const freshLoad = useSftpStore.getState().loadTreeDirectory(TAB, SESSION, '/srv', { force: true })
+    const staleLoad = useSftpStore
+      .getState()
+      .loadTreeDirectory(TAB, SESSION, '/srv', { force: true })
+    const freshLoad = useSftpStore
+      .getState()
+      .loadTreeDirectory(TAB, SESSION, '/srv', { force: true })
 
     second.resolve(listing('/srv', [entry('/srv', 'fresh', 'directory')]))
     await freshLoad
@@ -102,7 +106,9 @@ describe('sftpStore tree and sorting', () => {
     await staleLoad
 
     expect(
-      useSftpStore.getState().tabs[TAB]?.tree.listings['/srv']?.directories.map((item) => item.name),
+      useSftpStore
+        .getState()
+        .tabs[TAB]?.tree.listings['/srv']?.directories.map((item) => item.name),
     ).toEqual(['fresh'])
   })
 

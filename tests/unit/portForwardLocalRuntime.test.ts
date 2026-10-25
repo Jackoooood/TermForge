@@ -75,9 +75,7 @@ describe('local forwarding runtime', () => {
       try {
         client.write('hello')
         expect((await readExact(client, 5)).toString()).toBe('hello')
-        expect(facade.forwardOutCalls).toEqual([
-          ['127.0.0.1', 0, '127.0.0.1', echo.port],
-        ])
+        expect(facade.forwardOutCalls).toEqual([['127.0.0.1', 0, '127.0.0.1', echo.port]])
         await waitFor(() => handle.activeConnections === 1)
       } finally {
         client.destroy()

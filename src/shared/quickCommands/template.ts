@@ -3,12 +3,9 @@ import { QUICK_COMMAND_LIMITS } from '../constants/quickCommands'
 const TEMPLATE_IDENTIFIER = /^[A-Za-z_][A-Za-z0-9_]{0,31}$/
 
 export type QuickCommandTemplateParseResult =
-  | { ok: true; parameters: string[] }
-  | { ok: false; message: string }
+  { ok: true; parameters: string[] } | { ok: false; message: string }
 
-export type QuickCommandRenderResult =
-  | { ok: true; text: string }
-  | { ok: false; message: string }
+export type QuickCommandRenderResult = { ok: true; text: string } | { ok: false; message: string }
 
 export function hasDisallowedControlCharacters(value: string): boolean {
   return [...value].some((character) => {
@@ -104,8 +101,9 @@ export function renderQuickCommandTemplate(
     resolved.set(name, value)
   }
 
-  const text = body.replace(/\{\{([A-Za-z_][A-Za-z0-9_]{0,31})\}\}/g, (_match, name: string) =>
-    resolved.get(name) ?? '',
+  const text = body.replace(
+    /\{\{([A-Za-z_][A-Za-z0-9_]{0,31})\}\}/g,
+    (_match, name: string) => resolved.get(name) ?? '',
   )
   if (text.trim().length === 0) {
     return { ok: false, message: '替换参数后的命令为空。' }

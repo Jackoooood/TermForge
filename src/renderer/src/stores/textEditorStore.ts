@@ -72,7 +72,12 @@ function tabFromRemoteFile(file: RemoteTextFile): TextEditorTab {
   }
 }
 
-function failedTab(sessionId: string, path: string, message: string, code: OperationErrorCode): TextEditorTab {
+function failedTab(
+  sessionId: string,
+  path: string,
+  message: string,
+  code: OperationErrorCode,
+): TextEditorTab {
   return {
     id: textEditorTabId(sessionId, path),
     sessionId,
@@ -209,7 +214,12 @@ export const useTextEditorStore = create<TextEditorState>((set, get) => ({
       set((state) => ({
         tabs: state.tabs.map((candidate) =>
           candidate.id === tabId
-            ? { ...candidate, status: 'error', error: UNAVAILABLE_MESSAGE, errorCode: 'unavailable' }
+            ? {
+                ...candidate,
+                status: 'error',
+                error: UNAVAILABLE_MESSAGE,
+                errorCode: 'unavailable',
+              }
             : candidate,
         ),
       }))
@@ -293,7 +303,12 @@ export const useTextEditorStore = create<TextEditorState>((set, get) => ({
       set((state) => ({
         tabs: state.tabs.map((candidate) =>
           candidate.id === tabId
-            ? { ...candidate, status: 'error', error: UNAVAILABLE_MESSAGE, errorCode: 'unavailable' }
+            ? {
+                ...candidate,
+                status: 'error',
+                error: UNAVAILABLE_MESSAGE,
+                errorCode: 'unavailable',
+              }
             : candidate,
         ),
       }))
@@ -333,7 +348,12 @@ export const useTextEditorStore = create<TextEditorState>((set, get) => ({
       set((state) => ({
         tabs: state.tabs.map((candidate) =>
           candidate.id === tabId
-            ? { ...candidate, status: 'error', error: '读取远程文件失败，请稍后重试。', errorCode: 'internal' }
+            ? {
+                ...candidate,
+                status: 'error',
+                error: '读取远程文件失败，请稍后重试。',
+                errorCode: 'internal',
+              }
             : candidate,
         ),
       }))

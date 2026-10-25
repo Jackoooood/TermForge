@@ -127,28 +127,7 @@ describe('SOCKS5 protocol', () => {
       await negotiateNoAuth(harness)
       harness.client.write(
         Buffer.from([
-          5,
-          1,
-          0,
-          4,
-          0x20,
-          0x01,
-          0x0d,
-          0xb8,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          1,
-          0x01,
-          0xbb,
+          5, 1, 0, 4, 0x20, 0x01, 0x0d, 0xb8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0x01, 0xbb,
         ]),
       )
 
@@ -224,9 +203,7 @@ describe('SOCKS5 protocol', () => {
       })
       await negotiateNoAuth(reserved)
       reserved.client.write(ipv4Request([10, 0, 0, 5], 8_080, { reserved: 1 }))
-      expect([...(await readExact(reserved.client, 10))][1]).toBe(
-        SOCKS5_REPLY_GENERAL_FAILURE,
-      )
+      expect([...(await readExact(reserved.client, 10))][1]).toBe(SOCKS5_REPLY_GENERAL_FAILURE)
       await rejection
     } finally {
       reserved.dispose()
@@ -239,9 +216,7 @@ describe('SOCKS5 protocol', () => {
       })
       await negotiateNoAuth(zeroPort)
       zeroPort.client.write(ipv4Request([10, 0, 0, 5], 0))
-      expect([...(await readExact(zeroPort.client, 10))][1]).toBe(
-        SOCKS5_REPLY_GENERAL_FAILURE,
-      )
+      expect([...(await readExact(zeroPort.client, 10))][1]).toBe(SOCKS5_REPLY_GENERAL_FAILURE)
       await rejection
     } finally {
       zeroPort.dispose()

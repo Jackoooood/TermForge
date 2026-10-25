@@ -124,26 +124,20 @@ export class SshForwardingSessionHandle implements SshForwardingSession {
     return new Promise<Duplex>((resolve, reject) => {
       let settled = false
       try {
-        this.client.forwardOut(
-          srcAddress,
-          srcPort,
-          destAddress,
-          destPort,
-          (error, channel) => {
-            if (settled) return
-            settled = true
-            if (this.isClosed) {
-              if (!error) channel.destroy()
-              reject(unavailable())
-              return
-            }
-            if (error) {
-              reject(error)
-              return
-            }
-            resolve(channel)
-          },
-        )
+        this.client.forwardOut(srcAddress, srcPort, destAddress, destPort, (error, channel) => {
+          if (settled) return
+          settled = true
+          if (this.isClosed) {
+            if (!error) channel.destroy()
+            reject(unavailable())
+            return
+          }
+          if (error) {
+            reject(error)
+            return
+          }
+          resolve(channel)
+        })
       } catch (error) {
         settled = true
         reject(error)

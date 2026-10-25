@@ -10,7 +10,9 @@ import {
 
 describe('quick command template', () => {
   it('extracts unique parameters in first-seen order', () => {
-    expect(parseQuickCommandTemplate('tail -n {{lines}} {{path}} | grep {{pattern}} {{path}}')).toEqual({
+    expect(
+      parseQuickCommandTemplate('tail -n {{lines}} {{path}} | grep {{pattern}} {{path}}'),
+    ).toEqual({
       ok: true,
       parameters: ['lines', 'path', 'pattern'],
     })

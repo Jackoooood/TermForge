@@ -55,15 +55,7 @@ function greeting(): Buffer {
 }
 
 function ipv4Connect(address: [number, number, number, number], port: number): Buffer {
-  return Buffer.from([
-    5,
-    1,
-    0,
-    1,
-    ...address,
-    (port >> 8) & 0xff,
-    port & 0xff,
-  ])
+  return Buffer.from([5, 1, 0, 1, ...address, (port >> 8) & 0xff, port & 0xff])
 }
 
 function domainConnect(host: string, port: number): Buffer {
@@ -113,18 +105,13 @@ describe('dynamic SOCKS5 forwarding runtime', () => {
 
       const socket = trackSocket(await connectToPort(handle.boundPort))
       await completeNoAuth(socket)
-      const reply = await completeConnect(
-        socket,
-        ipv4Connect([127, 0, 0, 1], echo.port),
-      )
+      const reply = await completeConnect(socket, ipv4Connect([127, 0, 0, 1], echo.port))
       expect([...reply]).toEqual([5, 0, 0, 1, 0, 0, 0, 0, 0, 0])
 
       socket.write('through')
       expect((await readExact(socket, 7)).toString()).toBe('through')
       await waitFor(() => handle.activeConnections === 1)
-      expect(facade.forwardOutCalls).toEqual([
-        ['127.0.0.1', 0, '127.0.0.1', echo.port],
-      ])
+      expect(facade.forwardOutCalls).toEqual([['127.0.0.1', 0, '127.0.0.1', echo.port]])
 
       socket.destroy()
       await waitFor(() => handle.activeConnections === 0)
@@ -166,9 +153,7 @@ describe('dynamic SOCKS5 forwarding runtime', () => {
       expect([...(await readExact(socket, 2))]).toEqual([5, 0])
       expect((await readExact(socket, 10))[1]).toBe(0)
       expect((await readExact(socket, 5)).toString()).toBe('EARLY')
-      expect(facade.forwardOutCalls).toEqual([
-        ['127.0.0.1', 0, 'localhost', echo.port],
-      ])
+      expect(facade.forwardOutCalls).toEqual([['127.0.0.1', 0, 'localhost', echo.port]])
       socket.destroy()
     } finally {
       await handle.stop()
@@ -205,10 +190,7 @@ describe('dynamic SOCKS5 forwarding runtime', () => {
 
       const badAddressType = trackSocket(await connectToPort(handle.boundPort))
       await completeNoAuth(badAddressType)
-      const addressReply = await completeConnect(
-        badAddressType,
-        Buffer.from([5, 1, 0, 9, 0, 0]),
-      )
+      const addressReply = await completeConnect(badAddressType, Buffer.from([5, 1, 0, 9, 0, 0]))
       expect([...addressReply]).toEqual([5, 8, 0, 1, 0, 0, 0, 0, 0, 0])
       await once(badAddressType, 'close')
       await waitFor(() => handle.activeConnections === 0)
@@ -303,14 +285,10 @@ describe('dynamic SOCKS5 forwarding runtime', () => {
       for (let index = 0; index < PORT_FORWARD_LIMITS.maxConnectionsPerRule; index += 1) {
         const socket = trackSocket(await connectToPort(handle.boundPort))
         await completeNoAuth(socket)
-        expect(
-          (await completeConnect(socket, ipv4Connect([127, 0, 0, 1], 9)))[1],
-        ).toBe(0)
+        expect((await completeConnect(socket, ipv4Connect([127, 0, 0, 1], 9)))[1]).toBe(0)
         sockets.push(socket)
       }
-      await waitFor(
-        () => handle.activeConnections === PORT_FORWARD_LIMITS.maxConnectionsPerRule,
-      )
+      await waitFor(() => handle.activeConnections === PORT_FORWARD_LIMITS.maxConnectionsPerRule)
 
       const overflow = trackSocket(await connectToPort(handle.boundPort))
       await once(overflow, 'close')
@@ -321,9 +299,7 @@ describe('dynamic SOCKS5 forwarding runtime', () => {
 
       const recovered = trackSocket(await connectToPort(handle.boundPort))
       await completeNoAuth(recovered)
-      expect(
-        (await completeConnect(recovered, ipv4Connect([127, 0, 0, 1], 9)))[1],
-      ).toBe(0)
+      expect((await completeConnect(recovered, ipv4Connect([127, 0, 0, 1], 9)))[1]).toBe(0)
       recovered.destroy()
     } finally {
       for (const socket of sockets) socket.destroy()

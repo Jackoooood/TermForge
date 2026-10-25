@@ -35,7 +35,10 @@ function listing(
   }
 }
 
-function rootsResult(home = HOME, roots = ROOTS): OperationResult<{ home: string; roots: LocalRootEntry[] }> {
+function rootsResult(
+  home = HOME,
+  roots = ROOTS,
+): OperationResult<{ home: string; roots: LocalRootEntry[] }> {
   return { ok: true, value: { home, roots } }
 }
 

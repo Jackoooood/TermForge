@@ -11,18 +11,11 @@ import { CredentialPromptModal } from '@renderer/features/connections/Credential
 import { HostKeyConfirmModal } from '@renderer/features/connections/HostKeyConfirmModal'
 import { useSshBridgeEvents } from '@renderer/hooks/useSshBridgeEvents'
 import { useAppStore } from '@renderer/stores/appStore'
-import {
-  promptForCredentialIfNeeded,
-  useSessionStore,
-} from '@renderer/stores/sessionStore'
+import { promptForCredentialIfNeeded, useSessionStore } from '@renderer/stores/sessionStore'
 import { useSshPromptStore } from '@renderer/stores/sshPromptStore'
 import { useTerminalStore } from '@renderer/stores/terminalStore'
 import { useWorkspaceStore } from '@renderer/stores/workspaceStore'
-import {
-  createFakeBridge,
-  fakeSessionInfo,
-  fakeSshSnapshot,
-} from './helpers/fakeBridge'
+import { createFakeBridge, fakeSessionInfo, fakeSshSnapshot } from './helpers/fakeBridge'
 
 const TAB_ID = 'sshtab-test'
 
@@ -132,12 +125,15 @@ describe('host key confirmation UI', () => {
   })
 
   it('keeps the prompt and shows the error when the trust decision was not saved', async () => {
-    window.termforge = createFakeBridge({}, {
-      respondToHostKey: vi.fn().mockResolvedValue({
-        ok: false,
-        error: { code: 'storage-write-failed', message: '无法保存主机密钥信任决定。' },
-      }),
-    })
+    window.termforge = createFakeBridge(
+      {},
+      {
+        respondToHostKey: vi.fn().mockResolvedValue({
+          ok: false,
+          error: { code: 'storage-write-failed', message: '无法保存主机密钥信任决定。' },
+        }),
+      },
+    )
     useSshPromptStore.getState().enqueueHostKey(CHALLENGE)
     const user = userEvent.setup()
     render(<HostKeyConfirmModal />)
@@ -262,16 +258,19 @@ describe('useSshBridgeEvents', () => {
     const hostKeyListeners: Array<(event: SshHostKeyRequestEvent) => void> = []
     const unsubscribeStatus = vi.fn()
     const unsubscribeHostKey = vi.fn()
-    window.termforge = createFakeBridge({}, {
-      onSessionStatus: (listener) => {
-        statusListeners.push(listener)
-        return unsubscribeStatus
+    window.termforge = createFakeBridge(
+      {},
+      {
+        onSessionStatus: (listener) => {
+          statusListeners.push(listener)
+          return unsubscribeStatus
+        },
+        onHostKeyRequest: (listener) => {
+          hostKeyListeners.push(listener)
+          return unsubscribeHostKey
+        },
       },
-      onHostKeyRequest: (listener) => {
-        hostKeyListeners.push(listener)
-        return unsubscribeHostKey
-      },
-    })
+    )
 
     function Harness() {
       useSshBridgeEvents()
@@ -284,7 +283,12 @@ describe('useSshBridgeEvents', () => {
     seedTab()
 
     statusListeners[0]?.({
-      session: fakeSshSnapshot({ clientId: TAB_ID, sessionId: 'ssh-1', connectionId: 'conn-1', status: 'connecting' }),
+      session: fakeSshSnapshot({
+        clientId: TAB_ID,
+        sessionId: 'ssh-1',
+        connectionId: 'conn-1',
+        status: 'connecting',
+      }),
     })
     expect(useSessionStore.getState().sessions[TAB_ID]?.status).toBe('connecting')
 

@@ -130,8 +130,7 @@ export class PortForwardService implements PortForwardServicePort {
 
   constructor(private readonly dependencies: PortForwardServiceDependencies) {
     this.now = dependencies.now ?? (() => new Date())
-    this.connectTimeoutMs =
-      dependencies.connectTimeoutMs ?? PORT_FORWARD_LIMITS.connectTimeoutMs
+    this.connectTimeoutMs = dependencies.connectTimeoutMs ?? PORT_FORWARD_LIMITS.connectTimeoutMs
     this.handshakeTimeoutMs =
       dependencies.handshakeTimeoutMs ?? PORT_FORWARD_LIMITS.handshakeTimeoutMs
     this.stopTimeoutMs = dependencies.stopTimeoutMs ?? PORT_FORWARD_LIMITS.stopTimeoutMs
@@ -264,10 +263,8 @@ export class PortForwardService implements PortForwardServicePort {
       this.publish()
 
       const events: ForwardRuntimeEvents = {
-        onConnectionCountChange: (count) =>
-          this.handleConnectionCount(state, generation, count),
-        onUnexpectedFailure: (error) =>
-          this.handleUnexpectedFailure(state, generation, error),
+        onConnectionCountChange: (count) => this.handleConnectionCount(state, generation, count),
+        onUnexpectedFailure: (error) => this.handleUnexpectedFailure(state, generation, error),
       }
 
       let handle: ForwardRuntimeHandle
@@ -511,10 +508,7 @@ export class PortForwardService implements PortForwardServicePort {
 
   private assertNotBusy(state: RuleState, busyMessage: string): void {
     if (state.runtime.cleanupPending) {
-      throw new AppOperationError(
-        'conflict',
-        '上一次停止未能完成资源清理，请先重试停止该规则。',
-      )
+      throw new AppOperationError('conflict', '上一次停止未能完成资源清理，请先重试停止该规则。')
     }
     if (this.isActive(state)) {
       throw new AppOperationError('conflict', busyMessage)

@@ -330,19 +330,14 @@ const sftp = Object.freeze({
       path,
     )) as OperationResult<SftpMutationAck>,
 
-  readTextFile: async (
-    sessionId: string,
-    path: string,
-  ): Promise<OperationResult<RemoteTextFile>> =>
+  readTextFile: async (sessionId: string, path: string): Promise<OperationResult<RemoteTextFile>> =>
     (await ipcRenderer.invoke(
       IPC_CHANNELS.sftpReadTextFile,
       sessionId,
       path,
     )) as OperationResult<RemoteTextFile>,
 
-  writeTextFile: async (
-    input: SftpTextWriteInput,
-  ): Promise<OperationResult<SftpTextWriteAck>> =>
+  writeTextFile: async (input: SftpTextWriteInput): Promise<OperationResult<SftpTextWriteAck>> =>
     (await ipcRenderer.invoke(
       IPC_CHANNELS.sftpWriteTextFile,
       input,
@@ -493,7 +488,9 @@ const wallpaper = Object.freeze({
 
 const quickCommands = Object.freeze({
   list: async (): Promise<OperationResult<QuickCommandSnapshot>> =>
-    (await ipcRenderer.invoke(IPC_CHANNELS.quickCommandsList)) as OperationResult<QuickCommandSnapshot>,
+    (await ipcRenderer.invoke(
+      IPC_CHANNELS.quickCommandsList,
+    )) as OperationResult<QuickCommandSnapshot>,
 
   create: async (input: QuickCommandDraft): Promise<OperationResult<QuickCommand>> =>
     (await ipcRenderer.invoke(
@@ -509,10 +506,9 @@ const quickCommands = Object.freeze({
     )) as OperationResult<QuickCommand>,
 
   remove: async (id: string): Promise<OperationResult<{ id: string }>> =>
-    (await ipcRenderer.invoke(
-      IPC_CHANNELS.quickCommandsRemove,
-      id,
-    )) as OperationResult<{ id: string }>,
+    (await ipcRenderer.invoke(IPC_CHANNELS.quickCommandsRemove, id)) as OperationResult<{
+      id: string
+    }>,
 
   setFavorite: async (id: string, favorite: boolean): Promise<OperationResult<QuickCommand>> =>
     (await ipcRenderer.invoke(
@@ -537,10 +533,9 @@ const commandHistory = Object.freeze({
     )) as OperationResult<CommandHistorySnapshot>,
 
   remove: async (id: string): Promise<OperationResult<{ id: string }>> =>
-    (await ipcRenderer.invoke(
-      IPC_CHANNELS.commandHistoryRemove,
-      id,
-    )) as OperationResult<{ id: string }>,
+    (await ipcRenderer.invoke(IPC_CHANNELS.commandHistoryRemove, id)) as OperationResult<{
+      id: string
+    }>,
 
   clear: async (): Promise<OperationResult<CommandHistoryClearAck>> =>
     (await ipcRenderer.invoke(

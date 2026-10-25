@@ -141,7 +141,10 @@ describe('port forward repository', () => {
       repository.create(localInput({ bindPort: 0 } as Partial<PortForwardCreateInput>)),
     ).rejects.toMatchObject({ code: 'invalid-input' })
     await expect(
-      repository.create({ ...localInput(), privateKey: 'leak' } as unknown as PortForwardCreateInput),
+      repository.create({
+        ...localInput(),
+        privateKey: 'leak',
+      } as unknown as PortForwardCreateInput),
     ).rejects.toMatchObject({ code: 'invalid-input' })
 
     await expect(repository.list()).resolves.toEqual({ rules: [] })
@@ -196,7 +199,9 @@ describe('port forward repository', () => {
     const repository = new PortForwardRepository(filePath)
     const rules = await Promise.all(
       Array.from({ length: 5 }, (_, index) =>
-        repository.create(localInput({ bindPort: 3000 + index } as Partial<PortForwardCreateInput>)),
+        repository.create(
+          localInput({ bindPort: 3000 + index } as Partial<PortForwardCreateInput>),
+        ),
       ),
     )
     expect(new Set(rules.map((rule) => rule.id)).size).toBe(5)

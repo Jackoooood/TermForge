@@ -381,9 +381,7 @@ export class TransferService implements TransferServicePort {
       throw this.asEnqueueFailure(error)
     }
 
-    const sourcePaths = [
-      ...new Set(parsed.data.localPaths.map((path) => normalizeLocalPath(path))),
-    ]
+    const sourcePaths = [...new Set(parsed.data.localPaths.map((path) => normalizeLocalPath(path)))]
     const expanded = await this.expandLocalUploadSources(sourcePaths)
     if (this.disposed) {
       throw new AppOperationError('unavailable', '应用正在退出，无法开始新的传输。')

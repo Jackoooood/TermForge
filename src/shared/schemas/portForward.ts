@@ -67,9 +67,7 @@ const targetHostSchema = z
   .trim()
   .min(1, '请输入目标主机')
   .max(MAX_HOST_LENGTH, `目标主机最多 ${MAX_HOST_LENGTH} 个字符`)
-  .transform((value) =>
-    value.startsWith('[') && value.endsWith(']') ? value.slice(1, -1) : value,
-  )
+  .transform((value) => (value.startsWith('[') && value.endsWith(']') ? value.slice(1, -1) : value))
   .refine(isValidHost, '请输入有效的目标主机名或 IP 地址')
 
 const ruleBaseShape = {

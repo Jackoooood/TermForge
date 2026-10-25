@@ -13,7 +13,7 @@ export function TerminalWorkspace() {
   const activeTabId = useWorkspaceStore((state) => state.activeTabId)
   const split = useWorkspaceStore((state) => state.split)
   const setSplitRatio = useWorkspaceStore((state) => state.setSplitRatio)
-  const activeSession = activeTabId ? sessions[activeTabId] ?? null : null
+  const activeSession = activeTabId ? (sessions[activeTabId] ?? null) : null
 
   if (!activeSession) return null
 

@@ -16,11 +16,15 @@ export function TerminalEmptyPane({ paneId, direction }: TerminalEmptyPaneProps)
   const assignPaneTab = useWorkspaceStore((state) => state.assignPaneTab)
   const otherPane = paneId === 'pane-a' ? 'pane-b' : 'pane-a'
   const boundElsewhere = split.panes[otherPane].tabId
-  const candidates = tabOrder.filter(
-    (tabId) => tabId !== boundElsewhere && sessions[tabId],
-  )
+  const candidates = tabOrder.filter((tabId) => tabId !== boundElsewhere && sessions[tabId])
   const slotLabel =
-    direction === 'row' ? (paneId === 'pane-a' ? '左侧' : '右侧') : paneId === 'pane-a' ? '上方' : '下方'
+    direction === 'row'
+      ? paneId === 'pane-a'
+        ? '左侧'
+        : '右侧'
+      : paneId === 'pane-a'
+        ? '上方'
+        : '下方'
 
   const handleChange = (event: ChangeEvent<HTMLSelectElement>): void => {
     const tabId = event.currentTarget.value

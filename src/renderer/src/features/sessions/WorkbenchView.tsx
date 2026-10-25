@@ -45,9 +45,7 @@ export function WorkbenchView() {
             <div
               className="workbench__dock"
               ref={dockAreaRef}
-              style={
-                sftpDockWidth ? { flexBasis: `${sftpDockWidth}px` } : undefined
-              }
+              style={sftpDockWidth ? { flexBasis: `${sftpDockWidth}px` } : undefined}
             >
               <PaneResizer
                 className="workbench__dock-resizer"
@@ -57,9 +55,7 @@ export function WorkbenchView() {
                 min={SFTP_DOCK_MIN_WIDTH}
                 max={SFTP_DOCK_MAX_WIDTH}
                 fallbackWidth={380}
-                getTargetWidth={() =>
-                  dockAreaRef.current?.getBoundingClientRect().width ?? null
-                }
+                getTargetWidth={() => dockAreaRef.current?.getBoundingClientRect().width ?? null}
                 onChange={setSftpDockWidth}
                 onReset={() => setSftpDockWidth(null)}
               />

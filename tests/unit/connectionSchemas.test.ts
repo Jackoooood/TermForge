@@ -241,10 +241,7 @@ describe('jump host references', () => {
     expect(
       connectionInputSchema.safeParse({
         ...INPUT,
-        jumpConnectionIds: Array.from(
-          { length: MAX_JUMP_HOPS + 1 },
-          (_, index) => `conn-${index}`,
-        ),
+        jumpConnectionIds: Array.from({ length: MAX_JUMP_HOPS + 1 }, (_, index) => `conn-${index}`),
       }).success,
     ).toBe(false)
 
@@ -308,10 +305,7 @@ describe('jump host references', () => {
       connectionCatalogSchema.safeParse({
         tags: TAGS,
         groups,
-        connections: [
-          jumpProfile('conn-a', ['conn-b']),
-          jumpProfile('conn-b', ['conn-a']),
-        ],
+        connections: [jumpProfile('conn-a', ['conn-b']), jumpProfile('conn-b', ['conn-a'])],
       }).success,
     ).toBe(false)
 

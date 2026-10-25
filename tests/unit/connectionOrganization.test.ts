@@ -90,7 +90,9 @@ describe('connection organization repository', () => {
 
     const reloaded = await new ConnectionRepository(filePath).list()
     expect(reloaded.groups.some((group) => group.id === 'production')).toBe(false)
-    expect(reloaded.connections.find((connection) => connection.id === member?.id)?.groupId).toBeNull()
+    expect(
+      reloaded.connections.find((connection) => connection.id === member?.id)?.groupId,
+    ).toBeNull()
   })
 
   it('reorders groups only when the full set is supplied', async () => {
@@ -211,9 +213,9 @@ describe('connection organization repository', () => {
     await expect(
       repository.bulkUpdate([], { type: 'favorite', favorite: true }),
     ).rejects.toMatchObject({ code: 'invalid-input' })
-    await expect(repository.bulkUpdate(['../bad'], { type: 'favorite', favorite: true })).rejects.toMatchObject(
-      { code: 'invalid-input' },
-    )
+    await expect(
+      repository.bulkUpdate(['../bad'], { type: 'favorite', favorite: true }),
+    ).rejects.toMatchObject({ code: 'invalid-input' })
 
     const reloaded = await new ConnectionRepository(filePath).list()
     expect(reloaded.connections.find((item) => item.id === first.id)).toMatchObject({

@@ -65,9 +65,7 @@ export const sftpReadTextFileInputSchema = z.strictObject({
 export const sftpWriteTextFileInputSchema = z.strictObject({
   sessionId: sftpSessionIdSchema,
   path: remotePathSchema,
-  content: z
-    .string()
-    .max(MAX_REMOTE_TEXT_FILE_BYTES, '文件内容超过 2 MiB 编辑上限'),
+  content: z.string().max(MAX_REMOTE_TEXT_FILE_BYTES, '文件内容超过 2 MiB 编辑上限'),
   encoding: z.enum(['utf-8', 'utf-8-bom']),
   eol: z.enum(['lf', 'crlf']),
   expectedRevision: z.string().min(1).max(128).nullable(),

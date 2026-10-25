@@ -151,41 +151,36 @@ export class ShellChannelManager {
       }, this.openTimeoutMs)
 
       try {
-        client.shell(
-          { term: SHELL_TERM, cols: size.cols, rows: size.rows },
-          (error, channel) => {
-            if (runtime.openSettled) {
-              this.safeCloseChannel(channel)
-              return
-            }
-            this.settleOpen(runtime)
+        client.shell({ term: SHELL_TERM, cols: size.cols, rows: size.rows }, (error, channel) => {
+          if (runtime.openSettled) {
+            this.safeCloseChannel(channel)
+            return
+          }
+          this.settleOpen(runtime)
 
-            if (error || !channel) {
-              this.failOpening(runtime, '无法在 SSH 会话上打开远程 Shell。')
-              reject(
-                new AppOperationError('unavailable', '无法打开远程 Shell，请稍后重试。'),
-              )
-              return
-            }
-            if (runtime.status !== 'opening') {
-              this.safeCloseChannel(channel)
-              reject(new AppOperationError('unavailable', 'SSH 会话已断开，远程 Shell 未启动。'))
-              return
-            }
+          if (error || !channel) {
+            this.failOpening(runtime, '无法在 SSH 会话上打开远程 Shell。')
+            reject(new AppOperationError('unavailable', '无法打开远程 Shell，请稍后重试。'))
+            return
+          }
+          if (runtime.status !== 'opening') {
+            this.safeCloseChannel(channel)
+            reject(new AppOperationError('unavailable', 'SSH 会话已断开，远程 Shell 未启动。'))
+            return
+          }
 
-            runtime.channel = channel
-            this.attachChannel(runtime, channel)
-            runtime.status = 'open'
-            this.applyWindow(runtime)
-            this.publishStatus(runtime)
-            resolve({
-              sessionId,
-              status: 'open',
-              size: copySize(runtime.size),
-              reused: false,
-            })
-          },
-        )
+          runtime.channel = channel
+          this.attachChannel(runtime, channel)
+          runtime.status = 'open'
+          this.applyWindow(runtime)
+          this.publishStatus(runtime)
+          resolve({
+            sessionId,
+            status: 'open',
+            size: copySize(runtime.size),
+            reused: false,
+          })
+        })
       } catch {
         if (!runtime.openSettled) {
           this.settleOpen(runtime)
@@ -266,11 +261,7 @@ export class ShellChannelManager {
   ): void {
     const runtime = this.runtimes.get(sessionId)
     if (!runtime) return
-    if (
-      runtime.status === 'closed' ||
-      runtime.status === 'exited' ||
-      runtime.status === 'error'
-    ) {
+    if (runtime.status === 'closed' || runtime.status === 'exited' || runtime.status === 'error') {
       return
     }
     this.finalize(runtime, {

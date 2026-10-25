@@ -136,10 +136,7 @@ function clearAutoReconnectTimer(tabId: string): void {
   autoReconnectTimers.delete(tabId)
 }
 
-function updateAutoReconnect(
-  tabId: string,
-  autoReconnect: SessionAutoReconnect | null,
-): void {
+function updateAutoReconnect(tabId: string, autoReconnect: SessionAutoReconnect | null): void {
   useSessionStore.setState((state) => {
     const tab = state.sessions[tabId]
     if (!tab || closingTabs.has(tabId)) return state
@@ -422,8 +419,7 @@ export const useSessionStore = create<SessionStoreState>((set, get) => ({
 
   openSession: async (connection) => {
     const existing = Object.values(get().sessions).find(
-      (session) =>
-        session.connectionId === connection.id && PENDING_STATUSES.has(session.status),
+      (session) => session.connectionId === connection.id && PENDING_STATUSES.has(session.status),
     )
     if (existing) {
       useWorkspaceStore.getState().activateTab(existing.id)
@@ -560,9 +556,7 @@ export const useSessionStore = create<SessionStoreState>((set, get) => ({
     const next = applySnapshotToTab(tab, snapshot)
     set((state) => ({
       sessions: { ...state.sessions, [snapshot.clientId]: next },
-      dismissedSessionIds: state.dismissedSessionIds.filter(
-        (id) => id !== snapshot.sessionId,
-      ),
+      dismissedSessionIds: state.dismissedSessionIds.filter((id) => id !== snapshot.sessionId),
     }))
     if (next.status === 'connected') {
       stopAutoReconnect(next.id)
@@ -573,11 +567,7 @@ export const useSessionStore = create<SessionStoreState>((set, get) => ({
     } else if (next.status === 'closing') {
       stopAutoReconnect(next.id)
     }
-    if (
-      next.status === 'error' ||
-      next.status === 'disconnected' ||
-      next.status === 'closing'
-    ) {
+    if (next.status === 'error' || next.status === 'disconnected' || next.status === 'closing') {
       useSshPromptStore.getState().clearHostKeysForSession(snapshot.sessionId)
     }
     return next
@@ -807,10 +797,7 @@ async function performCancelConnect(tabId: string, session: SessionInfo): Promis
   })
 }
 
-async function startReconnectAttempt(
-  tabId: string,
-  automatic: boolean,
-): Promise<string | null> {
+async function startReconnectAttempt(tabId: string, automatic: boolean): Promise<string | null> {
   const inFlight = reconnectPromises.get(tabId)
   if (inFlight) return inFlight
 
@@ -889,10 +876,7 @@ async function performReconnect(
   })
 
   if (oldSessionId) {
-    const disconnected = await withTimeout(
-      disconnectSession(oldSessionId),
-      CLOSE_WAIT_MS,
-    )
+    const disconnected = await withTimeout(disconnectSession(oldSessionId), CLOSE_WAIT_MS)
     if (!isAttemptCurrent(tabId, attemptEpoch) || !isTabReusable(tabId)) {
       return null
     }

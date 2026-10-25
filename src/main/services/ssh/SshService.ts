@@ -40,10 +40,7 @@ import type { HostKeyStore } from '../../storage/hostKeyRepository'
 import { ShellChannelManager, type SshShellClientLike } from '../terminal/ShellChannelManager'
 import type { ResolvedSshAuth, SshCredentialResolver } from './credentialResolver'
 import { parseHostKeyBlob } from './hostKeyBlob'
-import {
-  SshForwardingSessionHandle,
-  type SshForwardingSession,
-} from './SshForwardingSession'
+import { SshForwardingSessionHandle, type SshForwardingSession } from './SshForwardingSession'
 import { mapSshClientError, SshFailureError } from './sshFailure'
 
 export interface SshClientLike extends SshShellClientLike {

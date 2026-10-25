@@ -15,8 +15,7 @@ export interface DecodedRemoteText {
 }
 
 export type RemoteTextDecodeResult =
-  | { ok: true; value: DecodedRemoteText }
-  | { ok: false; reason: RemoteTextDecodeFailure }
+  { ok: true; value: DecodedRemoteText } | { ok: false; reason: RemoteTextDecodeFailure }
 
 const UTF8_BOM = [0xef, 0xbb, 0xbf] as const
 

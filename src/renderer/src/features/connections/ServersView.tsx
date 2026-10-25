@@ -62,9 +62,7 @@ export function ServersView() {
     })
   const filteredConnections = connections.filter((connection) => {
     if (normalizedQuery.length === 0) return true
-    const groupName = connection.groupId
-      ? groupNames.get(connection.groupId) ?? ''
-      : '未分组'
+    const groupName = connection.groupId ? (groupNames.get(connection.groupId) ?? '') : '未分组'
     return [
       connection.name,
       connection.host,
@@ -261,7 +259,7 @@ export function ServersView() {
                     <td>
                       <span className="table-muted">
                         {connection.groupId
-                          ? groupNames.get(connection.groupId) ?? '未分组'
+                          ? (groupNames.get(connection.groupId) ?? '未分组')
                           : '未分组'}
                       </span>
                     </td>

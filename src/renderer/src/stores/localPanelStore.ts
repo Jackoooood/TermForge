@@ -112,7 +112,11 @@ export const useLocalPanelStore = create<LocalPanelStoreState>((set, get) => ({
 
     const bridge = window.termforge
     if (!bridge) {
-      applyFailure(set, tabId, unavailableError('未加载 Electron preload bridge，无法浏览本地文件。'))
+      applyFailure(
+        set,
+        tabId,
+        unavailableError('未加载 Electron preload bridge，无法浏览本地文件。'),
+      )
       return
     }
 
@@ -160,7 +164,11 @@ export const useLocalPanelStore = create<LocalPanelStoreState>((set, get) => ({
   load: async (tabId, rawPath, options) => {
     const bridge = window.termforge
     if (!bridge) {
-      applyFailure(set, tabId, unavailableError('未加载 Electron preload bridge，无法浏览本地文件。'))
+      applyFailure(
+        set,
+        tabId,
+        unavailableError('未加载 Electron preload bridge，无法浏览本地文件。'),
+      )
       return false
     }
 

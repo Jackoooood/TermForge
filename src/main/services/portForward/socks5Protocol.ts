@@ -95,9 +95,7 @@ export class Socks5Handshake {
     })
 
     this.timer = setTimeout(() => {
-      this.fail(
-        new Socks5ProtocolError('SOCKS5 握手超时，连接已关闭。', null, true),
-      )
+      this.fail(new Socks5ProtocolError('SOCKS5 握手超时，连接已关闭。', null, true))
     }, options.timeoutMs)
     this.timer.unref?.()
 
@@ -230,7 +228,8 @@ export class Socks5Handshake {
       totalLength = 7 + domainLength
       if (this.buffer.length < totalLength) return false
       targetHost = this.buffer.subarray(5, 5 + domainLength).toString('utf8')
-      targetPort = ((this.buffer[5 + domainLength] ?? 0) << 8) | (this.buffer[6 + domainLength] ?? 0)
+      targetPort =
+        ((this.buffer[5 + domainLength] ?? 0) << 8) | (this.buffer[6 + domainLength] ?? 0)
       resolvedAddressType = 'domain'
       if (
         domainLength === 0 ||

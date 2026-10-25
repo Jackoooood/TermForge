@@ -71,7 +71,9 @@ svg{display:block;width:256px;height:256px}
     await window.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(html)}`)
     await new Promise((resolve) => setTimeout(resolve, 500))
     const captured = await window.webContents.capturePage()
-    await log(`captured size=${captured.getSize().width}x${captured.getSize().height} empty=${captured.isEmpty()} pngBytes=${captured.toPNG().length}`)
+    await log(
+      `captured size=${captured.getSize().width}x${captured.getSize().height} empty=${captured.isEmpty()} pngBytes=${captured.toPNG().length}`,
+    )
     if (captured.isEmpty()) throw new Error('capturePage returned an empty image')
     const normalized =
       captured.getSize().width === 256

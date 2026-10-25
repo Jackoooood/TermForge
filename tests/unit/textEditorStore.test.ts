@@ -152,9 +152,9 @@ describe('textEditorStore', () => {
 
     await useTextEditorStore.getState().openFile(SESSION, PATH)
 
-    await expect(
-      useTextEditorStore.getState().save(textEditorTabId(SESSION, PATH)),
-    ).resolves.toBe(true)
+    await expect(useTextEditorStore.getState().save(textEditorTabId(SESSION, PATH))).resolves.toBe(
+      true,
+    )
     expect(writeTextFile).not.toHaveBeenCalled()
   })
 

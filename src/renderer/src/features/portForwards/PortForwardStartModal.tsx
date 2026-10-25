@@ -71,15 +71,13 @@ function StartDialog({ item, onClose }: { item: PortForwardItem; onClose: () => 
   const sessions = useSessionStore((state) => state.sessions)
   const pushToast = useAppStore((state) => state.pushToast)
   const candidates = connectedSessionsFor(sessions, item.rule.connectionId, activeTabId)
-  const exposureRequired =
-    item.rule.type !== 'dynamic' && !isLoopbackAddress(item.rule.bindAddress)
+  const exposureRequired = item.rule.type !== 'dynamic' && !isLoopbackAddress(item.rule.bindAddress)
 
   const [sessionId, setSessionId] = useState(candidates[0]?.sessionId ?? '')
   const [riskConfirmed, setRiskConfirmed] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const submitting = pending === 'start'
-  const canSubmit =
-    !submitting && sessionId.length > 0 && (!exposureRequired || riskConfirmed)
+  const canSubmit = !submitting && sessionId.length > 0 && (!exposureRequired || riskConfirmed)
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
@@ -108,9 +106,7 @@ function StartDialog({ item, onClose }: { item: PortForwardItem; onClose: () => 
       })
     } catch (error) {
       setSubmitError(
-        error instanceof Error && error.message
-          ? error.message
-          : '端口转发未能启动，请稍后重试。',
+        error instanceof Error && error.message ? error.message : '端口转发未能启动，请稍后重试。',
       )
     }
   }
@@ -161,7 +157,8 @@ function StartDialog({ item, onClose }: { item: PortForwardItem; onClose: () => 
             <div className="form-error-summary" role="alert">
               <Info size={13} aria-hidden="true" />
               <span>
-                当前没有该连接的活动 SSH 会话。请先在服务器页连接并等待状态变为“已连接”，再启动转发。
+                当前没有该连接的活动 SSH
+                会话。请先在服务器页连接并等待状态变为“已连接”，再启动转发。
               </span>
             </div>
           ) : (
@@ -200,7 +197,9 @@ function StartDialog({ item, onClose }: { item: PortForwardItem; onClose: () => 
                 disabled={submitting}
                 onChange={(event) => setRiskConfirmed(event.target.checked)}
               />
-              <span>我已确认该监听地址的暴露范围，并理解这台主机可能被同一网络中的其他设备访问。</span>
+              <span>
+                我已确认该监听地址的暴露范围，并理解这台主机可能被同一网络中的其他设备访问。
+              </span>
             </label>
           </div>
         ) : null}

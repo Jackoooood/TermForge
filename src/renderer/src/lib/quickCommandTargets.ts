@@ -17,11 +17,11 @@ export function isQuickCommandTargetSendable(
 ): boolean {
   return Boolean(
     session &&
-      session.status === 'connected' &&
-      session.sessionId &&
-      shell &&
-      shell.status === 'open' &&
-      shell.sessionId === session.sessionId,
+    session.status === 'connected' &&
+    session.sessionId &&
+    shell &&
+    shell.status === 'open' &&
+    shell.sessionId === session.sessionId,
   )
 }
 

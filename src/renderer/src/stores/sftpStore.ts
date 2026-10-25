@@ -8,11 +8,7 @@ import type {
   SftpMutationAck,
 } from '@shared/types'
 import { normalizeRemotePath, sortRemoteEntries } from '@shared/sftp/remotePath'
-import type {
-  RemoteSortDirection,
-  RemoteSortField,
-  RemoteSortState,
-} from '@shared/sftp/remotePath'
+import type { RemoteSortDirection, RemoteSortField, RemoteSortState } from '@shared/sftp/remotePath'
 
 export type SftpViewStatus = 'idle' | 'opening' | 'loading' | 'ready' | 'error' | 'disconnected'
 
@@ -411,11 +407,7 @@ export const useSftpStore = create<SftpStoreState>((set, get) => ({
       if (!tab) return state
       const nextDirection =
         direction ??
-        (tab.sort.field === field
-          ? tab.sort.direction === 'asc'
-            ? 'desc'
-            : 'asc'
-          : 'asc')
+        (tab.sort.field === field ? (tab.sort.direction === 'asc' ? 'desc' : 'asc') : 'asc')
       if (tab.sort.field === field && tab.sort.direction === nextDirection) return state
       return {
         tabs: {
@@ -496,10 +488,7 @@ export const useSftpStore = create<SftpStoreState>((set, get) => ({
       }
     })
 
-    const applyTreeFailure = (
-      code: OperationErrorCode,
-      message: string,
-    ): void => {
+    const applyTreeFailure = (code: OperationErrorCode, message: string): void => {
       set((state) => {
         const current = state.tabs[tabId]
         if (

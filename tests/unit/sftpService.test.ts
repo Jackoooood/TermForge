@@ -766,28 +766,30 @@ describe('SftpService remote text files', () => {
     )
     wrapper.readFiles.set('/srv/app/notes.txt', plain)
 
-    await expect(
-      harness.service.readTextFile(SESSION_A, '/srv//app/./notes.txt'),
-    ).resolves.toEqual({
-      sessionId: SESSION_A,
-      path: '/srv/app/notes.txt',
-      content: 'alpha\r\nbeta\r\n',
-      encoding: 'utf-8',
-      eol: 'crlf',
-      revision: `1700000123:${plain.length}`,
-      sizeBytes: plain.length,
-      modifiedAt: new Date(1_700_000_123_000).toISOString(),
-      permissions: '-rw-r--r--',
-    })
+    await expect(harness.service.readTextFile(SESSION_A, '/srv//app/./notes.txt')).resolves.toEqual(
+      {
+        sessionId: SESSION_A,
+        path: '/srv/app/notes.txt',
+        content: 'alpha\r\nbeta\r\n',
+        encoding: 'utf-8',
+        eol: 'crlf',
+        revision: `1700000123:${plain.length}`,
+        sizeBytes: plain.length,
+        modifiedAt: new Date(1_700_000_123_000).toISOString(),
+        permissions: '-rw-r--r--',
+      },
+    )
 
     const bom = Buffer.concat([Buffer.from([0xef, 0xbb, 0xbf]), Buffer.from('echo "hi"\n')])
     wrapper.statEntries.set('/srv/app/run.sh', remoteStats('file', { size: bom.length }))
     wrapper.readFiles.set('/srv/app/run.sh', bom)
-    await expect(harness.service.readTextFile(SESSION_A, '/srv/app/run.sh')).resolves.toMatchObject({
-      content: 'echo "hi"\n',
-      encoding: 'utf-8-bom',
-      eol: 'lf',
-    })
+    await expect(harness.service.readTextFile(SESSION_A, '/srv/app/run.sh')).resolves.toMatchObject(
+      {
+        content: 'echo "hi"\n',
+        encoding: 'utf-8-bom',
+        eol: 'lf',
+      },
+    )
     expect(wrapper.calls.readStreams).toEqual(['/srv/app/notes.txt', '/srv/app/run.sh'])
   })
 
@@ -822,19 +824,16 @@ describe('SftpService remote text files', () => {
     await expect(
       harness.service.readTextFile(SESSION_A, '/srv/app/utf16.txt'),
     ).rejects.toMatchObject({ code: 'unsupported' })
-    await expect(harness.service.readTextFile(SESSION_A, '/srv/app/huge.txt')).rejects.toMatchObject(
-      { code: 'limit-exceeded' },
-    )
+    await expect(
+      harness.service.readTextFile(SESSION_A, '/srv/app/huge.txt'),
+    ).rejects.toMatchObject({ code: 'limit-exceeded' })
     expect(wrapper.calls.readStreams).toEqual(['/srv/app/blob.bin', '/srv/app/utf16.txt'])
   })
 
   it('stops streaming when the response exceeds the byte cap despite a smaller stat', async () => {
     const { harness, wrapper } = await openSession()
     wrapper.statEntries.set('/srv/app/stream.txt', remoteStats('file', { size: 1 }))
-    wrapper.readFiles.set(
-      '/srv/app/stream.txt',
-      Buffer.alloc(MAX_REMOTE_TEXT_FILE_BYTES + 1, 0x61),
-    )
+    wrapper.readFiles.set('/srv/app/stream.txt', Buffer.alloc(MAX_REMOTE_TEXT_FILE_BYTES + 1, 0x61))
 
     await expect(
       harness.service.readTextFile(SESSION_A, '/srv/app/stream.txt'),
@@ -1030,12 +1029,7 @@ describe('SftpService transfer port', () => {
     const targetPath = '/srv/app/index.html'
 
     await expect(
-      harness.service.commitRemoteUpload(
-        SESSION_A,
-        tempPath,
-        '/srv/other/index.html',
-        true,
-      ),
+      harness.service.commitRemoteUpload(SESSION_A, tempPath, '/srv/other/index.html', true),
     ).rejects.toMatchObject({ code: 'invalid-input' })
     await expect(
       harness.service.commitRemoteUpload(SESSION_A, '/srv/app/index.html', targetPath, true),
@@ -1054,12 +1048,7 @@ describe('SftpService transfer port', () => {
     ).rejects.toMatchObject({ code: 'already-exists' })
     expect(wrapper.calls.rename).toHaveLength(0)
 
-    const result = await harness.service.commitRemoteUpload(
-      SESSION_A,
-      tempPath,
-      targetPath,
-      true,
-    )
+    const result = await harness.service.commitRemoteUpload(SESSION_A, tempPath, targetPath, true)
     expect(result).toEqual({
       targetPath,
       replacedExisting: true,
@@ -1112,9 +1101,7 @@ describe('SftpService transfer port', () => {
     expect(wrapper.calls.unlink).toHaveLength(0)
 
     wrapper.statEntries.set(tempPath, remoteStats('file', { size: 12 }))
-    await expect(
-      harness.service.removeTransferFile(SESSION_A, tempPath),
-    ).resolves.toBeUndefined()
+    await expect(harness.service.removeTransferFile(SESSION_A, tempPath)).resolves.toBeUndefined()
     expect(wrapper.calls.unlink).toEqual([tempPath])
   })
 })

@@ -19,15 +19,14 @@ export function TerminalPaneHeader({
 }: TerminalPaneHeaderProps) {
   const focusPane = useWorkspaceStore((state) => state.focusPane)
   const assignPaneTab = useWorkspaceStore((state) => state.assignPaneTab)
-  const slotLabel = direction === 'row' ? (paneId === 'pane-a' ? '左' : '右') : paneId === 'pane-a' ? '上' : '下'
+  const slotLabel =
+    direction === 'row' ? (paneId === 'pane-a' ? '左' : '右') : paneId === 'pane-a' ? '上' : '下'
   const DirectionIcon = direction === 'row' ? Columns2 : Rows2
 
   return (
     <header
       className={
-        focused
-          ? 'terminal-pane__header terminal-pane__header--focused'
-          : 'terminal-pane__header'
+        focused ? 'terminal-pane__header terminal-pane__header--focused' : 'terminal-pane__header'
       }
     >
       <button

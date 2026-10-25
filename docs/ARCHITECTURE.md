@@ -721,30 +721,30 @@ running/starting → error(cleanupPending=true) → error(cleanupPending=false)
 
 ## 12. 数据持久化
 
-| 数据                        | 位置                                                     | 写入方                                           |
-| --------------------------- | -------------------------------------------------------- | ------------------------------------------------ |
-| 连接与分组                  | `<userData>/connections.json`                            | `ConnectionRepository`（原子写入、串行队列）     |
-| 加密凭据                    | `<userData>/credentials.enc.json`                        | `EncryptedCredentialStore`（safeStorage 密文）   |
-| 主机密钥信任                | `<userData>/known-hosts.json`                            | `FileHostKeyStore.trust/remove`                  |
-| 会话状态                    | 主进程内存                                               | `SshService`（唯一权威）                         |
-| Shell/PTY 状态与通道        | 主进程内存                                               | `SshService` / `ShellChannelManager`（唯一权威） |
-| SFTP 通道、主目录与路径锁   | 主进程内存                                               | `SftpService`（唯一权威；不持久化）              |
-| 端口转发规则                | `<userData>/port-forwards.json`                          | `PortForwardRepository`（版本化、strict、原子写入） |
-| 端口转发运行时              | 主进程内存                                               | `PortForwardService`（唯一权威；不持久化）       |
-| 自定义快速命令与收藏        | `<userData>/quick-commands.json`                         | `QuickCommandRepository`（版本化、strict、原子写入） |
+| 数据                        | 位置                                                     | 写入方                                                |
+| --------------------------- | -------------------------------------------------------- | ----------------------------------------------------- |
+| 连接与分组                  | `<userData>/connections.json`                            | `ConnectionRepository`（原子写入、串行队列）          |
+| 加密凭据                    | `<userData>/credentials.enc.json`                        | `EncryptedCredentialStore`（safeStorage 密文）        |
+| 主机密钥信任                | `<userData>/known-hosts.json`                            | `FileHostKeyStore.trust/remove`                       |
+| 会话状态                    | 主进程内存                                               | `SshService`（唯一权威）                              |
+| Shell/PTY 状态与通道        | 主进程内存                                               | `SshService` / `ShellChannelManager`（唯一权威）      |
+| SFTP 通道、主目录与路径锁   | 主进程内存                                               | `SftpService`（唯一权威；不持久化）                   |
+| 端口转发规则                | `<userData>/port-forwards.json`                          | `PortForwardRepository`（版本化、strict、原子写入）   |
+| 端口转发运行时              | 主进程内存                                               | `PortForwardService`（唯一权威；不持久化）            |
+| 自定义快速命令与收藏        | `<userData>/quick-commands.json`                         | `QuickCommandRepository`（版本化、strict、原子写入）  |
 | 命令历史                    | `<userData>/command-history.json`                        | `CommandHistoryRepository`（最多 200 条；不额外加密） |
-| 应用设置                    | `<userData>/settings.json`                               | `SettingsRepository`（版本化 v6、strict、原子写入） |
-| 壁纸图片与展示元数据        | `<userData>/wallpapers/wallpaper.jpg` / `wallpaper.json` | `WallpaperService`（重编码 JPEG + 原子写入）     |
-| 壁纸渲染投影                | 渲染进程内存                                             | `wallpaperStore`（data URL + 文件名，不落盘）    |
-| 未完成传输任务快照          | `<userData>/transfer-journal.json`                       | `TransferService`（最多 100 条；仅活动/已中断）  |
-| 结构化诊断日志              | `<userData>/logs/termforge*.log`                         | `Logger`（脱敏、轮转、限长；导出需用户选择路径） |
-| 传输任务、队列与临时文件    | 主进程内存 + 目标目录临时文件                            | `TransferService`（唯一权威；结束/退出清理）     |
-| SFTP 目录条目、状态与选中项 | 渲染进程内存（按标签）                                   | `sftpStore`（应用运行期间）                      |
-| 分屏布局与窗格绑定          | 渲染进程内存                                             | `workspaceStore`（运行态；不持久化）             |
-| 自动重连进度与定时器        | 渲染进程内存                                             | `sessionStore`（运行态；不持久化）               |
-| 终端输出重放缓冲            | 渲染进程内存（模块级，≤256 KiB/标签）                    | `terminalRuntime`（不进入 Zustand）              |
-| 传输任务投影                | 渲染进程内存                                             | `transferStore`（只读投影，按 `revision` 合并）  |
-| 渲染镜像、偏好              | 渲染进程内存                                             | Zustand stores                                   |
+| 应用设置                    | `<userData>/settings.json`                               | `SettingsRepository`（版本化 v6、strict、原子写入）   |
+| 壁纸图片与展示元数据        | `<userData>/wallpapers/wallpaper.jpg` / `wallpaper.json` | `WallpaperService`（重编码 JPEG + 原子写入）          |
+| 壁纸渲染投影                | 渲染进程内存                                             | `wallpaperStore`（data URL + 文件名，不落盘）         |
+| 未完成传输任务快照          | `<userData>/transfer-journal.json`                       | `TransferService`（最多 100 条；仅活动/已中断）       |
+| 结构化诊断日志              | `<userData>/logs/termforge*.log`                         | `Logger`（脱敏、轮转、限长；导出需用户选择路径）      |
+| 传输任务、队列与临时文件    | 主进程内存 + 目标目录临时文件                            | `TransferService`（唯一权威；结束/退出清理）          |
+| SFTP 目录条目、状态与选中项 | 渲染进程内存（按标签）                                   | `sftpStore`（应用运行期间）                           |
+| 分屏布局与窗格绑定          | 渲染进程内存                                             | `workspaceStore`（运行态；不持久化）                  |
+| 自动重连进度与定时器        | 渲染进程内存                                             | `sessionStore`（运行态；不持久化）                    |
+| 终端输出重放缓冲            | 渲染进程内存（模块级，≤256 KiB/标签）                    | `terminalRuntime`（不进入 Zustand）                   |
+| 传输任务投影                | 渲染进程内存                                             | `transferStore`（只读投影，按 `revision` 合并）       |
+| 渲染镜像、偏好              | 渲染进程内存                                             | Zustand stores                                        |
 
 连接仓库仍使用首启种子、strict schema 与版本化信封；损坏时停止加载。主机密钥仓库只保存 host/port、算法、OpenSSH SHA256 指纹与信任时间，同一端点只保留一条记录。传输任务历史、队列、速度采样与临时文件路径不落盘，只有未完成任务的展示快照进入传输日志，重启后水合为 `interrupted` 且不恢复执行；`.termforge-part-*` 与 `.termforge-backup-*` 只用于进行中/提交中的传输，正常结束后应被清理。
 

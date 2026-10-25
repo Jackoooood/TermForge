@@ -515,9 +515,7 @@ export class ConnectionRepository implements ConnectionOrganizationStore {
           }
           case 'remove-tags': {
             const removeTagIds = parsed.tagIds
-            const remaining = existing.tagIds.filter(
-              (tagId) => !removeTagIds.includes(tagId),
-            )
+            const remaining = existing.tagIds.filter((tagId) => !removeTagIds.includes(tagId))
             if (remaining.length !== existing.tagIds.length) {
               nextProfile = connectionProfileSchema.parse({
                 ...existing,
@@ -538,9 +536,7 @@ export class ConnectionRepository implements ConnectionOrganizationStore {
       if (updated.length > 0) {
         const next: ConnectionCatalog = {
           ...state,
-          connections: state.connections.map(
-            (connection) => byId.get(connection.id) ?? connection,
-          ),
+          connections: state.connections.map((connection) => byId.get(connection.id) ?? connection),
         }
         await this.persist(next)
         this.catalog = next
@@ -572,9 +568,7 @@ export class ConnectionRepository implements ConnectionOrganizationStore {
   ): void {
     const normalized = normalizeName(name)
     if (
-      catalog.tags.some(
-        (tag) => tag.id !== exceptTagId && normalizeName(tag.name) === normalized,
-      )
+      catalog.tags.some((tag) => tag.id !== exceptTagId && normalizeName(tag.name) === normalized)
     ) {
       throw new AppOperationError('invalid-input', '标签名称已存在，请使用其他名称。')
     }

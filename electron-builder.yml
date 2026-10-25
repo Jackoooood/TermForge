@@ -9,11 +9,11 @@ directories:
 files:
   - out/**/*
   - package.json
-  - "!**/*.map"
-  - "!node_modules/zod/src/**"
-  - "!node_modules/**/{test,tests,__tests__}/**"
-  - "!node_modules/**/*.test.*"
-  - "!node_modules/**/*.spec.*"
+  - '!**/*.map'
+  - '!node_modules/zod/src/**'
+  - '!node_modules/**/{test,tests,__tests__}/**'
+  - '!node_modules/**/*.test.*'
+  - '!node_modules/**/*.spec.*'
 
 asar: true
 removePackageScripts: true
@@ -42,7 +42,7 @@ nsis:
   installerHeaderIcon: build/icon.ico
   deleteAppDataOnUninstall: false
   runAfterFinish: true
-  language: "2052"
+  language: '2052'
   installerLanguages:
     - zh_CN
     - en_US

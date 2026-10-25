@@ -263,25 +263,24 @@ describe('sessionStore', () => {
     expect(firstTabId).not.toBeNull()
     expect(useSessionStore.getState().sessions[firstTabId as string]?.sessionId).toBe('ssh-first')
 
-    const secondTabId = await useSessionStore
-      .getState()
-      .openSession({ id: 'conn-1', name: 'prod' })
+    const secondTabId = await useSessionStore.getState().openSession({ id: 'conn-1', name: 'prod' })
     expect(secondTabId).not.toBe(firstTabId)
     expect(connect).toHaveBeenCalledTimes(2)
     expect(connect.mock.calls[1]?.[1]).not.toBe(firstClientId)
-    expect(useSessionStore.getState().sessions[secondTabId as string]?.sessionId).toBe(
-      'ssh-second',
-    )
+    expect(useSessionStore.getState().sessions[secondTabId as string]?.sessionId).toBe('ssh-second')
     expect(Object.keys(useSessionStore.getState().sessions)).toHaveLength(2)
   })
 
   it('keeps a retryable tab when the main process rejects the connection', async () => {
-    window.termforge = createBridge({}, {
-      connect: vi.fn().mockResolvedValue({
-        ok: false,
-        error: { code: 'not-found', message: '找不到该连接配置。' },
-      }),
-    })
+    window.termforge = createBridge(
+      {},
+      {
+        connect: vi.fn().mockResolvedValue({
+          ok: false,
+          error: { code: 'not-found', message: '找不到该连接配置。' },
+        }),
+      },
+    )
     const tabId = await openSession()
     expect(useSessionStore.getState().sessions[tabId]).toMatchObject({
       status: 'error',
@@ -307,11 +306,14 @@ describe('sessionStore', () => {
   })
 
   it('preserves the tab on passive disconnect and keeps retry state when reconnect fails', async () => {
-    window.termforge = createBridge({}, {
-      connect: vi.fn(async (_connectionId: string, clientId: string) =>
-        connectedResult('conn-1', clientId, 'ssh-old'),
-      ),
-    })
+    window.termforge = createBridge(
+      {},
+      {
+        connect: vi.fn(async (_connectionId: string, clientId: string) =>
+          connectedResult('conn-1', clientId, 'ssh-old'),
+        ),
+      },
+    )
     const tabId = await openSession()
 
     const applied = useSessionStore.getState().applySshSnapshot(
@@ -332,21 +334,24 @@ describe('sessionStore', () => {
     })
     expect(useWorkspaceStore.getState().tabOrder).toEqual([tabId])
 
-    window.termforge = createBridge({}, {
-      disconnect: vi.fn().mockResolvedValue({
-        ok: true,
-        value: fakeSshSnapshot({
-          clientId: tabId,
-          sessionId: 'ssh-old',
-          status: 'disconnected',
-          connectedAt: null,
+    window.termforge = createBridge(
+      {},
+      {
+        disconnect: vi.fn().mockResolvedValue({
+          ok: true,
+          value: fakeSshSnapshot({
+            clientId: tabId,
+            sessionId: 'ssh-old',
+            status: 'disconnected',
+            connectedAt: null,
+          }),
         }),
-      }),
-      connect: vi.fn().mockResolvedValue({
-        ok: false,
-        error: { code: 'not-found', message: '连接已删除。' },
-      }),
-    })
+        connect: vi.fn().mockResolvedValue({
+          ok: false,
+          error: { code: 'not-found', message: '连接已删除。' },
+        }),
+      },
+    )
     await useSessionStore.getState().reconnectSession(tabId)
     expect(useSessionStore.getState().sessions[tabId]).toMatchObject({
       status: 'error',
@@ -680,11 +685,14 @@ describe('sessionStore', () => {
   })
 
   it('closes only the requested tab, keeps a neighbour active and is idempotent', async () => {
-    window.termforge = createBridge({}, {
-      connect: vi.fn(async (connectionId: string, clientId: string) =>
-        connectedResult(connectionId, clientId, `ssh-${clientId}`),
-      ),
-    })
+    window.termforge = createBridge(
+      {},
+      {
+        connect: vi.fn(async (connectionId: string, clientId: string) =>
+          connectedResult(connectionId, clientId, `ssh-${clientId}`),
+        ),
+      },
+    )
     const first = await openSession('conn-1', 'prod')
     const second = await openSession('conn-2', 'stage')
     useWorkspaceStore.getState().activateTab(first)
@@ -755,15 +763,18 @@ describe('sessionStore', () => {
   })
 
   it('keeps a tab with a retryable error when the main process fails to close it', async () => {
-    window.termforge = createBridge({}, {
-      connect: vi.fn(async (connectionId: string, clientId: string) =>
-        connectedResult(connectionId, clientId, 'ssh-1'),
-      ),
-      disconnect: vi.fn().mockResolvedValue({
-        ok: false,
-        error: { code: 'internal', message: '主进程关闭失败。' },
-      }),
-    })
+    window.termforge = createBridge(
+      {},
+      {
+        connect: vi.fn(async (connectionId: string, clientId: string) =>
+          connectedResult(connectionId, clientId, 'ssh-1'),
+        ),
+        disconnect: vi.fn().mockResolvedValue({
+          ok: false,
+          error: { code: 'internal', message: '主进程关闭失败。' },
+        }),
+      },
+    )
     const tabId = await openSession()
 
     await useSessionStore.getState().closeSession(tabId)
@@ -778,57 +789,73 @@ describe('sessionStore', () => {
   })
 
   it('ignores snapshots for unknown tabs and for other sessions of the same tab', async () => {
-    window.termforge = createBridge({}, {
-      connect: vi.fn(async (connectionId: string, clientId: string) =>
-        connectedResult(connectionId, clientId, 'ssh-1'),
-      ),
-    })
+    window.termforge = createBridge(
+      {},
+      {
+        connect: vi.fn(async (connectionId: string, clientId: string) =>
+          connectedResult(connectionId, clientId, 'ssh-1'),
+        ),
+      },
+    )
     const tabId = await openSession()
 
     expect(
-      useSessionStore.getState().applySshSnapshot(
-        fakeSshSnapshot({ clientId: 'sshtab-unknown', sessionId: 'ssh-unknown' }),
-      ),
+      useSessionStore
+        .getState()
+        .applySshSnapshot(
+          fakeSshSnapshot({ clientId: 'sshtab-unknown', sessionId: 'ssh-unknown' }),
+        ),
     ).toBeNull()
 
     expect(
-      useSessionStore.getState().applySshSnapshot(
-        fakeSshSnapshot({ clientId: tabId, sessionId: 'ssh-other', connectionId: 'conn-1' }),
-      ),
+      useSessionStore
+        .getState()
+        .applySshSnapshot(
+          fakeSshSnapshot({ clientId: tabId, sessionId: 'ssh-other', connectionId: 'conn-1' }),
+        ),
     ).toBeNull()
     expect(useSessionStore.getState().sessions[tabId]?.sessionId).toBe('ssh-1')
     expect(useSessionStore.getState().dismissedSessionIds).toContain('ssh-other')
   })
 
   it('applies the disconnect snapshot and reports failures', async () => {
-    window.termforge = createBridge({}, {
-      connect: vi.fn(async (connectionId: string, clientId: string) =>
-        connectedResult(connectionId, clientId, 'ssh-1'),
-      ),
-    })
+    window.termforge = createBridge(
+      {},
+      {
+        connect: vi.fn(async (connectionId: string, clientId: string) =>
+          connectedResult(connectionId, clientId, 'ssh-1'),
+        ),
+      },
+    )
     const tabId = await openSession()
 
-    window.termforge = createBridge({}, {
-      disconnect: vi.fn(async (sessionId: string) => ({
-        ok: true as const,
-        value: fakeSshSnapshot({
-          clientId: tabId,
-          sessionId,
-          status: 'disconnected' as const,
-          connectedAt: null,
-        }),
-      })),
-    })
+    window.termforge = createBridge(
+      {},
+      {
+        disconnect: vi.fn(async (sessionId: string) => ({
+          ok: true as const,
+          value: fakeSshSnapshot({
+            clientId: tabId,
+            sessionId,
+            status: 'disconnected' as const,
+            connectedAt: null,
+          }),
+        })),
+      },
+    )
     await useSessionStore.getState().requestDisconnect(tabId)
     expect(useSessionStore.getState().sessions[tabId]?.status).toBe('disconnected')
     expect(useSessionStore.getState().sessions[tabId]?.hasTerminal).toBe(true)
 
-    window.termforge = createBridge({}, {
-      disconnect: vi.fn().mockResolvedValue({
-        ok: false,
-        error: { code: 'not-found', message: '找不到该 SSH 会话。' },
-      }),
-    })
+    window.termforge = createBridge(
+      {},
+      {
+        disconnect: vi.fn().mockResolvedValue({
+          ok: false,
+          error: { code: 'not-found', message: '找不到该 SSH 会话。' },
+        }),
+      },
+    )
     await useSessionStore.getState().requestDisconnect(tabId)
     expect(useAppStore.getState().toasts.at(-1)?.title).toBe('断开连接失败')
     expect(useAppStore.getState().toasts.at(-1)?.description).toBe('找不到该 SSH 会话。')
@@ -844,12 +871,15 @@ describe('sessionStore', () => {
         connectedAt: null,
       }),
     }))
-    window.termforge = createBridge({}, {
-      disconnect,
-      connect: vi.fn(async (connectionId: string, clientId: string) =>
-        connectedResult(connectionId, clientId, `ssh-${connectionId}`),
-      ),
-    })
+    window.termforge = createBridge(
+      {},
+      {
+        disconnect,
+        connect: vi.fn(async (connectionId: string, clientId: string) =>
+          connectedResult(connectionId, clientId, `ssh-${connectionId}`),
+        ),
+      },
+    )
     const prod = await openSession('conn-prod', 'prod')
     const stage = await openSession('conn-stage', 'stage')
     useWorkspaceStore.getState().activateTab(stage)
@@ -875,12 +905,15 @@ describe('sessionStore', () => {
         connectedAt: null,
       }),
     }))
-    window.termforge = createBridge({}, {
-      disconnect,
-      connect: vi.fn(async (connectionId: string, clientId: string) =>
-        connectedResult(connectionId, clientId, `ssh-${clientId}`),
-      ),
-    })
+    window.termforge = createBridge(
+      {},
+      {
+        disconnect,
+        connect: vi.fn(async (connectionId: string, clientId: string) =>
+          connectedResult(connectionId, clientId, `ssh-${clientId}`),
+        ),
+      },
+    )
     const first = await openSession('conn-1', 'prod')
     const second = await openSession('conn-2', 'stage')
     useSshPromptStore.getState().openCredentialPrompt({
@@ -906,11 +939,14 @@ describe('sessionStore', () => {
   })
 
   it('syncs renamed connection profiles into existing tabs', async () => {
-    window.termforge = createBridge({}, {
-      connect: vi.fn(async (connectionId: string, clientId: string) =>
-        connectedResult(connectionId, clientId, 'ssh-1'),
-      ),
-    })
+    window.termforge = createBridge(
+      {},
+      {
+        connect: vi.fn(async (connectionId: string, clientId: string) =>
+          connectedResult(connectionId, clientId, 'ssh-1'),
+        ),
+      },
+    )
     const tabId = await openSession()
 
     useSessionStore.getState().syncConnectionProfiles([{ id: 'conn-1', name: 'prod-renamed' }])
@@ -1304,12 +1340,15 @@ describe('sshPromptStore', () => {
   })
 
   it('drops expired or rejected challenges instead of keeping a stale prompt', async () => {
-    window.termforge = createBridge({}, {
-      respondToHostKey: vi.fn().mockResolvedValue({
-        ok: false,
-        error: { code: 'not-found', message: '该主机密钥确认已过期。' },
-      }),
-    })
+    window.termforge = createBridge(
+      {},
+      {
+        respondToHostKey: vi.fn().mockResolvedValue({
+          ok: false,
+          error: { code: 'not-found', message: '该主机密钥确认已过期。' },
+        }),
+      },
+    )
     useSshPromptStore.getState().enqueueHostKey(challenge)
     await useSshPromptStore.getState().resolveHostKey('req-1', true)
     expect(useSshPromptStore.getState().hostKeyQueue).toHaveLength(0)
@@ -1349,9 +1388,15 @@ describe('transferStore', () => {
 
   it('syncs main-process snapshots and discards stale revisions', async () => {
     const initial = fakeTransferTask()
-    window.termforge = createFakeBridge({}, {}, {}, {}, {
-      list: async () => ({ ok: true, value: [initial] }),
-    })
+    window.termforge = createFakeBridge(
+      {},
+      {},
+      {},
+      {},
+      {
+        list: async () => ({ ok: true, value: [initial] }),
+      },
+    )
 
     await useTransferStore.getState().sync()
     expect(useTransferStore.getState().tasks).toEqual([initial])
@@ -1443,12 +1488,18 @@ describe('transferStore', () => {
       value: fakeTransferTask({ id: 'transfer-active', revision: 4, conflictPolicy: 'rename' }),
     })
     const clearHistory = vi.fn().mockResolvedValue({ ok: true, value: { cleared: 1 } })
-    window.termforge = createFakeBridge({}, {}, {}, {}, {
-      cancel,
-      retry,
-      resolveConflict,
-      clearHistory,
-    })
+    window.termforge = createFakeBridge(
+      {},
+      {},
+      {},
+      {},
+      {
+        cancel,
+        retry,
+        resolveConflict,
+        clearHistory,
+      },
+    )
 
     await useTransferStore.getState().cancelTask('transfer-active')
     expect(cancel).toHaveBeenCalledWith('transfer-active')
@@ -1548,9 +1599,9 @@ describe('connectionStore', () => {
     await useConnectionStore.getState().loadConnections()
     expect(useConnectionStore.getState().loadStatus).toBe('ready')
     expect(useConnectionStore.getState().connections).toHaveLength(2)
-    expect(
-      Object.values(useSessionStore.getState().sessions).map((session) => session.id),
-    ).toEqual(['sshtab-prod-web'])
+    expect(Object.values(useSessionStore.getState().sessions).map((session) => session.id)).toEqual(
+      ['sshtab-prod-web'],
+    )
   })
 
   it('surfaces local storage failures instead of falling back to fixtures', async () => {

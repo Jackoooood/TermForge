@@ -63,8 +63,7 @@ export interface QuickCommandExecuteHistoryInput extends QuickCommandExecuteBase
 }
 
 export type QuickCommandExecuteInput =
-  | QuickCommandExecuteLibraryInput
-  | QuickCommandExecuteHistoryInput
+  QuickCommandExecuteLibraryInput | QuickCommandExecuteHistoryInput
 
 export interface QuickCommandExecuteAck {
   requestId: string

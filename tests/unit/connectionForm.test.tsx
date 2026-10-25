@@ -180,10 +180,14 @@ describe('ConnectionForm jump hosts', () => {
 
     const list = screen.getByRole('list', { name: '跳板连接顺序' })
     expect(within(list).getAllByRole('listitem')).toHaveLength(2)
-    expect(screen.getByText('连接路径：本机 → bastion-1 → bastion-2 → 目标服务器')).toBeInTheDocument()
+    expect(
+      screen.getByText('连接路径：本机 → bastion-1 → bastion-2 → 目标服务器'),
+    ).toBeInTheDocument()
 
     await user.click(screen.getByRole('button', { name: '将跳板 bastion-2 上移' }))
-    expect(screen.getByText('连接路径：本机 → bastion-2 → bastion-1 → 目标服务器')).toBeInTheDocument()
+    expect(
+      screen.getByText('连接路径：本机 → bastion-2 → bastion-1 → 目标服务器'),
+    ).toBeInTheDocument()
 
     await user.click(screen.getByRole('button', { name: '移除跳板 bastion-1' }))
     expect(screen.getByText('连接路径：本机 → bastion-2 → 目标服务器')).toBeInTheDocument()

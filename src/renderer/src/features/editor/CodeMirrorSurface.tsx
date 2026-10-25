@@ -1,9 +1,4 @@
-import {
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-} from 'react'
+import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
 import { Compartment, EditorState } from '@codemirror/state'
 import {
   EditorView,
@@ -16,12 +11,7 @@ import {
   lineNumbers,
   rectangularSelection,
 } from '@codemirror/view'
-import {
-  defaultKeymap,
-  history,
-  historyKeymap,
-  indentWithTab,
-} from '@codemirror/commands'
+import { defaultKeymap, history, historyKeymap, indentWithTab } from '@codemirror/commands'
 import {
   HighlightStyle,
   LanguageDescription,
@@ -75,7 +65,10 @@ const remoteHighlightStyle = HighlightStyle.define([
   },
   { tag: [t.number, t.bool, t.null], color: 'var(--tf-terminal-yellow)' },
   { tag: [t.typeName, t.className, t.namespace], color: 'var(--tf-terminal-cyan)' },
-  { tag: [t.function(t.variableName), t.function(t.propertyName)], color: 'var(--tf-terminal-blue)' },
+  {
+    tag: [t.function(t.variableName), t.function(t.propertyName)],
+    color: 'var(--tf-terminal-blue)',
+  },
   { tag: [t.propertyName], color: 'var(--tf-terminal-white)' },
   { tag: [t.variableName, t.definition(t.variableName)], color: 'var(--tf-terminal-foreground)' },
   { tag: [t.operator, t.punctuation, t.bracket], color: 'var(--tf-color-text-secondary)' },

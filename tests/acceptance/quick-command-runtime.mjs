@@ -1,5 +1,13 @@
 import { spawn } from 'node:child_process'
-import { mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs'
+import {
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  readdirSync,
+  rmSync,
+  statSync,
+  writeFileSync,
+} from 'node:fs'
 import { createServer } from 'node:net'
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
@@ -176,7 +184,9 @@ async function waitFor(cdp, expression, timeoutMs, label) {
     }
     await sleep(150)
   }
-  throw new Error(`timeout: ${label}${lastError ? ` (${String(lastError.message ?? lastError)})` : ''}`)
+  throw new Error(
+    `timeout: ${label}${lastError ? ` (${String(lastError.message ?? lastError)})` : ''}`,
+  )
 }
 
 const HELPERS = `(() => {
@@ -341,11 +351,7 @@ async function main() {
     delete launchEnv.ELECTRON_RUN_AS_NODE
     child = spawn(
       ELECTRON,
-      [
-        `--remote-debugging-port=${cdpPort}`,
-        `--user-data-dir=${userDataDir}`,
-        REPO_ROOT,
-      ],
+      [`--remote-debugging-port=${cdpPort}`, `--user-data-dir=${userDataDir}`, REPO_ROOT],
       {
         cwd: REPO_ROOT,
         env: launchEnv,
@@ -468,9 +474,7 @@ async function main() {
       'server sidebar rendered',
     )
 
-    await cdp.evaluate(
-      `__qcAccept.clickLabelPrefix(${JSON.stringify(`连接 ${connectionName}`)})`,
-    )
+    await cdp.evaluate(`__qcAccept.clickLabelPrefix(${JSON.stringify(`连接 ${connectionName}`)})`)
     await waitFor(cdp, `!!__qcAccept.button('信任并继续')`, 15000, 'host key prompt')
     await cdp.evaluate(`__qcAccept.clickButton('信任并继续')`)
 
@@ -494,12 +498,7 @@ async function main() {
       10000,
       'first fixture prompt',
     )
-    await waitFor(
-      cdp,
-      `!!__qcAccept.button('快速命令')`,
-      10000,
-      'terminal toolbar quick commands',
-    )
+    await waitFor(cdp, `!!__qcAccept.button('快速命令')`, 10000, 'terminal toolbar quick commands')
     check('real-ssh-terminal-ready', () => ({
       connectionId: setup.connectionId,
       sessionId: sessionA,
@@ -529,19 +528,9 @@ async function main() {
       targetStrip: connectedTargetNotice,
     }))
     await cdp.evaluate(`__qcAccept.clickTab('命令库')`)
-    await waitFor(
-      cdp,
-      `!!__qcAccept.card('系统运行时间')`,
-      10000,
-      'built-in card',
-    )
+    await waitFor(cdp, `!!__qcAccept.card('系统运行时间')`, 10000, 'built-in card')
     await cdp.evaluate(`__qcAccept.clickCardButton('系统运行时间', '发送')`)
-    await waitFor(
-      cdp,
-      `!!__qcAccept.button('确认发送')`,
-      5000,
-      'send compose',
-    )
+    await waitFor(cdp, `!!__qcAccept.button('确认发送')`, 5000, 'send compose')
     const composeOne = await cdp.evaluate(`(() => ({
       title: document.querySelector('.modal__title')?.innerText ?? '',
       preview: document.querySelector('[aria-label="最终命令预览"]')?.innerText ?? '',
@@ -555,7 +544,9 @@ async function main() {
         throw new Error(`unexpected preview: ${JSON.stringify(composeOne)}`)
       }
       if (!composeOne.target.endsWith(sessionA)) {
-        throw new Error(`compose target did not stay on captured session: ${JSON.stringify(composeOne)}`)
+        throw new Error(
+          `compose target did not stay on captured session: ${JSON.stringify(composeOne)}`,
+        )
       }
       if (!composeOne.historyOff || composeOne.historyCheckboxes !== 0) {
         throw new Error(`history should be off without checkbox: ${JSON.stringify(composeOne)}`)
@@ -569,16 +560,9 @@ async function main() {
       10000,
       'uptime written to real shell',
     )
-    await waitFor(
-      cdp,
-      `!document.querySelector('.qc-compose')`,
-      5000,
-      'send compose closed',
-    )
+    await waitFor(cdp, `!document.querySelector('.qc-compose')`, 5000, 'send compose closed')
     const historyAfterOffSend = await cdp.evaluate(`window.termforge.commandHistory.list()`)
-    const uptimeOutput = await cdp.evaluate(
-      `(${outputFor(sessionA)}).slice(-400)`,
-    )
+    const uptimeOutput = await cdp.evaluate(`(${outputFor(sessionA)}).slice(-400)`)
     check('send-uses-real-shell-and-does-not-record-when-off', () => {
       if (!historyAfterOffSend?.ok) throw new Error(JSON.stringify(historyAfterOffSend))
       if (historyAfterOffSend.value.entries.length !== 0) {
@@ -593,12 +577,7 @@ async function main() {
     await cdp.evaluate(`__qcAccept.clickCardButton('当前身份', '插入')`)
     await waitFor(cdp, `!!__qcAccept.button('插入到终端')`, 5000, 'insert compose')
     await cdp.evaluate(`__qcAccept.clickButton('插入到终端')`)
-    await waitFor(
-      cdp,
-      `document.body.innerText.includes('已插入终端输入行')`,
-      5000,
-      'insert toast',
-    )
+    await waitFor(cdp, `document.body.innerText.includes('已插入终端输入行')`, 5000, 'insert toast')
     await sleep(500)
     const afterInsert = await cdp.evaluate(outputFor(sessionA))
     await cdp.evaluate(`window.termforge.terminal.write(${JSON.stringify(sessionA)}, '\\r')`)
@@ -664,18 +643,11 @@ async function main() {
     await waitFor(cdp, `!!__qcAccept.button('保存命令')`, 5000, 'editor open')
     await cdp.evaluate(`__qcAccept.setField('命令名称', '验收站点探测')`)
     await cdp.evaluate(`__qcAccept.setField('分类', '验收')`)
-    await cdp.evaluate(
-      `__qcAccept.setField('命令正文', 'echo ${COMMAND_TOKEN}_{{token}}')`,
-    )
+    await cdp.evaluate(`__qcAccept.setField('命令正文', 'echo ${COMMAND_TOKEN}_{{token}}')`)
     await cdp.evaluate(`__qcAccept.setField('token', 'approved')`)
     await screenshot('04-custom-command-editor')
     await cdp.evaluate(`__qcAccept.clickButton('保存命令')`)
-    await waitFor(
-      cdp,
-      `!!__qcAccept.card('验收站点探测')`,
-      10000,
-      'custom command card',
-    )
+    await waitFor(cdp, `!!__qcAccept.card('验收站点探测')`, 10000, 'custom command card')
     const customList = await cdp.evaluate(`window.termforge.quickCommands.list()`)
     const customCommand = customList.value.commands.find((item) => item.name === '验收站点探测')
     check('custom-command-created-with-parameters', () => {
@@ -690,9 +662,9 @@ async function main() {
         id: customCommand.id,
         body: customCommand.body,
         parameters: customCommand.parameters,
-        builtInReadOnly: (customList.value.commands.filter((item) => item.source === 'built-in') || []).every(
-          (item) => !item.editable,
-        ),
+        builtInReadOnly: (
+          customList.value.commands.filter((item) => item.source === 'built-in') || []
+        ).every((item) => !item.editable),
       }
     })
 
@@ -757,9 +729,7 @@ async function main() {
     await screenshot('06-history-recorded')
     await cdp.evaluate(`__qcAccept.clickLabel('关闭快速命令')`)
 
-    await cdp.evaluate(
-      `__qcAccept.clickLabelPrefix(${JSON.stringify(`连接 ${connectionName}`)})`,
-    )
+    await cdp.evaluate(`__qcAccept.clickLabelPrefix(${JSON.stringify(`连接 ${connectionName}`)})`)
     const sessionB = await waitFor(
       cdp,
       `(async () => {
@@ -830,7 +800,9 @@ async function main() {
         throw new Error(`captured target was not the second tab: ${capturedOnB}`)
       }
       if (!staleTarget.confirmDisabled) {
-        throw new Error(`confirm must be disabled with stale target: ${JSON.stringify(staleTarget)}`)
+        throw new Error(
+          `confirm must be disabled with stale target: ${JSON.stringify(staleTarget)}`,
+        )
       }
       if (!staleTarget.options.some((value) => value.endsWith(sessionA))) {
         throw new Error('first tab should be available for explicit reselect')
@@ -951,7 +923,12 @@ async function main() {
       'settings reopened',
     )
     await cdp.evaluate(`__qcAccept.clickTab('会话与传输记录')`)
-    await waitFor(cdp, `document.body.innerText.includes('清空命令历史')`, 5000, 'history settings row')
+    await waitFor(
+      cdp,
+      `document.body.innerText.includes('清空命令历史')`,
+      5000,
+      'history settings row',
+    )
     await cdp.evaluate(`__qcAccept.clickButton('清空命令历史')`)
     await waitFor(
       cdp,
@@ -977,7 +954,9 @@ async function main() {
       electronLog: electronLog.join('').slice(-4000),
     }
     writeFileSync(join(OUT_DIR, 'report.json'), JSON.stringify(report, null, 2))
-    console.log(JSON.stringify({ status: 'passed', checks: checks.length, screenshots: screenshots.length }))
+    console.log(
+      JSON.stringify({ status: 'passed', checks: checks.length, screenshots: screenshots.length }),
+    )
   } catch (error) {
     exitCode = 1
     const report = {

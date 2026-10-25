@@ -16,10 +16,7 @@ import { Button } from '@renderer/components/common/Button'
 import { IconButton } from '@renderer/components/common/IconButton'
 import { sftpErrorGuidance } from '@renderer/features/sftp/errorGuidance'
 import { cn } from '@renderer/lib/utils'
-import {
-  isTextEditorTabDirty,
-  useTextEditorStore,
-} from '@renderer/stores/textEditorStore'
+import { isTextEditorTabDirty, useTextEditorStore } from '@renderer/stores/textEditorStore'
 import type { TextEditorTab } from '@renderer/stores/textEditorStore'
 import { CodeMirrorSurface } from './CodeMirrorSurface'
 import type { CodeMirrorSurfaceHandle } from './CodeMirrorSurface'
@@ -179,12 +176,7 @@ export function RemoteTextEditor() {
       onMouseDown={handleBackdropMouseDown}
       onKeyDown={handleKeyDown}
     >
-      <section
-        className="text-editor"
-        role="dialog"
-        aria-modal="true"
-        aria-label="内置文本编辑器"
-      >
+      <section className="text-editor" role="dialog" aria-modal="true" aria-label="内置文本编辑器">
         <header className="text-editor__header">
           <div className="text-editor__brand">
             <FileText size={14} aria-hidden="true" />

@@ -104,9 +104,7 @@ export function PrimarySidebar() {
 
   const filteredConnections = connections.filter((connection) => {
     if (normalizedQuery.length === 0) return true
-    const groupName = connection.groupId
-      ? groupNames.get(connection.groupId) ?? ''
-      : '未分组'
+    const groupName = connection.groupId ? (groupNames.get(connection.groupId) ?? '') : '未分组'
     return [
       connection.name,
       connection.host,

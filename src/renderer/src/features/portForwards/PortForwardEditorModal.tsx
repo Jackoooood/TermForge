@@ -106,9 +106,7 @@ export function PortForwardEditorModal() {
 
   if (!editor.open) return null
   const editing = editor.mode === 'edit'
-  const item = editing
-    ? items.find((entry) => entry.rule.id === editor.ruleId)
-    : undefined
+  const item = editing ? items.find((entry) => entry.rule.id === editor.ruleId) : undefined
   const rule = item?.rule
   if (editing && !rule) return null
 
@@ -166,9 +164,7 @@ function PortForwardForm({
   onCancel,
   onSubmit,
 }: PortForwardFormProps) {
-  const [values, setValues] = useState<FormValues>(() =>
-    toValues(item?.rule, connections[0]?.id),
-  )
+  const [values, setValues] = useState<FormValues>(() => toValues(item?.rule, connections[0]?.id))
   const [errors, setErrors] = useState<FieldErrors>({})
   const [formError, setFormError] = useState<string | null>(null)
   const [submitError, setSubmitError] = useState<string | null>(null)
@@ -232,9 +228,7 @@ function PortForwardForm({
       await onSubmit(input)
     } catch (error) {
       setSubmitError(
-        error instanceof Error && error.message
-          ? error.message
-          : '转发规则未能保存，请稍后重试。',
+        error instanceof Error && error.message ? error.message : '转发规则未能保存，请稍后重试。',
       )
     } finally {
       setSubmitting(false)
@@ -327,8 +321,8 @@ function PortForwardForm({
             <div className="auth-note">
               <ArrowLeftRight size={13} aria-hidden="true" />
               <span>
-                SOCKS5 监听固定为 127.0.0.1:端口，仅允许本机应用访问；首版不支持 UDP
-                ASSOCIATE、BIND 或 SOCKS4。
+                SOCKS5 监听固定为 127.0.0.1:端口，仅允许本机应用访问；首版不支持 UDP ASSOCIATE、BIND
+                或 SOCKS4。
               </span>
             </div>
           </div>
@@ -413,7 +407,8 @@ function PortForwardForm({
         <div className="delete-confirm__note">
           <Info size={13} aria-hidden="true" />
           <span>
-            监听地址 {values.bindAddress} 不是回环地址。启动时会在本机网络上暴露该端口，应用会再次要求你确认风险。
+            监听地址 {values.bindAddress}{' '}
+            不是回环地址。启动时会在本机网络上暴露该端口，应用会再次要求你确认风险。
           </span>
         </div>
       ) : null}
