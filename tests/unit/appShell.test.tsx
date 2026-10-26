@@ -125,7 +125,7 @@ describe('App shell', () => {
       within(navigation)
         .getAllByRole('button')
         .map((button) => button.getAttribute('aria-label') ?? button.textContent),
-    ).toEqual(['首页', '连接管理', 'SFTP 文件', '命令库', '历史记录', '端口转发', '设置'])
+    ).toEqual(['首页', '连接管理', 'SFTP 文件', '命令库', '端口转发', '设置'])
     expect(within(navigation).getByRole('button', { name: '首页' })).toHaveAttribute(
       'aria-current',
       'page',
@@ -150,7 +150,7 @@ describe('App shell', () => {
     await user.click(within(navigation).getByRole('button', { name: '设置' }))
     expect(screen.getByRole('heading', { level: 1, name: '设置' })).toBeInTheDocument()
     expect(screen.getByRole('group', { name: '经典主题' })).toBeInTheDocument()
-    expect(screen.getByRole('group', { name: 'DBX 色板' })).toBeInTheDocument()
+    expect(screen.getByRole('group', { name: '扩展色板' })).toBeInTheDocument()
 
     await user.click(within(navigation).getByRole('button', { name: '端口转发' }))
     expect(screen.getByRole('heading', { level: 1, name: '端口转发' })).toBeInTheDocument()

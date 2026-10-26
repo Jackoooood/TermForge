@@ -560,7 +560,7 @@ export function SettingsView() {
                     外观
                   </h2>
                   <p className="settings-section__description">
-                    3 套经典主题与 13 套 DBX 色板。DBX 色板可独立选择浅色、深色或跟随系统；
+                    3 套经典主题与 13 套扩展色板。扩展色板可独立选择浅色、深色或跟随系统；
                     界面与终端字体均使用固定字体栈，修改后立即生效并持久化。
                   </p>
                 </header>
@@ -599,8 +599,8 @@ export function SettingsView() {
                           {theme === 'system'
                             ? `当前系统解析为 ${
                                 resolvedTheme === 'dark' ? 'Aurora（深色）' : 'Mist（浅色）'
-                              }；选择 DBX 色板后由下方深浅色控制接管。`
-                            : '深色解析为 Aurora、浅色解析为 Mist；DBX 色板使用下方独立的深浅色设置。'}
+                              }；选择扩展色板后由下方深浅色控制接管。`
+                            : '深色解析为 Aurora、浅色解析为 Mist；扩展色板使用下方独立的深浅色设置。'}
                         </span>
                       </span>
                     </label>
@@ -609,14 +609,14 @@ export function SettingsView() {
                   <section className="appearance-group" aria-labelledby="appearance-group-dbx">
                     <div className="appearance-group__header">
                       <h3 className="appearance-group__title" id="appearance-group-dbx">
-                        DBX 色板
+                        扩展色板
                       </h3>
                       <span className="appearance-group__note">13 套 · 浅色 / 深色双模式</span>
                     </div>
                     <div
                       className="theme-options theme-options--dbx"
                       role="group"
-                      aria-label="DBX 色板"
+                      aria-label="扩展色板"
                     >
                       {DBX_THEME_ENTRIES.map((entry) => (
                         <ThemeOptionCard
@@ -629,17 +629,17 @@ export function SettingsView() {
                     </div>
                     <div className="settings-row">
                       <div>
-                        <p className="settings-row__label">DBX 深浅色</p>
+                        <p className="settings-row__label">扩展色板深浅色</p>
                         <p className="settings-row__description">
                           {dbxActive
                             ? `当前为${resolvedTheme === 'dark' ? '深色' : '浅色'}${
                                 dbxThemeMode === 'system' ? '（随操作系统外观切换）' : ''
                               }。终端始终使用该色板的深色 ANSI 配色以保持可读性。`
-                            : '仅对 DBX 色板生效；选择任意 DBX 色板后可切换浅色、深色或跟随系统。'}
+                            : '仅对扩展色板生效；选择任意扩展色板后可切换浅色、深色或跟随系统。'}
                         </p>
                       </div>
                       <div className="settings-row__control">
-                        <div className="segmented" role="group" aria-label="DBX 深浅色">
+                        <div className="segmented" role="group" aria-label="扩展色板深浅色">
                           {DBX_THEME_MODES.map((mode) => (
                             <button
                               key={mode}
@@ -662,8 +662,8 @@ export function SettingsView() {
                         渐变强度 <span className="settings-row__value">{gradientIntensity}%</span>
                       </p>
                       <p className="settings-row__description">
-                        调节 Aurora 与 Mist 背景光斑的可见度；Obsidian 与 DBX
-                        色板采用纯色背景，不受影响。
+                        调节 Aurora 与 Mist 背景光斑的可见度；Obsidian
+                        与扩展色板采用纯色背景，不受影响。
                       </p>
                     </div>
                     <input

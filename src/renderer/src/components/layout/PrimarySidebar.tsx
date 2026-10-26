@@ -5,7 +5,6 @@ import {
   ChevronDown,
   Copy,
   FolderSync,
-  History,
   Info,
   LayoutDashboard,
   MoreHorizontal,
@@ -54,7 +53,7 @@ interface ConnectionMenuState {
 }
 
 interface NavItem {
-  id: WorkspaceModule | 'quick-commands' | 'command-history'
+  id: WorkspaceModule | 'quick-commands'
   label: string
   icon: LucideIcon
 }
@@ -64,7 +63,6 @@ const NAV_ITEMS: NavItem[] = [
   { id: 'servers', label: '连接管理', icon: Server },
   { id: 'sftp', label: 'SFTP 文件', icon: FolderSync },
   { id: 'quick-commands', label: '命令库', icon: Zap },
-  { id: 'command-history', label: '历史记录', icon: History },
   { id: 'port-forwards', label: '端口转发', icon: ArrowLeftRight },
   { id: 'settings', label: '设置', icon: Settings },
 ]
@@ -239,10 +237,6 @@ export function PrimarySidebar() {
   const navigate = (item: NavItem): void => {
     if (item.id === 'quick-commands') {
       openDrawer(null, 'library')
-      return
-    }
-    if (item.id === 'command-history') {
-      openDrawer(null, 'history')
       return
     }
     setActiveModule(item.id)

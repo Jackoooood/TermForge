@@ -544,8 +544,13 @@
 }
 
 .terminal-xterm .xterm-viewport {
-  scrollbar-color: var(--tf-border-strong) transparent;
-  scrollbar-width: thin;
+  /* xterm paints its unused fractional row with this hardcoded black layer; match the active theme. */
+  background-color: var(--tf-terminal-background, var(--tf-color-terminal));
+}
+
+.terminal-xterm .xterm-scrollable-element > .scrollbar {
+  /* xterm 6 draws its own scrollbar; wheel, keyboard and trackpad scrolling still work. */
+  display: none;
 }
 
 .terminal-shell-overlay {

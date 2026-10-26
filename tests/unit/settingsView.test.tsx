@@ -68,6 +68,9 @@ describe('settings view', () => {
     expect(tabs).toHaveLength(8)
     expect(screen.getByRole('tab', { name: '外观' })).toHaveAttribute('aria-selected', 'true')
     expect(screen.getByRole('tabpanel', { name: '外观' })).toBeVisible()
+    const appearancePanel = screen.getByRole('tabpanel', { name: '外观' })
+    expect(within(appearancePanel).queryByText(/DBX/)).not.toBeInTheDocument()
+    expect(within(appearancePanel).queryByLabelText(/DBX/)).not.toBeInTheDocument()
     expect(screen.queryByRole('tabpanel', { name: '终端' })).not.toBeInTheDocument()
 
     await user.click(screen.getByRole('tab', { name: '终端' }))
@@ -99,7 +102,7 @@ describe('settings view', () => {
       'true',
     )
     expect(
-      within(screen.getByRole('group', { name: 'DBX 色板' })).getAllByRole('button'),
+      within(screen.getByRole('group', { name: '扩展色板' })).getAllByRole('button'),
     ).toHaveLength(13)
 
     await user.click(within(classicGroup).getByRole('button', { name: /Mist 柔光/ }))
@@ -134,13 +137,13 @@ describe('settings view', () => {
 
     render(<SettingsView />)
 
-    const dbxGroup = screen.getByRole('group', { name: 'DBX 色板' })
+    const dbxGroup = screen.getByRole('group', { name: '扩展色板' })
     const cobalt = within(dbxGroup).getByRole('button', { name: /Cobalt 钴蓝/ })
     await user.click(cobalt)
     expect(update).toHaveBeenLastCalledWith(expect.objectContaining({ theme: 'dbx-cobalt' }))
     expect(cobalt).toHaveAttribute('aria-pressed', 'true')
 
-    const modeGroup = screen.getByRole('group', { name: 'DBX 深浅色' })
+    const modeGroup = screen.getByRole('group', { name: '扩展色板深浅色' })
     const darkMode = within(modeGroup).getByRole('button', { name: '深色' })
     expect(darkMode).toBeEnabled()
     await user.click(darkMode)
